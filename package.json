@@ -1,0 +1,52 @@
+{
+  "name": "narrately",
+  "version": "1.1.0",
+  "description": "An AI CLI tool that automatically generates your daily developer activity report from your IDEs, terminal, and Git history",
+  "type": "module",
+  "bin": {
+    "narrately": "./bin/narrately.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node ./bin/narrately.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deeppudasaini/narrately"
+  },
+  "bugs": {
+    "url": "https://github.com/deeppudasaini/narrately/issues"
+  },
+  "homepage": "https://github.com/deeppudasaini/narrately#readme",
+  "files": [
+    "bin",
+    "src",
+    "integrations/vscode",
+    "integrations/intellij/src",
+    "integrations/intellij/gradle",
+    "integrations/intellij/gradlew",
+    "integrations/intellij/gradlew.bat",
+    "integrations/intellij/build.gradle.kts",
+    "integrations/intellij/settings.gradle.kts"
+  ],
+  "keywords": [
+    "cli",
+    "developer-tools",
+    "time-tracking",
+    "ai",
+    "knowledge-graph"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
+    "@inquirer/prompts": "^7.8.6",
+    "adm-zip": "^0.6.0",
+    "diff": "^9.0.0",
+    "nodemailer": "^9.0.3",
+    "picocolors": "^1.1.1",
+    "yaml": "^2.8.1"
+  }
+}

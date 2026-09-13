@@ -1,0 +1,36 @@
+<idea-plugin>
+    <id>ai.narrately.collector</id>
+    <name>Narrately Collector</name>
+    <vendor email="pudasainideep08@gmail.com" url="https://github.com/deeppudasaini/narrately">Narrately</vendor>
+    <version>1.1.0</version>
+
+    <description><![CDATA[
+        Reports editor activity to the local Narrately collector daemon so your
+        daily developer log can be generated automatically.
+        <br/><br/>
+        Captures focus time, saves, edit volume, debug sessions, and the active
+        git branch.
+        <br/><br/>
+        <b>Privacy:</b> file paths, language ids, timestamps, and integer counts
+        only. File contents are never stored or transmitted. All data stays on
+        127.0.0.1.
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <b>1.1.0</b> — Deeper editor enrichers: edit-volume tracking (lines
+        added/removed), debug session spans, idle detection so time away from
+        the keyboard is not counted as coding, and git branch context.
+    ]]></change-notes>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="ai.narrately.collector.NarratelyStartupActivity"/>
+    </extensions>
+
+    <applicationListeners>
+        <listener
+            class="ai.narrately.collector.NarratelySaveListener"
+            topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"/>
+    </applicationListeners>
+</idea-plugin>

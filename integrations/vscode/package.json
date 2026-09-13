@@ -1,0 +1,62 @@
+{
+  "name": "narrately-collector",
+  "displayName": "Narrately Collector",
+  "description": "Reports editor focus and save activity to the local Narrately daemon. Metadata only — never file contents.",
+  "version": "1.1.0",
+  "publisher": "narrately",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deeppudasaini/narrately"
+  },
+  "bugs": {
+    "url": "https://github.com/deeppudasaini/narrately/issues"
+  },
+  "homepage": "https://github.com/deeppudasaini/narrately#readme",
+  "keywords": ["time-tracking", "developer-tools", "productivity", "activity-report"],
+  "galleryBanner": {
+    "color": "#171a21",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Narrately",
+      "properties": {
+        "narrately.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Report activity to the local Narrately daemon."
+        },
+        "narrately.port": {
+          "type": "number",
+          "default": 47821,
+          "description": "Port the local Narrately collector daemon listens on."
+        },
+        "narrately.excludedPatterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Regular expressions; matching file paths are never reported."
+        },
+        "narrately.idleThresholdSeconds": {
+          "type": "number",
+          "default": 300,
+          "minimum": 60,
+          "description": "Stop counting focus time after this many seconds with no keystrokes or selection changes."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "narrately.showStatus",
+        "title": "Narrately: Show Collector Status"
+      }
+    ]
+  }
+}

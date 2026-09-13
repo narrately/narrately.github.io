@@ -1,0 +1,587 @@
+<title>Narrately — Dashboard</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #0b0d12;
+    --panel: #12151c;
+    --panel-border: #232733;
+    --text: #e6e8ec;
+    --text-dim: #8a8f9c;
+    --accent: #6ea8fe;
+    --accent-dim: #2d4a7a;
+    --green: #4caf7d;
+    --red: #e0716f;
+    --yellow: #d8b657;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f5f6f8;
+      --panel: #ffffff;
+      --panel-border: #e2e5ea;
+      --text: #1a1d24;
+      --text-dim: #666c78;
+      --accent: #2563eb;
+      --accent-dim: #dbe6fb;
+      --green: #1f9d5b;
+      --red: #c0392b;
+      --yellow: #b8860b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--panel-border);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header h1 { font-size: 16px; margin: 0; font-weight: 600; }
+  header h1 span { color: var(--text-dim); font-weight: 400; }
+  .status { display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--text-dim); }
+  .status .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .dot.ok { background: var(--green); }
+  .dot.bad { background: var(--red); }
+  .range { display: flex; gap: 4px; background: var(--panel); border: 1px solid var(--panel-border); border-radius: 8px; padding: 3px; }
+  .range button {
+    background: none; border: none; color: var(--text-dim); padding: 5px 12px; border-radius: 6px;
+    font-size: 12px; cursor: pointer; font-family: inherit;
+  }
+  .range button.active { background: var(--accent-dim); color: var(--accent); }
+  main { max-width: 1180px; margin: 0 auto; padding: 20px 24px 60px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .card { background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--radius); padding: 14px 16px; }
+  .card .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+  .card .value { font-size: 22px; font-weight: 600; }
+  .card .value.green { color: var(--green); }
+  .grid-2 { display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
+  .panel { background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--radius); padding: 16px; }
+  .panel h2 { font-size: 13px; margin: 0 0 12px; font-weight: 600; }
+  .panel h2 small { color: var(--text-dim); font-weight: 400; }
+  .empty { color: var(--text-dim); font-size: 13px; padding: 8px 0; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; }
+  .bar-row .name { width: 130px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar-track { flex: 1; height: 8px; background: var(--panel-border); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+  .bar-row .meta { width: 130px; text-align: right; color: var(--text-dim); flex-shrink: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; color: var(--text-dim); font-weight: 500; padding: 6px 8px; border-bottom: 1px solid var(--panel-border); }
+  td { padding: 6px 8px; border-bottom: 1px solid var(--panel-border); }
+  tr:last-child td { border-bottom: none; }
+  .churn-add { color: var(--green); }
+  .churn-del { color: var(--red); }
+  .notes-panel { margin-bottom: 16px; }
+  .notes-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .notes-header input[type=date] {
+    background: var(--bg); color: var(--text); border: 1px solid var(--panel-border);
+    border-radius: 6px; padding: 5px 8px; font-family: inherit; font-size: 12px;
+  }
+  .note {
+    background: var(--bg); border: 1px solid var(--panel-border); border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 8px;
+  }
+  .note .note-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .note .note-project { font-size: 11px; color: var(--accent); background: var(--accent-dim); padding: 2px 8px; border-radius: 10px; }
+  .note .note-body { white-space: pre-wrap; font-size: 13px; }
+  .note button.del { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 12px; }
+  .note button.del:hover { color: var(--red); }
+  .note-form { display: flex; flex-direction: column; gap: 8px; }
+  .note-form textarea {
+    background: var(--bg); color: var(--text); border: 1px solid var(--panel-border); border-radius: 8px;
+    padding: 8px 10px; font-family: inherit; font-size: 13px; resize: vertical; min-height: 60px;
+  }
+  .note-form-row { display: flex; gap: 8px; }
+  .note-form input[type=text] {
+    background: var(--bg); color: var(--text); border: 1px solid var(--panel-border); border-radius: 6px;
+    padding: 6px 8px; font-family: inherit; font-size: 12px; flex: 0 0 180px;
+  }
+  button.primary {
+    background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 7px 16px;
+    font-size: 12px; cursor: pointer; font-family: inherit; align-self: flex-start;
+  }
+  button.primary:hover { opacity: .9; }
+  .chat-panel { margin-bottom: 16px; }
+  .chat-messages { max-height: 360px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .chat-msg { padding: 8px 12px; border-radius: 10px; font-size: 13px; max-width: 80%; white-space: pre-wrap; }
+  .chat-msg.user { align-self: flex-end; background: var(--accent-dim); color: var(--accent); }
+  .chat-msg.assistant { align-self: flex-start; background: var(--bg); border: 1px solid var(--panel-border); }
+  .chat-input-row { display: flex; gap: 8px; }
+  .chat-input-row input {
+    flex: 1; background: var(--bg); color: var(--text); border: 1px solid var(--panel-border);
+    border-radius: 8px; padding: 8px 10px; font-family: inherit; font-size: 13px;
+  }
+  .reports-list { display: flex; flex-direction: column; gap: 6px; }
+  .report-row {
+    display: flex; justify-content: space-between; align-items: center; padding: 8px 10px;
+    border: 1px solid var(--panel-border); border-radius: 8px; cursor: pointer; font-size: 12px;
+  }
+  .report-row:hover { border-color: var(--accent); }
+  .report-row .tag { color: var(--text-dim); }
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 10;
+    align-items: center; justify-content: center; padding: 40px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-overlay .box {
+    background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--radius);
+    max-width: 720px; width: 100%; max-height: 100%; overflow: auto; padding: 24px;
+  }
+  .modal-overlay pre { white-space: pre-wrap; font-family: inherit; font-size: 13px; margin: 0; }
+  .modal-overlay .close { float: right; background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 20px; }
+  .diff-row .redacted-tag { color: var(--yellow); font-size: 11px; margin-left: 6px; }
+</style>
+
+<header>
+  <h1>Narrately <span>— dashboard</span></h1>
+  <div class="range" id="range">
+    <button data-range="today">Today</button>
+    <button data-range="week" class="active">This week</button>
+    <button data-range="month">30 days</button>
+    <button data-range="all">All time</button>
+  </div>
+  <div class="status" id="status">loading…</div>
+</header>
+
+<main>
+  <div class="cards" id="cards"></div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <h2>Time by project</h2>
+      <div id="projects"></div>
+    </div>
+    <div class="panel">
+      <h2>Daily timeline</h2>
+      <div id="timeline"></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <h2>Top files by churn <small>lines added/removed</small></h2>
+      <div id="files"></div>
+    </div>
+    <div class="panel">
+      <h2>Focus <small>share of day in one stretch</small></h2>
+      <div id="focus"></div>
+    </div>
+  </div>
+
+  <div class="panel notes-panel">
+    <h2>Notes</h2>
+    <div class="notes-header">
+      <button id="notePrev">←</button>
+      <input type="date" id="noteDate">
+      <button id="noteNext">→</button>
+      <span id="noteDateLabel" style="color:var(--text-dim);font-size:12px;"></span>
+    </div>
+    <div id="notesList"></div>
+    <div class="note-form">
+      <div class="note-form-row">
+        <input type="text" id="noteProject" placeholder="Project (optional)">
+      </div>
+      <textarea id="noteBody" placeholder="Add context the automated tracking can't capture — a decision, a meeting, why you spent the afternoon on that one bug…"></textarea>
+      <button class="primary" id="noteSubmit">Add note</button>
+    </div>
+  </div>
+
+  <div class="panel chat-panel">
+    <h2>Chat <small>ask anything about your tracked activity or your notes</small></h2>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="empty" id="chatStatus" style="display:none;"></div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="e.g. what did I say about the auth bug last week?">
+      <button class="primary" id="chatSend">Send</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Code changes <small>opt-in — real diff content for your own commits</small></h2>
+    <div class="reports-list" id="diffs"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Recent reports</h2>
+    <div class="reports-list" id="reports"></div>
+  </div>
+</main>
+
+<div id="reportView" class="modal-overlay">
+  <div class="box">
+    <button class="close" id="reportClose">&times;</button>
+    <pre id="reportBody"></pre>
+  </div>
+</div>
+
+<div id="diffView" class="modal-overlay">
+  <div class="box">
+    <button class="close" id="diffClose">&times;</button>
+    <div id="diffMeta" style="color:var(--text-dim);font-size:12px;margin-bottom:10px;"></div>
+    <pre id="diffBody"></pre>
+  </div>
+</div>
+
+<script>
+  const state = { range: 'week' };
+
+  function fmtDuration(seconds) {
+    seconds = Number(seconds) || 0;
+    if (seconds < 60) return Math.round(seconds) + 's';
+    let h = Math.floor(seconds / 3600);
+    let m = Math.round((seconds % 3600) / 60);
+    if (m === 60) { h += 1; m = 0; }
+    if (!h) return m + 'm';
+    return m ? `${h}h ${m}m` : `${h}h`;
+  }
+
+  async function api(path, opts) {
+    const res = await fetch(path, opts);
+    if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || res.statusText);
+    return res.json();
+  }
+
+  function q(range) {
+    return `range=${encodeURIComponent(range)}`;
+  }
+
+  function el(tag, attrs = {}, children = []) {
+    const node = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') node.className = v;
+      else if (k === 'text') node.textContent = v;
+      else if (k.startsWith('on')) node.addEventListener(k.slice(2), v);
+      else node.setAttribute(k, v);
+    }
+    for (const child of [].concat(children)) node.appendChild(child);
+    return node;
+  }
+
+  async function loadStatus() {
+    const box = document.getElementById('status');
+    try {
+      const s = await api('/api/status');
+      if (!s.configured) {
+        box.innerHTML = '<span class="dot bad"></span>not configured — run `narrately onboard`';
+        return;
+      }
+      const daemonDot = `<span class="dot ${s.daemon.running ? 'ok' : 'bad'}"></span>daemon ${s.daemon.running ? 'running' : 'stopped'}`;
+      const providerDot = `<span class="dot ${s.provider.hasApiKey ? 'ok' : 'bad'}"></span>${s.provider.label}`;
+      box.innerHTML = `<span>${daemonDot}</span><span>${providerDot}</span>`;
+    } catch {
+      box.textContent = 'status unavailable';
+    }
+  }
+
+  async function loadOverview() {
+    const data = await api(`/api/overview?${q(state.range)}`);
+    const t = data.totals;
+    const cards = document.getElementById('cards');
+    cards.innerHTML = '';
+    const items = [
+      ['Tracked time', fmtDuration(t.durationSec)],
+      ['Sessions', t.sessions],
+      ['Lines added', '+' + (t.linesAdded ?? 0), 'green'],
+      ['Lines removed', '-' + (t.linesRemoved ?? 0)],
+      ['Debug time', fmtDuration(t.debugSec ?? 0)],
+      ['Errors resolved', t.errorsResolved ?? 0],
+    ];
+    for (const [label, value, cls] of items) {
+      cards.appendChild(el('div', { class: 'card' }, [
+        el('div', { class: 'label', text: label }),
+        el('div', { class: 'value' + (cls ? ' ' + cls : ''), text: String(value) }),
+      ]));
+    }
+
+    const box = document.getElementById('projects');
+    box.innerHTML = '';
+    if (!data.projects.length) {
+      box.appendChild(el('div', { class: 'empty', text: 'No sessions in this window.' }));
+      return;
+    }
+    const max = Math.max(...data.projects.map((p) => Number(p.duration_sec)));
+    for (const p of data.projects) {
+      const pct = max ? Math.round((Number(p.duration_sec) / max) * 100) : 0;
+      box.appendChild(el('div', { class: 'bar-row' }, [
+        el('div', { class: 'name', text: p.project }),
+        el('div', { class: 'bar-track' }, [el('div', { class: 'bar-fill', style: `width:${pct}%` })]),
+        el('div', { class: 'meta', text: fmtDuration(p.duration_sec) }),
+      ]));
+    }
+  }
+
+  async function loadTimeline() {
+    const { rows } = await api(`/api/timeline?${q(state.range)}`);
+    const box = document.getElementById('timeline');
+    box.innerHTML = '';
+    if (!rows.length) {
+      box.appendChild(el('div', { class: 'empty', text: 'No activity in this window.' }));
+      return;
+    }
+    const max = Math.max(...rows.map((r) => Number(r.duration_sec)));
+    for (const r of rows) {
+      const pct = max ? Math.round((Number(r.duration_sec) / max) * 100) : 0;
+      box.appendChild(el('div', { class: 'bar-row' }, [
+        el('div', { class: 'name', text: r.day }),
+        el('div', { class: 'bar-track' }, [el('div', { class: 'bar-fill', style: `width:${pct}%` })]),
+        el('div', { class: 'meta', text: fmtDuration(r.duration_sec) }),
+      ]));
+    }
+  }
+
+  async function loadFiles() {
+    const { rows } = await api(`/api/files?${q(state.range)}&limit=12`);
+    const box = document.getElementById('files');
+    box.innerHTML = '';
+    if (!rows.length) {
+      box.appendChild(el('div', { class: 'empty', text: 'No edit activity recorded yet.' }));
+      return;
+    }
+    const table = el('table', {}, [
+      el('tr', {}, [el('th', { text: 'File' }), el('th', { text: 'Project' }), el('th', { text: 'Churn' })]),
+    ]);
+    for (const r of rows) {
+      table.appendChild(el('tr', {}, [
+        el('td', { text: r.file }),
+        el('td', { text: r.project }),
+        el('td', {}, [
+          el('span', { class: 'churn-add', text: '+' + r.linesAdded }),
+          document.createTextNode(' / '),
+          el('span', { class: 'churn-del', text: '-' + r.linesRemoved }),
+        ]),
+      ]));
+    }
+    box.appendChild(table);
+  }
+
+  async function loadFocus() {
+    const { rows } = await api(`/api/focus?${q(state.range)}`);
+    const box = document.getElementById('focus');
+    box.innerHTML = '';
+    if (!rows.length) {
+      box.appendChild(el('div', { class: 'empty', text: 'No sessions in this window.' }));
+      return;
+    }
+    for (const r of rows.slice(-10)) {
+      const pct = Math.round(r.focusRatio * 100);
+      box.appendChild(el('div', { class: 'bar-row' }, [
+        el('div', { class: 'name', text: r.day }),
+        el('div', { class: 'bar-track' }, [el('div', { class: 'bar-fill', style: `width:${pct}%` })]),
+        el('div', { class: 'meta', text: pct + '%' }),
+      ]));
+    }
+  }
+
+  async function loadReports() {
+    const { rows } = await api('/api/reports?limit=15');
+    const box = document.getElementById('reports');
+    box.innerHTML = '';
+    if (!rows.length) {
+      box.appendChild(el('div', { class: 'empty', text: 'No reports generated yet — run `narrately report`.' }));
+      return;
+    }
+    for (const r of rows) {
+      const row = el('div', { class: 'report-row', onclick: () => openReport(r.id) }, [
+        el('span', { text: `${r.period_start.slice(0, 10)} → ${r.period_end.slice(0, 10)}` }),
+        el('span', { class: 'tag', text: `${r.mode} · ${r.generator}` }),
+      ]);
+      box.appendChild(row);
+    }
+  }
+
+  async function openReport(id) {
+    const report = await api(`/api/reports/${id}`);
+    document.getElementById('reportBody').textContent = report.markdown;
+    document.getElementById('reportView').classList.add('open');
+  }
+  document.getElementById('reportClose').addEventListener('click', () => {
+    document.getElementById('reportView').classList.remove('open');
+  });
+  document.getElementById('reportView').addEventListener('click', (e) => {
+    if (e.target.id === 'reportView') e.target.classList.remove('open');
+  });
+
+  async function loadDiffs() {
+    const { rows } = await api(`/api/diffs?${q(state.range)}&limit=20`);
+    const box = document.getElementById('diffs');
+    box.innerHTML = '';
+    if (!rows.length) {
+      box.appendChild(el('div', { class: 'empty' }, [
+        document.createTextNode('Nothing captured in this window. '),
+        el('span', { text: 'This is opt-in and off by default — see collectors.git.capture_diffs in config.yaml.' }),
+      ]));
+      return;
+    }
+    for (const r of rows) {
+      const row = el('div', { class: 'report-row diff-row', onclick: () => openDiff(r.id) }, [
+        el('span', {}, [
+          el('span', { text: r.file }),
+          r.redacted ? el('span', { class: 'redacted-tag', text: '[redacted]' }) : document.createTextNode(''),
+        ]),
+        el('span', { class: 'tag' }, [
+          document.createTextNode(`${r.project ?? '?'} · `),
+          el('span', { class: 'churn-add', text: '+' + r.lines_added }),
+          document.createTextNode('/'),
+          el('span', { class: 'churn-del', text: '-' + r.lines_removed }),
+        ]),
+      ]);
+      box.appendChild(row);
+    }
+  }
+
+  async function openDiff(id) {
+    const diff = await api(`/api/diffs/${id}`);
+    document.getElementById('diffMeta').textContent =
+      `${diff.file} — ${diff.project ?? '?'} · ${diff.commit_hash ? diff.commit_hash.slice(0, 8) : diff.session_id ?? ''} · +${diff.lines_added}/-${diff.lines_removed}${diff.redacted ? ' · secret-shaped content redacted' : ''}`;
+    document.getElementById('diffBody').textContent = diff.diff_text ?? `(${diff.summary ?? 'no diff text stored'})`;
+    document.getElementById('diffView').classList.add('open');
+  }
+  document.getElementById('diffClose').addEventListener('click', () => {
+    document.getElementById('diffView').classList.remove('open');
+  });
+  document.getElementById('diffView').addEventListener('click', (e) => {
+    if (e.target.id === 'diffView') e.target.classList.remove('open');
+  });
+
+  const noteDateInput = document.getElementById('noteDate');
+
+  function todayLocal() {
+    const d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 10);
+  }
+
+  function shiftDate(dateStr, days) {
+    const d = new Date(dateStr + 'T12:00:00');
+    d.setDate(d.getDate() + days);
+    return d.toISOString().slice(0, 10);
+  }
+
+  async function loadNotes() {
+    const date = noteDateInput.value;
+    document.getElementById('noteDateLabel').textContent =
+      new Date(date + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
+    const { rows } = await api(`/api/notes?date=${date}`);
+    const box = document.getElementById('notesList');
+    box.innerHTML = '';
+    if (!rows.length) {
+      box.appendChild(el('div', { class: 'empty', text: 'No notes for this day yet.' }));
+      return;
+    }
+    for (const n of rows) {
+      const note = el('div', { class: 'note' }, [
+        el('div', { class: 'note-meta' }, [
+          n.project ? el('span', { class: 'note-project', text: n.project }) : el('span', { text: '' }),
+          el('button', { class: 'del', text: 'delete', onclick: () => deleteNoteRow(n.id) }),
+        ]),
+        el('div', { class: 'note-body', text: n.body }),
+      ]);
+      box.appendChild(note);
+    }
+  }
+
+  async function deleteNoteRow(id) {
+    await api(`/api/notes/${id}`, { method: 'DELETE' });
+    loadNotes();
+  }
+
+  document.getElementById('noteSubmit').addEventListener('click', async () => {
+    const body = document.getElementById('noteBody').value.trim();
+    if (!body) return;
+    const project = document.getElementById('noteProject').value.trim() || undefined;
+    await api('/api/notes', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ date: noteDateInput.value, project, body }),
+    });
+    document.getElementById('noteBody').value = '';
+    document.getElementById('noteProject').value = '';
+    loadNotes();
+  });
+
+  document.getElementById('notePrev').addEventListener('click', () => {
+    noteDateInput.value = shiftDate(noteDateInput.value, -1);
+    loadNotes();
+  });
+  document.getElementById('noteNext').addEventListener('click', () => {
+    noteDateInput.value = shiftDate(noteDateInput.value, 1);
+    loadNotes();
+  });
+  noteDateInput.addEventListener('change', loadNotes);
+
+  let chatHistory = [];
+
+  function appendChatMessage(role, text) {
+    const box = document.getElementById('chatMessages');
+    box.appendChild(el('div', { class: `chat-msg ${role}`, text }));
+    box.scrollTop = box.scrollHeight;
+  }
+
+  async function sendChat() {
+    const input = document.getElementById('chatInput');
+    const question = input.value.trim();
+    if (!question) return;
+    input.value = '';
+    input.disabled = true;
+    appendChatMessage('user', question);
+
+    const statusBox = document.getElementById('chatStatus');
+    statusBox.style.display = 'block';
+    statusBox.textContent = 'Thinking…';
+
+    try {
+      const res = await api('/api/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ question, history: chatHistory }),
+      });
+      statusBox.style.display = 'none';
+      appendChatMessage('assistant', res.text);
+      chatHistory.push({ role: 'user', content: question }, { role: 'assistant', content: res.text });
+      chatHistory = chatHistory.slice(-24);
+    } catch (err) {
+      statusBox.style.display = 'block';
+      statusBox.textContent = 'Error: ' + err.message;
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
+  }
+
+  document.getElementById('chatSend').addEventListener('click', sendChat);
+  document.getElementById('chatInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendChat();
+  });
+
+  document.getElementById('range').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-range]');
+    if (!btn) return;
+    state.range = btn.dataset.range;
+    document.querySelectorAll('#range button').forEach((b) => b.classList.toggle('active', b === btn));
+    refresh();
+  });
+
+  function refresh() {
+    loadOverview().catch(console.error);
+    loadTimeline().catch(console.error);
+    loadFiles().catch(console.error);
+    loadFocus().catch(console.error);
+    loadDiffs().catch(console.error);
+  }
+
+  noteDateInput.value = todayLocal();
+  loadStatus();
+  loadNotes();
+  loadReports();
+  refresh();
+</script>
