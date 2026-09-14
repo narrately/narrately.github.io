@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>ai.narrately.collector</id>
     <name>Narrately Collector</name>
-    <vendor email="pudasainideep08@gmail.com" url="https://github.com/deeppudasaini/narrately">Narrately</vendor>
+    <vendor email="pudasainideep08@gmail.com" url="https://github.com/narrately/narrately.github.io">Narrately</vendor>
     <version>1.1.0</version>
 
     <description><![CDATA[

@@ -7,12 +7,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/deeppudasaini/narrately"
+    "url": "https://github.com/narrately/narrately.github.io"
   },
   "bugs": {
-    "url": "https://github.com/deeppudasaini/narrately/issues"
+    "url": "https://github.com/narrately/narrately.github.io"
   },
-  "homepage": "https://github.com/deeppudasaini/narrately#readme",
+  "homepage": "https://github.com/narrately/narrately.github.io#readme",
   "keywords": ["time-tracking", "developer-tools", "productivity", "activity-report"],
   "galleryBanner": {
     "color": "#171a21",
