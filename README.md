@@ -36,7 +36,7 @@ VS Code and JetBrains (IDEA, WebStorm, PyCharm, GoLand, RubyMine) are thin produ
 
 ## Documentation
 
-Full docs — installation, onboarding, commands, configuration, privacy model, and the code-change-capture tiers: **[Narrately Documentation](https://claude.ai/code/artifact/ca56c402-9e92-4550-8403-37cbf357a640)**
+Full docs — installation, onboarding, commands, configuration, privacy model, and the code-change-capture tiers: **[Narrately Documentation](https://deeppudasaini.github.io/narrately/)**
 
 ## Privacy
 
