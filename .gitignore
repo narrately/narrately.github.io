@@ -10,5 +10,6 @@ integrations/intellij/.gradle/
 
 .narrately/
 .gstack/
+cloud/dashboard/config.js
 pacakge-lock.json
 test/

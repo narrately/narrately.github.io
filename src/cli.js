@@ -49,6 +49,14 @@ const COMMANDS = {
     summary: 'Open the local detail dashboard: projects, files, notes, reports',
     load: () => import('./commands/web.js'),
   },
+  cloud: {
+    summary: 'Narrately Cloud account: signup | login | logout | status | org <org-id>',
+    load: () => import('./commands/cloud.js'),
+  },
+  sync: {
+    summary: 'Push session metadata to Narrately Cloud for team rollups (opt-in)',
+    load: () => import('./commands/sync.js'),
+  },
 };
 
 function printHelp() {
@@ -69,7 +77,7 @@ ${pc.bold('Getting started')}
   narrately daemon start     Start background collection
   narrately report           Generate a report on demand
 
-${pc.dim('All data stays on this machine unless you enable email delivery.')}
+${pc.dim('All data stays on this machine unless you enable email delivery or run `narrately sync`.')}
 `);
 }
 

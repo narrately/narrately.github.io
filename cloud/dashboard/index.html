@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Narrately Cloud — Team</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --panel: #12151c;
+    --panel-border: #232733;
+    --text: #e6e8ec;
+    --text-dim: #8a8f9c;
+    --accent: #6ea8fe;
+    --accent-dim: #2d4a7a;
+    --green: #4caf7d;
+    --red: #e0716f;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f5f6f8;
+      --panel: #ffffff;
+      --panel-border: #e2e5ea;
+      --text: #1a1d24;
+      --text-dim: #666c78;
+      --accent: #2563eb;
+      --accent-dim: #dbe6fb;
+      --green: #1f9d5b;
+      --red: #c0392b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 24px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .sub { color: var(--text-dim); margin: 0 0 24px; font-size: 13px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
+  input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 8px 10px;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  button {
+    background: var(--accent);
+    color: #0b0d12;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button.secondary {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--panel-border);
+    font-weight: 400;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--panel-border); font-size: 13px; }
+  th { color: var(--text-dim); font-weight: 500; }
+  .bar-track { background: var(--panel-border); border-radius: 4px; height: 8px; width: 100%; overflow: hidden; }
+  .bar-fill { background: var(--accent); height: 100%; }
+  .row-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .err { color: var(--red); font-size: 13px; margin-top: 8px; }
+  .dim { color: var(--text-dim); }
+  #app { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Narrately Cloud</h1>
+  <p class="sub">Team activity rollup — session metadata only, never file contents.</p>
+
+  <div id="login" class="card">
+    <label for="email">Email Address</label>
+    <input id="email" type="email" autocomplete="username" placeholder="Email address" />
+    <label for="password">Password</label>
+    <input id="password" type="password" autocomplete="current-password" placeholder="Password"/>
+    <button id="loginBtn">Log in</button>
+    <div id="loginErr" class="err"></div>
+  </div>
+
+  <div id="app">
+    <div class="row-head">
+      <span id="whoami" class="dim"></span>
+      <button class="secondary" id="logoutBtn">Log out</button>
+    </div>
+
+    <div id="billingBanner" class="card" style="display:none;">
+      <div class="row-head">
+        <span id="billingStatus"></span>
+        <button id="upgradeBtn">Upgrade team plan</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row-head">
+        <strong>This week, by teammate</strong>
+        <span id="orgLabel" class="dim"></span>
+      </div>
+      <table id="teamTable">
+        <thead><tr><th>Member</th><th>Time</th><th style="width:40%">Share</th><th>Sessions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div id="teamEmpty" class="dim" style="display:none; padding-top: 8px;">No synced activity yet this week.</div>
+    </div>
+
+    <div class="card">
+      <strong>Daily timeline</strong>
+      <table id="dayTable">
+        <thead><tr><th>Day</th><th>Time</th><th style="width:50%">&nbsp;</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+(function () {
+  const SUPABASE_URL = window.NARRATELY_CLOUD_URL || '';
+  const SUPABASE_ANON_KEY = window.NARRATELY_CLOUD_ANON_KEY || '';
+
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    document.body.innerHTML =
+      '<div class="wrap"><div class="card err">Missing config.js — copy ' +
+      'config.example.js to config.js and fill in your Supabase project URL ' +
+      'and anon key. See cloud/README.md.</div></div>';
+    return;
+  }
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const loginCard = document.getElementById('login');
+  const app = document.getElementById('app');
+  const loginErr = document.getElementById('loginErr');
+
+  function formatDuration(sec) {
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    if (h) return h + 'h ' + m + 'm';
+    return m + 'm';
+  }
+
+  function startOfWeek() {
+    const d = new Date();
+    const day = d.getDay();
+    const diff = (day === 0 ? -6 : 1) - day;
+    d.setDate(d.getDate() + diff);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  async function loadRollup() {
+    const since = startOfWeek().toISOString();
+    const { data: rows, error } = await supabase
+      .from('synced_sessions')
+      .select('user_id, started_at, duration_sec')
+      .gte('started_at', since);
+
+    if (error) {
+      document.getElementById('teamEmpty').style.display = 'block';
+      document.getElementById('teamEmpty').textContent = 'Could not load: ' + error.message;
+      return;
+    }
+
+    // By-member totals. We only have user_id (uuid) here — Supabase's admin
+    // API is needed to resolve emails; for now label by short id. Swap in a
+    // `profiles` table (id, display_name) synced from auth.users if you want names.
+    const byMember = new Map();
+    const byDay = new Map();
+    for (const row of rows) {
+      byMember.set(row.user_id, (byMember.get(row.user_id) || 0) + row.duration_sec);
+      const day = row.started_at.slice(0, 10);
+      byDay.set(day, (byDay.get(day) || 0) + row.duration_sec);
+    }
+
+    const memberRows = [...byMember.entries()].sort((a, b) => b[1] - a[1]);
+    const teamTotal = memberRows.reduce((sum, [, s]) => sum + s, 0);
+    const maxMember = Math.max(1, ...memberRows.map(([, s]) => s));
+
+    const tbody = document.querySelector('#teamTable tbody');
+    tbody.innerHTML = '';
+    document.getElementById('teamEmpty').style.display = memberRows.length ? 'none' : 'block';
+
+    for (const [userId, sec] of memberRows) {
+      const sessions = rows.filter((r) => r.user_id === userId).length;
+      const pct = Math.round((sec / maxMember) * 100);
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + userId.slice(0, 8) + '&hellip;</td>' +
+        '<td>' + formatDuration(sec) + '</td>' +
+        '<td><div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div></td>' +
+        '<td class="dim">' + sessions + '</td>';
+      tbody.appendChild(tr);
+    }
+
+    const dayRows = [...byDay.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+    const maxDay = Math.max(1, ...dayRows.map(([, s]) => s));
+    const dtbody = document.querySelector('#dayTable tbody');
+    dtbody.innerHTML = '';
+    for (const [day, sec] of dayRows) {
+      const pct = Math.round((sec / maxDay) * 100);
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>' + day + '</td>' +
+        '<td>' + formatDuration(sec) + '</td>' +
+        '<td><div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div></td>';
+      dtbody.appendChild(tr);
+    }
+  }
+
+  let currentOrgId = null;
+
+  async function loadBilling() {
+    const { data: memberships } = await supabase.from('memberships').select('org_id').limit(1);
+    if (!memberships || !memberships.length) return;
+    currentOrgId = memberships[0].org_id;
+
+    const { data: org } = await supabase
+      .from('orgs')
+      .select('id, name, subscription_status')
+      .eq('id', currentOrgId)
+      .single();
+    if (!org) return;
+
+    document.getElementById('orgLabel').textContent = org.name;
+
+    const banner = document.getElementById('billingBanner');
+    const statusEl = document.getElementById('billingStatus');
+    if (org.subscription_status === 'active') {
+      banner.style.display = 'none';
+    } else {
+      banner.style.display = 'block';
+      statusEl.textContent =
+        org.subscription_status === 'trialing'
+          ? 'On trial — sync will pause once the trial ends.'
+          : 'Subscription ' + org.subscription_status + ' — new syncs are blocked until you upgrade.';
+    }
+  }
+
+  document.getElementById('upgradeBtn').addEventListener('click', async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData.session || !currentOrgId) return;
+    const resp = await fetch(SUPABASE_URL + '/functions/v1/create-checkout-session', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer ' + sessionData.session.access_token,
+      },
+      body: JSON.stringify({ org_id: currentOrgId }),
+    });
+    const body = await resp.json();
+    if (body.url) location.href = body.url;
+    else alert('Could not start checkout: ' + (body.error || resp.statusText));
+  });
+
+  async function showApp(user) {
+    loginCard.style.display = 'none';
+    app.style.display = 'block';
+    document.getElementById('whoami').textContent = user.email;
+    await loadBilling();
+    await loadRollup();
+  }
+
+  document.getElementById('loginBtn').addEventListener('click', async () => {
+    loginErr.textContent = '';
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      loginErr.textContent = error.message;
+      return;
+    }
+    showApp(data.user);
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    location.reload();
+  });
+
+  supabase.auth.getSession().then(({ data }) => {
+    if (data.session) showApp(data.session.user);
+  });
+})();
+</script>
+</body>
+</html>
