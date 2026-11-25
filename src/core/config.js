@@ -39,6 +39,9 @@ export const DEFAULT_CONFIG = {
     from: null,
     smtp: { host: null, port: 587, secure: false, user: null, pass: null },
   },
+  cloud: {
+    auto_sync: true,
+  },
 };
 
 function merge(base, override) {

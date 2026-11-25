@@ -14,6 +14,15 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!, { apiVersion: '202
 const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET')!;
 const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
 
+// Collapses Stripe's subscription states onto what is_org_active() in
+// schema.sql understands. A Stripe-side trial means a card is on file, so it
+// counts as paid; past_due keeps syncing while Stripe retries the card.
+function orgStatus(stripeStatus: Stripe.Subscription.Status): string {
+  if (stripeStatus === 'active' || stripeStatus === 'trialing') return 'active';
+  if (stripeStatus === 'past_due') return 'past_due';
+  return 'canceled';
+}
+
 Deno.serve(async (req) => {
   const signature = req.headers.get('stripe-signature');
   const body = await req.text();
@@ -38,8 +47,7 @@ Deno.serve(async (req) => {
     case 'customer.subscription.deleted': {
       const sub = event.data.object as Stripe.Subscription;
       const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
-      const status = sub.status === 'active' || sub.status === 'trialing' ? sub.status : 'canceled';
-      await admin.from('orgs').update({ subscription_status: status }).eq('stripe_customer_id', customerId);
+      await admin.from('orgs').update({ subscription_status: orgStatus(sub.status) }).eq('stripe_customer_id', customerId);
       break;
     }
   }

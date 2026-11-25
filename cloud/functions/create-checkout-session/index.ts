@@ -12,35 +12,61 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!, { apiVersion: '202
 const PRICE_ID = Deno.env.get('STRIPE_PRICE_ID')!;
 const SITE_URL = Deno.env.get('NARRATELY_DASHBOARD_URL') ?? 'http://127.0.0.1:5544';
 
+// The dashboard is served from its own origin and sends an Authorization
+// header, so the browser preflights every call — without these headers on
+// the OPTIONS reply (and the real one) the Upgrade button can never connect.
+const CORS = {
+  'Access-Control-Allow-Origin': SITE_URL,
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+};
+
+function json(payload: unknown, status: number) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { ...CORS, 'content-type': 'application/json' },
+  });
+}
+
 Deno.serve(async (req) => {
-  if (req.method !== 'POST') return new Response('method not allowed', { status: 405 });
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
+  if (req.method !== 'POST') return json({ error: 'method not allowed' }, 405);
 
   const authHeader = req.headers.get('Authorization');
-  if (!authHeader) return new Response('missing auth', { status: 401 });
+  if (!authHeader) return json({ error: 'missing auth' }, 401);
 
   const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!, {
     global: { headers: { Authorization: authHeader } },
   });
 
   const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError || !userData.user) return new Response('unauthorized', { status: 401 });
+  if (userError || !userData.user) return json({ error: 'unauthorized' }, 401);
 
   let body: { org_id?: string };
   try {
     body = await req.json();
   } catch {
-    return new Response('invalid JSON', { status: 400 });
+    return json({ error: 'invalid JSON' }, 400);
   }
-  if (!body.org_id) return new Response('org_id required', { status: 400 });
+  if (!body.org_id) return json({ error: 'org_id required' }, 400);
 
-  // RLS on `orgs` only allows this select if the caller is a member — that IS
-  // the authorization check for "can this user bill this org".
+  // Billing is an owner action. is_org_owner() runs against the caller's JWT,
+  // so this is the authorization check for "can this user bill this org".
+  const { data: isOwner } = await supabase.rpc('is_org_owner', { check_org_id: body.org_id });
+  if (!isOwner) return json({ error: 'only the team owner can manage billing' }, 403);
+
   const { data: org, error: orgError } = await supabase
     .from('orgs')
     .select('id, stripe_customer_id')
     .eq('id', body.org_id)
     .single();
-  if (orgError || !org) return new Response('org not found or not a member', { status: 404 });
+  if (orgError || !org) return json({ error: 'org not found' }, 404);
+
+  // Owners can read every membership row of their org, so this counts seats.
+  const { count: seats } = await supabase
+    .from('memberships')
+    .select('user_id', { count: 'exact', head: true })
+    .eq('org_id', body.org_id);
 
   let customerId = org.stripe_customer_id as string | null;
   if (!customerId) {
@@ -59,13 +85,11 @@ Deno.serve(async (req) => {
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     customer: customerId,
-    line_items: [{ price: PRICE_ID, quantity: 1 }],
+    line_items: [{ price: PRICE_ID, quantity: Math.max(1, seats ?? 1) }],
     success_url: `${SITE_URL}/?billing=success`,
     cancel_url: `${SITE_URL}/?billing=cancelled`,
     metadata: { org_id: body.org_id },
   });
 
-  return new Response(JSON.stringify({ url: session.url }), {
-    headers: { 'content-type': 'application/json' },
-  });
+  return json({ url: session.url }, 200);
 });
