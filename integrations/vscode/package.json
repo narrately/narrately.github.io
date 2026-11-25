@@ -2,7 +2,7 @@
   "name": "narrately-collector",
   "displayName": "Narrately Collector",
   "description": "Reports editor focus and save activity to the local Narrately daemon. Metadata only — never file contents.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "narrately",
   "license": "MIT",
   "repository": {
@@ -14,8 +14,9 @@
   },
   "homepage": "https://github.com/narrately/narrately.github.io#readme",
   "keywords": ["time-tracking", "developer-tools", "productivity", "activity-report"],
+  "icon": "icon.png",
   "galleryBanner": {
-    "color": "#171a21",
+    "color": "#0C0C10",
     "theme": "dark"
   },
   "engines": {

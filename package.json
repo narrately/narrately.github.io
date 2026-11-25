@@ -1,6 +1,6 @@
 {
   "name": "narrately",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "An AI CLI tool that automatically generates your daily developer activity report from your IDEs, terminal, and Git history",
   "type": "module",
   "bin": {
@@ -24,6 +24,8 @@
   "files": [
     "bin",
     "src",
+    "cloud/dashboard/index.html",
+    "cloud/dashboard/assets",
     "integrations/vscode",
     "integrations/intellij/src",
     "integrations/intellij/gradle",
