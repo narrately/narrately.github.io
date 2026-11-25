@@ -6,280 +6,249 @@
 <title>Narrately — Documentation</title>
 <meta name="description" content="Full documentation for Narrately — installation, onboarding, commands, project context, teams, configuration, and the privacy model.">
 <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
-<link rel="preload" href="assets/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#1C1F22">
 <script>
   document.documentElement.classList.add('js');
   try { var t = localStorage.getItem('narrately.theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
 </script>
 <style>
-  @font-face { font-family: 'Geist'; src: url(assets/geist.woff2) format('woff2'); font-weight: 300 700; font-display: swap; }
-  @font-face { font-family: 'Geist Mono'; src: url(assets/geist-mono.woff2) format('woff2'); font-weight: 400 600; font-display: swap; }
-  @font-face { font-family: 'Instrument Serif'; src: url(assets/instrument-serif.woff2) format('woff2'); font-style: normal; font-display: swap; }
-  @font-face { font-family: 'Instrument Serif'; src: url(assets/instrument-serif-italic.woff2) format('woff2'); font-style: italic; font-display: swap; }
+  @font-face { font-family: 'Barlow'; src: url(assets/barlow-400.woff2) format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Barlow'; src: url(assets/barlow-500.woff2) format('woff2'); font-weight: 500; font-display: swap; }
+  @font-face { font-family: 'Barlow'; src: url(assets/barlow-600.woff2) format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Barlow Semi Condensed'; src: url(assets/barlow-sc-600.woff2) format('woff2'); font-weight: 600; font-display: swap; }
+  @font-face { font-family: 'Barlow Semi Condensed'; src: url(assets/barlow-sc-700.woff2) format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Overpass Mono'; src: url(assets/overpass-mono.woff2) format('woff2'); font-weight: 300 700; font-display: swap; }
 
   :root {
-    color-scheme: dark;
-    --ink: #08080A; --ink-2: #0D0D11; --surface: #121217; --surface-2: #18181F; --surface-3: #22222B;
-    --line: rgba(255,255,255,.07); --line-2: rgba(255,255,255,.12);
-    --text: #F3F1EC; --text-2: #A6A39C; --text-3: #6E6C67;
-    --signal: #D4FF4F; --signal-ink: #0B1000; --signal-text: #D4FF4F; --signal-soft: rgba(212,255,79,.12);
-    --violet: #A594FF; --coral: #FF7D61; --sky: #6FCBFF; --amber: #FFC65C;
-    --good: #7BE495; --bad: #FF7D7D;
-    --glow-1: rgba(212,255,79,.08); --glow-2: rgba(165,148,255,.09);
-    --shadow: 0 30px 80px -30px rgba(0,0,0,.75);
-    --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-    --font-serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
-    --font-mono: 'Geist Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
-    --ease-out: cubic-bezier(.16, 1, .3, 1); --spring: cubic-bezier(.34, 1.56, .64, 1);
-    --top: 68px;
-  }
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      color-scheme: light;
-      --ink: #F4F2ED; --ink-2: #ECE9E2; --surface: #FFFFFF; --surface-2: #F7F5F0; --surface-3: #ECE9E2;
-      --line: rgba(18,18,18,.08); --line-2: rgba(18,18,18,.15);
-      --text: #111111; --text-2: #57544E; --text-3: #8D8A83;
-      --signal-text: #4A6500; --signal-soft: rgba(120,160,0,.13);
-      --violet: #6B57F0; --coral: #E5502F; --sky: #1689C9; --amber: #C98A00;
-      --good: #178A4A; --bad: #D0342C;
-      --glow-1: rgba(156,199,0,.12); --glow-2: rgba(107,87,240,.08);
-      --shadow: 0 30px 70px -35px rgba(30,25,15,.28);
-    }
-  }
-  :root[data-theme="light"] {
     color-scheme: light;
-    --ink: #F4F2ED; --ink-2: #ECE9E2; --surface: #FFFFFF; --surface-2: #F7F5F0; --surface-3: #ECE9E2;
-    --line: rgba(18,18,18,.08); --line-2: rgba(18,18,18,.15);
-    --text: #111111; --text-2: #57544E; --text-3: #8D8A83;
-    --signal-text: #4A6500; --signal-soft: rgba(120,160,0,.13);
-    --violet: #6B57F0; --coral: #E5502F; --sky: #1689C9; --amber: #C98A00;
-    --good: #178A4A; --bad: #D0342C;
-    --glow-1: rgba(156,199,0,.12); --glow-2: rgba(107,87,240,.08);
-    --shadow: 0 30px 70px -35px rgba(30,25,15,.28);
+    --paper: #F6F7F2; --paper-2: #ECEFE7; --sheet: #FFFFFF;
+    --grid: #E1EADF; --grid-2: #BED3C1; --print: #346B47;
+    --ink: #171A1C; --ink-2: #444A4E; --ink-3: #5C6368;
+    --rule: rgba(23,26,28,.13); --rule-2: rgba(23,26,28,.3);
+    --red: #C41E26; --red-ink: #FFFFFF;
+    --blue: #1E4FD0; --violet: #7A3CC6; --green: #0F7040; --brown: #96570F; --green-soft: rgba(18,122,69,.08);
+    --chassis: #1C1F22; --chassis-2: #2A2E32; --chassis-3: #3B4045; --engrave: #E6E9E3; --engrave-2: #A7AEA8;
+    --f-display: 'Barlow Semi Condensed', 'Barlow', 'Arial Narrow', sans-serif;
+    --f-body: 'Barlow', system-ui, sans-serif;
+    --f-mono: 'Overpass Mono', ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+    --side: 272px;
+  }
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #121513; --paper-2: #1B1F1C; --sheet: #191D1A;
+    --grid: #1C221E; --grid-2: #2D3831; --print: #7FB592;
+    --ink: #E8ECE6; --ink-2: #B4BCB5; --ink-3: #8F9891;
+    --rule: rgba(232,236,230,.12); --rule-2: rgba(232,236,230,.26);
+    --red: #FF5B4F; --red-ink: #1A0503;
+    --blue: #7D9DFF; --violet: #BA92FF; --green: #47C380; --brown: #E3A24A; --green-soft: rgba(71,195,128,.09);
+    --chassis: #0B0D0C; --chassis-2: #161A18; --chassis-3: #262C29; --engrave: #DDE2DC; --engrave-2: #8F978F;
   }
 
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-padding-top: calc(var(--top) + 20px); }
-  body { margin: 0; background: var(--ink); color: var(--text); font: 16px/1.65 var(--font-sans); -webkit-font-smoothing: antialiased; }
-  body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(900px 500px at 70% -10%, var(--glow-2), transparent 60%), radial-gradient(700px 420px at 10% -10%, var(--glow-1), transparent 60%); }
-  .grain { position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: .045; mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-  a { color: inherit; }
-  ::selection { background: var(--signal); color: var(--signal-ink); }
-  :focus-visible { outline: 2px solid var(--signal-text); outline-offset: 2px; }
-  button, input { font-family: inherit; }
-  code { font-family: var(--font-mono); }
-  svg.icon { width: 16px; height: 16px; flex-shrink: 0; }
-  kbd { font-family: var(--font-mono); font-size: 10.5px; padding: 0 6px; border-radius: 6px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--text-3); line-height: 1.6; }
-  ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
-  .progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 80; transform-origin: 0 50%; transform: scaleX(0); background: linear-gradient(90deg, var(--violet), var(--signal)); }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-padding-top: 84px; scrollbar-color: var(--grid-2) var(--paper); }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.65 var(--f-body); -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+  ::selection { background: var(--red); color: var(--red-ink); }
+  a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  :focus-visible { outline: 1.5px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 4px var(--paper), 0 0 0 5.5px var(--red); border-radius: 2px; }
+  .icon { width: 1.05em; height: 1.05em; flex: none; }
+  code, kbd { font-family: var(--f-mono); font-size: .84em; }
+  code { padding: 1px 5px; background: var(--paper-2); border: 1px solid var(--rule); border-radius: 2px; color: var(--ink); }
+  kbd { display: inline-block; min-width: 22px; padding: 1px 6px; border: 1px solid var(--rule-2); border-bottom-width: 2px; border-radius: 3px; background: var(--sheet); text-align: center; color: var(--ink); }
+  strong, b { font-weight: 600; color: var(--ink); }
+  .skip { position: absolute; left: 12px; top: -60px; z-index: 60; background: var(--red); color: var(--red-ink); padding: 10px 14px; font-weight: 600; }
+  .skip:focus { top: 10px; }
 
-  /* ---------- top bar ---------- */
-  header.site { position: sticky; top: 0; z-index: 60; height: var(--top); background: color-mix(in srgb, var(--ink) 78%, transparent); backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--line); }
-  .nav-row { max-width: 1440px; height: 100%; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 16px; }
-  .lockup { display: flex; align-items: center; gap: 9px; text-decoration: none; font-weight: 620; font-size: 18.5px; letter-spacing: -.045em; }
-  .lockup img { width: 28px; height: 28px; border-radius: 8px; transition: transform .6s var(--spring); }
-  .lockup:hover img { transform: rotate(-10deg) scale(1.08); }
-  .lockup em { font-style: normal; font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); border: 1px solid var(--line-2); padding: 2px 8px; border-radius: 999px; }
-  .search-btn { display: flex; align-items: center; gap: 10px; min-width: 260px; margin-left: 18px; padding: 8px 10px 8px 14px; border-radius: 12px; cursor: pointer; background: var(--surface); border: 1px solid var(--line); color: var(--text-3); font-size: 13.5px; transition: border-color .2s, color .2s; }
-  .search-btn:hover { border-color: var(--line-2); color: var(--text-2); }
-  .search-btn kbd { margin-left: auto; }
-  nav.links { display: flex; align-items: center; gap: 2px; margin-left: auto; }
-  nav.links a { padding: 7px 12px; border-radius: 999px; text-decoration: none; font-size: 14px; color: var(--text-2); transition: color .2s, background .2s; }
-  nav.links a:hover { color: var(--text); background: var(--surface-2); }
-  .icon-btn { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; background: none; border: 1px solid var(--line-2); color: var(--text-2); cursor: pointer; transition: transform .45s var(--spring), color .2s; flex-shrink: 0; }
-  .icon-btn:hover { color: var(--text); }
-  #themeToggle:hover { transform: rotate(-20deg); }
-  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; font-size: 13.5px; font-weight: 600; text-decoration: none; border: 1px solid transparent; cursor: pointer; white-space: nowrap; transition: transform .3s var(--ease-out), box-shadow .3s; }
-  .btn-primary { background: var(--signal); color: var(--signal-ink); }
-  .btn-primary:hover { box-shadow: 0 14px 34px -14px var(--signal); transform: translateY(-1px); }
+  /* ---------- chassis ---------- */
+  header.site { position: sticky; top: 0; z-index: 40; background: var(--chassis); color: var(--engrave); border-bottom: 1px solid #000; }
+  .nav-row { display: flex; align-items: center; gap: 14px; height: 58px; padding: 0 20px; }
+  .lockup { display: flex; align-items: center; gap: 10px; font: 600 22px/1 var(--f-display); color: var(--engrave); text-decoration: none; letter-spacing: -.01em; }
+  .lockup img { width: 28px; height: 28px; display: block; }
+  .lockup .sub { margin-left: 4px; padding: 4px 7px 3px; border: 1px solid var(--chassis-3); border-radius: 2px; font: 600 12px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; color: var(--engrave-2); }
+  .search-btn { display: flex; align-items: center; gap: 10px; width: 300px; height: 36px; margin-left: 22px; padding: 0 8px 0 12px; border: 1px solid var(--chassis-3); border-radius: 3px; background: var(--chassis-2); color: var(--engrave-2); font: 400 14.5px/1 var(--f-body); cursor: pointer; }
+  .search-btn:hover { border-color: var(--engrave-2); color: var(--engrave); }
+  .search-btn kbd { margin-left: auto; background: var(--chassis); border-color: var(--chassis-3); color: var(--engrave-2); font-size: 11.5px; }
+  .links { display: flex; gap: 2px; margin-left: auto; }
+  .links a { padding: 10px 11px 9px; font: 500 14px/1 var(--f-display); letter-spacing: .07em; text-transform: uppercase; color: var(--engrave-2); text-decoration: none; border-radius: 2px; }
+  .links a:hover { color: var(--engrave); background: var(--chassis-2); }
+  .icon-btn { display: inline-grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--chassis-3); border-radius: 3px; background: var(--chassis-2); color: var(--engrave); cursor: pointer; }
+  .icon-btn:hover { background: var(--chassis-3); }
   #menuBtn { display: none; }
-  @media (max-width: 1100px) { nav.links { display: none; } .search-btn { min-width: 0; margin-left: auto; } .search-btn span.t { display: none; } .search-btn kbd { display: none; } }
-  @media (max-width: 980px) { #menuBtn { display: grid; } .nav-row .btn-primary { display: none; } }
-  @media (max-width: 520px) { .lockup em { display: none; } }
+  .btn { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 3px; background: var(--red); border: 1px solid var(--red); color: var(--red-ink); font: 600 13.5px/1 var(--f-display); letter-spacing: .07em; text-transform: uppercase; text-decoration: none; white-space: nowrap; }
+  .btn:hover { background: var(--engrave); border-color: var(--engrave); color: var(--chassis); }
 
-  /* ---------- layout ---------- */
-  .shell { position: relative; z-index: 1; max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 280px minmax(0, 1fr); }
-  @media (max-width: 980px) { .shell { grid-template-columns: minmax(0, 1fr); } }
-
-  aside.sidebar { position: sticky; top: var(--top); height: calc(100vh - var(--top)); overflow-y: auto; padding: 24px 16px 60px; border-right: 1px solid var(--line); font-size: 13.5px; scrollbar-width: thin; scrollbar-color: var(--surface-3) transparent; }
-  @media (max-width: 980px) {
-    aside.sidebar { position: fixed; top: var(--top); left: 0; bottom: 0; height: auto; width: min(320px, 86vw); z-index: 55; background: var(--ink-2); box-shadow: var(--shadow); transform: translateX(-102%); transition: transform .45s var(--ease-out); }
-    body.menu-open aside.sidebar { transform: none; }
-    body.menu-open .scrim { opacity: 1; pointer-events: auto; }
-  }
-  .scrim { position: fixed; inset: var(--top) 0 0; z-index: 50; background: rgba(5,5,8,.5); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .3s; }
-  .filter { display: flex; align-items: center; gap: 8px; padding: 0 12px; margin-bottom: 16px; border-radius: 11px; background: var(--surface); border: 1px solid var(--line); color: var(--text-3); transition: border-color .2s, box-shadow .2s; }
-  .filter:focus-within { border-color: color-mix(in srgb, var(--signal-text) 55%, var(--line-2)); box-shadow: 0 0 0 4px var(--signal-soft); }
-  .filter input { flex: 1; min-width: 0; border: none; background: none; color: var(--text); font-size: 13.5px; padding: 9px 0; outline: none; }
-  .side-flat, .side-group > button { width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; text-decoration: none; background: none; border: none; color: var(--text); font-weight: 560; font-size: 13.5px; cursor: pointer; text-align: left; transition: background .15s; }
-  .side-flat:hover, .side-group > button:hover { background: var(--surface-2); }
-  .side-flat .ic, .side-group > button .ic { width: 16px; height: 16px; color: var(--text-3); flex-shrink: 0; }
-  .side-group > button .chev { margin-left: auto; width: 13px; height: 13px; color: var(--text-3); transition: transform .3s var(--spring); }
-  .side-group.open > button .chev { transform: rotate(90deg); }
-  .side-items { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s var(--ease-out); }
+  /* ---------- shell: chart-paper margin + reading column ---------- */
+  .shell { display: grid; grid-template-columns: var(--side) minmax(0, 1fr); min-height: calc(100vh - 58px); }
+  .sidebar { position: sticky; top: 58px; height: calc(100vh - 58px); overflow-y: auto; padding: 20px 16px 40px 18px; border-right: 1.5px solid var(--grid-2); background-color: var(--paper);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 12px 12px; scrollbar-width: thin; }
+  .filter { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 10px; margin-bottom: 16px; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--sheet); color: var(--ink-3); }
+  .filter input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--ink); font: 400 15px var(--f-body); }
+  .filter input::placeholder { color: var(--ink-3); }
+  .filter:focus-within { border-color: var(--ink); box-shadow: 0 0 0 3px var(--paper), 0 0 0 4.5px var(--red); }
+  .filter input:focus-visible, .palette-search input:focus-visible { outline: none; box-shadow: none; }
+  .side-flat, .side-group > button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px; border: 0; background: var(--paper); color: var(--ink); text-align: left; text-decoration: none; font: 600 13.5px/1.2 var(--f-display); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; border-radius: 2px; }
+  .side-flat:hover, .side-group > button:hover { background: var(--paper-2); }
+  .side-group { margin-top: 6px; }
+  .side-group .chev { margin-left: auto; display: inline-flex; color: var(--ink-3); transition: transform .2s var(--ease); }
+  .side-group.open .chev { transform: rotate(90deg); }
+  .side-items { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s var(--ease); }
   .side-group.open .side-items { grid-template-rows: 1fr; }
-  .side-items ul { overflow: hidden; list-style: none; margin: 0; padding: 0 0 0 26px; }
-  .side-group.open .side-items ul { padding-bottom: 8px; }
-  .side-items a { position: relative; display: block; margin: 1px 0; padding: 6px 10px 6px 14px; border-radius: 8px; text-decoration: none; color: var(--text-2); font-size: 13px; transition: color .15s, background .15s; }
-  .side-items a::before { content: ''; position: absolute; left: 0; top: 7px; bottom: 7px; width: 2px; border-radius: 2px; background: var(--line-2); transition: background .2s; }
-  .side-items a:hover { color: var(--text); background: var(--surface-2); }
-  .side-items a.active { color: var(--text); background: var(--surface-2); }
-  .side-items a.active::before { background: var(--signal-text); }
-  .side-items a.hidden, .side-group.hidden, .side-flat.hidden { display: none; }
-  .new-dot { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: var(--signal); color: var(--signal-ink); font-size: 9.5px; font-weight: 700; letter-spacing: .02em; vertical-align: 1px; }
-
-  main.content { padding: 44px 56px 120px; min-width: 0; max-width: 980px; }
-  @media (max-width: 640px) { main.content { padding: 30px 18px 90px; } }
+  .side-items ul { overflow: hidden; list-style: none; margin: 0; padding: 0 0 0 9px; }
+  .side-items li { border-left: 1.5px dashed var(--grid-2); }
+  .side-items a { display: flex; align-items: center; gap: 8px; padding: 5px 10px 5px 14px; margin-left: -1.5px; border-left: 2px solid transparent; background: var(--paper); font-size: 15px; color: var(--ink-2); text-decoration: none; }
+  .side-items a:hover { color: var(--ink); }
+  .side-items a.active { color: var(--ink); font-weight: 600; border-left: 2px solid var(--red); }
+  .new-dot { padding: 1px 5px 0; border: 1px solid var(--red); color: var(--red); font: 600 11px/1.3 var(--f-display); letter-spacing: .08em; }
+  .hidden { display: none !important; }
+  .scrim { display: none; }
 
   /* ---------- content ---------- */
-  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--signal-text); margin: 0 0 16px; }
-  .eyebrow::before { content: ''; width: 18px; height: 1px; background: currentColor; }
-  .welcome { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .95fr); gap: 36px; align-items: center; margin-bottom: 60px; }
-  @media (max-width: 1180px) { .welcome { grid-template-columns: minmax(0, 1fr); } }
-  .welcome h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(52px, 6vw, 86px); line-height: .95; letter-spacing: -.035em; margin: 0 0 18px; }
-  .welcome h1 em { color: var(--signal-text); }
-  .welcome p.lead { font-size: 17px; color: var(--text-2); margin: 0 0 22px; max-width: 46ch; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chips a { display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 999px; text-decoration: none; font-size: 13px; color: var(--text-2); background: var(--surface); border: 1px solid var(--line); transition: color .2s, border-color .2s, transform .3s var(--spring); }
-  .chips a:hover { color: var(--text); border-color: var(--line-2); transform: translateY(-2px); }
+  .content { position: relative; padding: 64px 64px 96px; max-width: 980px; }
+  /* printed margin scale: a tick every 24px, a longer one every 120px */
+  .content::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 14px; pointer-events: none; background-image: linear-gradient(var(--print) 1px, transparent 1px), linear-gradient(var(--grid-2) 1px, transparent 1px); background-size: 14px 120px, 7px 24px; background-repeat: repeat-y; }
+  .welcome { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 330px); gap: 48px; align-items: end; padding-bottom: 56px; border-bottom: 1.5px solid var(--ink); }
+  .welcome h1 { margin: 0 0 18px; font: 700 clamp(3rem, 5.6vw, 4.6rem)/.92 var(--f-display); letter-spacing: -.025em; text-wrap: balance; }
+  .lead { margin: 0 0 26px; font-size: 19px; line-height: 1.55; color: var(--ink-2); max-width: 46ch; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  .chips a { display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1.5px solid var(--red); font: 600 14px/1 var(--f-display); letter-spacing: .07em; text-transform: uppercase; text-decoration: none; }
+  .chips a:hover { color: var(--red); }
+  .code-float { position: relative; z-index: 0; background: var(--sheet); border: 1px solid var(--rule-2); }
+  .code-float::before { content: ''; position: absolute; inset: 0; transform: translate(6px, 6px); background: var(--paper-2); border: 1px solid var(--rule-2); z-index: -1; }
+  .cf-top { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-bottom: 1px solid var(--rule); background: var(--sheet); font: 500 11.5px/1 var(--f-mono); color: var(--ink-3); }
+  .cf-top .rec { width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+  .code-float pre { margin: 0; padding: 14px 16px; background: var(--sheet); font: 400 12.5px/1.6 var(--f-mono); color: var(--ink-2); white-space: pre-wrap; }
+  .code-float .ps { color: var(--red); } .code-float .h { color: var(--blue); font-weight: 600; }
 
-  .code-float { border-radius: 20px; overflow: hidden; background: #0B0B0E; border: 1px solid rgba(255,255,255,.1); box-shadow: var(--shadow); color: #E8E3DA; }
-  .cf-top { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #23232B; }
-  .cf-top i { width: 10px; height: 10px; border-radius: 50%; background: #2A2A33; }
-  .cf-top span { margin-left: 8px; font-family: var(--font-mono); font-size: 11.5px; color: #7D7A73; }
-  .code-float pre { margin: 0; padding: 18px 20px; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.8; overflow-x: auto; }
-  .code-float .ps { color: #D4FF4F; } .code-float .h { color: #FFC65C; } .code-float .c { color: #7D7A73; } .code-float b { color: #fff; font-weight: 500; }
+  .section-title { margin: 56px 0 6px; font: 700 2rem/1 var(--f-display); letter-spacing: -.01em; }
+  .guide-index { margin: 18px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; border-top: 1px solid var(--rule-2); }
+  .guide-index li { border-bottom: 1px solid var(--rule-2); }
+  .guide-index a { display: block; padding: 16px 0; text-decoration: none; }
+  .guide-index b { display: flex; align-items: center; gap: 8px; font: 600 17px/1.3 var(--f-body); }
+  .guide-index b::after { content: ''; flex: none; width: 16px; height: 16px; margin-left: auto; background: var(--ink-3); transition: transform .2s var(--ease), background-color .2s;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat; }
+  .guide-index a:hover b::after { background: var(--red); transform: translateX(3px); }
+  .guide-index span:not(.new-dot) { display: block; margin-top: 3px; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
 
-  .section-title { font-family: var(--font-serif); font-weight: 400; font-size: 36px; letter-spacing: -.02em; margin: 0 0 18px; }
-  .guides-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 30px; }
-  @media (max-width: 720px) { .guides-grid { grid-template-columns: minmax(0, 1fr); } }
-  .guide-card { position: relative; overflow: hidden; display: flex; gap: 14px; padding: 18px; border-radius: 18px; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--line); transition: border-color .25s, transform .35s var(--ease-out); }
-  .guide-card:hover { border-color: var(--line-2); transform: translateY(-3px); }
-  .guide-card::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--signal-text) 8%, transparent), transparent 60%); }
-  .guide-card:hover::after { opacity: 1; }
-  .guide-card .gi { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; background: var(--signal-soft); color: var(--signal-text); }
-  .guide-card .gi.v { background: color-mix(in srgb, var(--violet) 15%, transparent); color: var(--violet); }
-  .guide-card .gi.c { background: color-mix(in srgb, var(--coral) 15%, transparent); color: var(--coral); }
-  .guide-card .gi.s { background: color-mix(in srgb, var(--sky) 15%, transparent); color: var(--sky); }
-  .guide-card h4 { margin: 2px 0 4px; font-size: 15.5px; font-weight: 600; letter-spacing: -.02em; display: flex; align-items: center; gap: 6px; }
-  .guide-card p { margin: 0; font-size: 13.5px; color: var(--text-2); line-height: 1.55; }
-  .guide-card .arrow { position: absolute; top: 18px; right: 16px; color: var(--text-3); transition: transform .35s var(--spring), color .2s; }
-  .guide-card:hover .arrow { transform: translate(3px, -3px); color: var(--text); }
+  .doc-section { padding-top: 64px; }
+  .doc-h { position: relative; margin: 0 0 16px; font: 700 2.15rem/1.05 var(--f-display); letter-spacing: -.012em; text-wrap: balance; }
+  .doc-h .anchor { margin-left: 10px; color: var(--grid-2); text-decoration: none; font-weight: 600; opacity: 0; transition: opacity .15s; }
+  .doc-h:hover .anchor, .anchor:focus-visible { opacity: 1; }
+  .doc-h .anchor:hover { color: var(--red); }
+  .doc-h3 { margin: 34px 0 10px; font: 600 1.2rem/1.3 var(--f-body); }
+  .doc-p { margin: 0 0 18px; max-width: 68ch; color: var(--ink-2); }
+  .doc-p a, .callout a, .faq-item a { color: var(--ink); text-decoration-color: var(--red); }
 
-  .doc-section { padding: 56px 0 8px; border-top: 1px solid var(--line); margin-top: 48px; }
-  .doc-section .kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); margin: 0 0 10px; }
-  h2.doc-h { font-family: var(--font-serif); font-weight: 400; font-size: clamp(34px, 4vw, 46px); line-height: 1.02; letter-spacing: -.025em; margin: 0 0 16px; }
-  h2.doc-h a.anchor { opacity: 0; margin-left: 10px; font-family: var(--font-sans); font-size: 20px; color: var(--text-3); text-decoration: none; transition: opacity .2s; vertical-align: middle; }
-  h2.doc-h:hover a.anchor { opacity: 1; }
-  h3.doc-h3 { font-size: 17px; font-weight: 600; letter-spacing: -.02em; margin: 30px 0 10px; }
-  p.doc-p { color: var(--text-2); font-size: 15.5px; line-height: 1.75; margin: 0 0 16px; max-width: 72ch; }
-  p.doc-p strong { color: var(--text); font-weight: 600; }
-  p.doc-p a, .callout a { color: var(--signal-text); text-underline-offset: 3px; }
-  p.doc-p code, li code, td code, .callout code { background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; font-size: 13px; color: var(--text); }
+  .diffblock { position: relative; margin: 8px 0 24px; padding: 14px 54px 14px 0; border: 1px solid var(--rule-2); background: var(--sheet); font: 400 14px/1.75 var(--f-mono); overflow-x: auto; }
+  .diffblock::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 34px; background: var(--paper-2); border-right: 1px solid var(--rule); }
+  .diffblock .l { position: relative; padding-left: 48px; white-space: pre; color: var(--ink); }
+  .diffblock.cmd .l::before { content: '$'; position: absolute; left: 13px; color: var(--red); }
+  .diffblock .l.add { background: var(--green-soft); color: var(--green); }
+  .diffblock .l.add::before { content: '+'; position: absolute; left: 14px; color: var(--green); }
+  .diffblock .cm { color: var(--ink-3); }
+  .copy { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 34px; height: 30px; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--sheet); color: var(--ink-2); cursor: pointer; }
+  .copy:hover { border-color: var(--ink); color: var(--ink); }
+  .copy.copied { color: var(--green); border-color: var(--green); }
 
-  .callout { display: flex; gap: 12px; padding: 14px 16px; border-radius: 14px; margin: 6px 0 18px; font-size: 14.5px; color: var(--text-2); background: var(--signal-soft); border: 1px solid color-mix(in srgb, var(--signal-text) 22%, transparent); }
-  .callout svg { color: var(--signal-text); margin-top: 3px; }
-  .callout.warn { background: color-mix(in srgb, var(--amber) 11%, transparent); border-color: color-mix(in srgb, var(--amber) 28%, transparent); }
-  .callout.warn svg { color: var(--amber); }
-  .callout strong { color: var(--text); }
+  .ref-wrap { margin: 8px 0 26px; overflow-x: auto; }
+  .ref { width: 100%; border-collapse: collapse; font-size: 15.5px; }
+  .ref th { padding: 0 16px 8px 0; border-bottom: 1.5px solid var(--ink); text-align: left; font: 600 12.5px/1.2 var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+  .ref td { padding: 11px 16px 11px 0; border-bottom: 1px solid var(--rule-2); vertical-align: top; color: var(--ink-2); }
+  .ref td:first-child { font: 500 13.5px/1.5 var(--f-mono); color: var(--ink); white-space: nowrap; }
 
-  .diffblock { position: relative; margin: 6px 0 18px; padding: 14px 0; border-radius: 14px; overflow-x: auto; font-family: var(--font-mono); font-size: 13px; line-height: 1.8; background: #0B0B0E; border: 1px solid rgba(255,255,255,.1); color: #E8E3DA; }
-  .diffblock .l { padding: 0 52px 0 18px; white-space: pre; }
-  .diffblock .ctx { color: #E8E3DA; }
-  .diffblock .add { background: rgba(123,228,149,.10); color: #7BE495; }
-  .diffblock .rm { background: rgba(255,125,125,.10); color: #FF7D7D; }
-  .diffblock .cm, .diffblock span[style] { color: #7D7A73 !important; }
-  .diffblock .copy { position: absolute; top: 9px; right: 9px; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; border: 1px solid rgba(255,255,255,.1); background: #18181F; color: #A6A39C; cursor: pointer; opacity: 0; transition: opacity .2s, color .2s; }
-  .diffblock:hover .copy, .diffblock .copy:focus-visible { opacity: 1; }
-  .diffblock .copy:hover { color: #fff; }
-  .diffblock .copy.copied { opacity: 1; color: #0B1000; background: #D4FF4F; border-color: #D4FF4F; animation: pop .45s var(--spring); }
-  @keyframes pop { 40% { transform: scale(1.18); } }
-  @media (hover: none) { .diffblock .copy { opacity: 1; } }
+  .step-list { margin: 10px 0 24px; padding: 0; list-style: none; border-top: 1px solid var(--rule-2); counter-reset: step; }
+  .step-list li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 13px 0; border-bottom: 1px solid var(--rule-2); counter-increment: step; }
+  .step-list .num::before { content: ''; display: block; width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; background: var(--red); }
+  .step-list.ordered .num::before { content: counter(step); width: auto; height: auto; margin-top: 1px; border-radius: 0; background: none; font: 600 14px/1.5 var(--f-mono); color: var(--red); }
+  .step-list strong { display: block; font-weight: 600; }
+  .step-list span:not(.num):not(.muted) { display: block; color: var(--ink-2); font-size: 15.5px; }
+  .step-list .muted { color: var(--ink-3); font-weight: 400; }
 
-  .ref-wrap { overflow-x: auto; margin: 6px 0 18px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); }
-  table.ref { width: 100%; border-collapse: collapse; font-size: 14px; }
-  table.ref th { text-align: left; font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--text-3); padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
-  table.ref td { padding: 12px 16px; border-bottom: 1px solid var(--line); color: var(--text-2); vertical-align: top; }
-  table.ref tr:last-child td { border-bottom: none; }
-  table.ref tr:hover td { background: var(--surface-2); }
-  table.ref td:first-child { color: var(--text); font-family: var(--font-mono); font-size: 13px; white-space: nowrap; }
+  .callout { display: flex; gap: 12px; margin: 8px 0 22px; padding: 14px 16px; border: 1px solid var(--rule-2); background: var(--sheet); font-size: 15.5px; color: var(--ink-2); }
+  .callout > .icon { color: var(--green); margin-top: 3px; }
+  .callout.warn > .icon { color: var(--brown); }
+  .callout.warn { background: var(--paper-2); }
 
-  .step-list { list-style: none; margin: 6px 0 18px; padding: 0; counter-reset: step; display: grid; gap: 8px; }
-  .step-list li { display: flex; gap: 16px; padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); transition: border-color .2s; }
-  .step-list li:hover { border-color: var(--line-2); }
-  .step-list .num { counter-increment: step; flex-shrink: 0; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--signal-ink); background: var(--signal); }
-  .step-list .num::before { content: counter(step, decimal-leading-zero); }
-  .step-list strong { display: block; font-size: 14.5px; font-weight: 600; margin-bottom: 2px; letter-spacing: -.01em; }
-  .step-list span { font-size: 13.5px; color: var(--text-2); line-height: 1.6; }
+  .tier-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 10px 0 8px; border-top: 1.5px solid var(--ink); }
+  .tier-card { padding: 16px 20px 18px 0; border-bottom: 1px solid var(--rule-2); }
+  .tier-card + .tier-card { padding-left: 20px; border-left: 1px solid var(--rule-2); }
+  .tier-card .badge { font: 600 12.5px/1 var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--red); }
+  .tier-card h3 { margin: 8px 0 4px; font: 600 17px/1.3 var(--f-body); }
+  .tier-card p { margin: 0; font-size: 15px; color: var(--ink-2); }
 
-  .tier-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 8px 0 18px; }
-  @media (max-width: 780px) { .tier-cards { grid-template-columns: minmax(0, 1fr); } }
-  .tier-card { padding: 18px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); transition: transform .35s var(--ease-out), border-color .2s; }
-  .tier-card:hover { transform: translateY(-3px); border-color: var(--line-2); }
-  .tier-card .badge { display: inline-block; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; padding: 3px 9px; border-radius: 999px; color: var(--signal-text); background: var(--signal-soft); margin-bottom: 12px; }
-  .tier-card h4 { margin: 0 0 6px; font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
-  .tier-card p { margin: 0; font-size: 13.5px; color: var(--text-2); line-height: 1.55; }
-
-  .faq-item { border-radius: 16px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 8px; transition: border-color .2s; }
-  .faq-item.open { border-color: var(--line-2); }
-  .faq-item button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 16px; background: none; border: none; text-align: left; padding: 16px 18px; cursor: pointer; font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -.01em; }
-  .faq-item .plus { width: 26px; height: 26px; flex-shrink: 0; position: relative; border-radius: 50%; background: var(--surface-2); transition: transform .4s var(--spring), background .2s; }
-  .faq-item .plus::before, .faq-item .plus::after { content: ''; position: absolute; left: 50%; top: 50%; width: 11px; height: 1.6px; border-radius: 2px; background: var(--text-2); transform: translate(-50%, -50%); }
-  .faq-item .plus::after { transform: translate(-50%, -50%) rotate(90deg); transition: transform .3s var(--ease-out); }
-  .faq-item.open .plus { transform: rotate(180deg); background: var(--signal); }
-  .faq-item.open .plus::before, .faq-item.open .plus::after { background: var(--signal-ink); }
-  .faq-item.open .plus::after { transform: translate(-50%, -50%) rotate(0deg); }
-  .faq-item .a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s var(--ease-out); }
+  #faq-list { border-top: 1.5px solid var(--ink); margin-top: 6px; }
+  .faq-item { border-bottom: 1px solid var(--rule-2); }
+  .faq-item > button { display: flex; align-items: center; gap: 16px; width: 100%; padding: 17px 0; border: 0; background: none; color: var(--ink); text-align: left; font: 600 17px/1.35 var(--f-body); cursor: pointer; }
+  .faq-item > button:hover { color: var(--red); }
+  .plus { position: relative; flex: none; margin-left: auto; width: 14px; height: 14px; }
+  .plus::before, .plus::after { content: ''; position: absolute; left: 0; right: 0; top: 6px; border-top: 1.5px solid currentColor; transition: transform .25s var(--ease); }
+  .plus::after { transform: rotate(90deg); }
+  .faq-item.open .plus::after { transform: rotate(0); }
+  .faq-item .a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s var(--ease); }
   .faq-item.open .a { grid-template-rows: 1fr; }
   .faq-item .a > div { overflow: hidden; }
-  .faq-item .a p { margin: 0 18px 18px; font-size: 14.5px; color: var(--text-2); line-height: 1.7; max-width: 70ch; }
+  .faq-item .a p { margin: 0 0 18px; max-width: 68ch; color: var(--ink-2); }
 
-  .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease-out), transform .7s var(--ease-out); }
-  .js .reveal.in { opacity: 1; transform: none; }
-
-  .next-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 64px; }
-  .next-nav a { padding: 18px; border-radius: 16px; text-decoration: none; background: var(--surface); border: 1px solid var(--line); transition: border-color .2s, transform .3s var(--ease-out); }
-  .next-nav a:hover { border-color: var(--line-2); transform: translateY(-2px); }
-  .next-nav small { display: block; font-family: var(--font-mono); font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; }
-  .next-nav b { font-size: 16px; font-weight: 600; letter-spacing: -.02em; }
+  .next-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 72px; }
+  .next-nav a { display: block; padding: 16px 18px; border: 1.5px solid var(--ink); border-radius: 3px; text-decoration: none; }
   .next-nav a:last-child { text-align: right; }
+  .next-nav a:hover { background: var(--ink); color: var(--paper); }
+  .next-nav small { display: block; font: 600 12px/1 var(--f-display); letter-spacing: .08em; text-transform: uppercase; opacity: .75; margin-bottom: 6px; }
+  .next-nav b { font: 600 18px/1.2 var(--f-display); color: inherit; }
 
-  footer.site-footer { position: relative; z-index: 1; border-top: 1px solid var(--line); padding: 32px 24px; }
-  .footer-inner { max-width: 1440px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-3); font-family: var(--font-mono); }
-  .footer-inner a { color: var(--text-2); text-decoration: none; }
-  .footer-inner a:hover { color: var(--text); }
+  .site-footer { background: var(--chassis); color: var(--engrave-2); border-top: 1px solid #000; }
+  .footer-inner { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 18px 22px; font: 500 12.5px/1.4 var(--f-mono); }
+  .footer-inner a:hover { color: var(--engrave); }
 
   /* ---------- search palette ---------- */
-  .palette { position: fixed; inset: 0; z-index: 90; display: none; align-items: flex-start; justify-content: center; padding-top: 13vh; background: rgba(5,5,8,.55); backdrop-filter: blur(6px); }
-  .palette.open { display: flex; animation: fade .2s both; }
-  @keyframes fade { from { opacity: 0; } }
-  .palette-box { width: min(600px, calc(100% - 28px)); background: var(--surface); border: 1px solid var(--line-2); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden; animation: boxIn .4s var(--spring) both; }
-  @keyframes boxIn { from { opacity: 0; transform: scale(.94) translateY(-8px); } }
-  .palette-search { display: flex; align-items: center; gap: 10px; padding: 0 18px; border-bottom: 1px solid var(--line); color: var(--text-3); }
-  .palette-search input { flex: 1; border: none; background: none; color: var(--text); font-size: 15.5px; padding: 17px 0; outline: none; }
-  .palette-list { max-height: 380px; overflow-y: auto; padding: 6px; }
-  .pal-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 11px; cursor: pointer; color: var(--text-2); }
-  .pal-item.sel { background: var(--surface-2); color: var(--text); }
-  .pal-item.sel svg { color: var(--signal-text); }
-  .pal-item .g { margin-left: auto; font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); }
-  .pal-item mark { background: var(--signal-soft); color: var(--signal-text); border-radius: 3px; padding: 0 1px; }
-  .pal-empty { padding: 28px; text-align: center; color: var(--text-3); font-size: 13.5px; }
+  .palette { position: fixed; inset: 0; z-index: 80; display: none; align-items: flex-start; justify-content: center; padding: 12vh 16px 16px; background: rgba(12,14,13,.5); }
+  .palette.open { display: flex; }
+  .palette-box { width: min(620px, 100%); background: var(--sheet); border: 1.5px solid var(--ink); border-radius: 3px; animation: palIn .22s var(--ease); }
+  @keyframes palIn { from { opacity: 0; transform: translateY(-8px); } }
+  .palette-search { display: flex; align-items: center; gap: 10px; padding: 0 14px; height: 54px; border-bottom: 1px solid var(--rule-2); color: var(--ink-3); }
+  .palette-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--ink); font: 400 17px var(--f-body); }
+  .palette-list { max-height: 52vh; overflow-y: auto; padding: 6px; }
+  .pal-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border: 1px solid transparent; border-radius: 2px; color: var(--ink-2); cursor: pointer; font-size: 15.5px; }
+  .pal-item .icon { color: var(--ink-3); }
+  .pal-item .g { margin-left: auto; font: 500 12px/1 var(--f-mono); color: var(--ink-3); white-space: nowrap; }
+  .pal-item.sel { background: var(--paper-2); border-color: var(--rule-2); color: var(--ink); }
+  .pal-item.sel .icon { color: var(--red); }
+  .pal-item mark { background: none; color: var(--red); font-weight: 600; }
+  .pal-empty { padding: 18px 12px; color: var(--ink-3); font-size: 15px; }
 
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
-    .js .reveal { opacity: 1; transform: none; }
+  /* ---------- responsive ---------- */
+  @media (max-width: 1180px) { .links { display: none; } .search-btn { margin-left: auto; } .welcome { grid-template-columns: minmax(0, 1fr); } .code-float { max-width: 460px; } }
+  @media (max-width: 900px) {
+    #menuBtn { display: inline-grid; }
+    .shell { grid-template-columns: minmax(0, 1fr); }
+    .sidebar { position: fixed; top: 58px; left: 0; bottom: 0; z-index: 35; width: min(300px, 86vw); height: auto; transform: translateX(-102%); transition: transform .3s var(--ease); }
+    .menu-open .sidebar { transform: none; }
+    .scrim { display: block; position: fixed; inset: 58px 0 0; z-index: 34; background: rgba(12,14,13,.45); opacity: 0; pointer-events: none; transition: opacity .25s; }
+    .menu-open .scrim { opacity: 1; pointer-events: auto; }
+    .content { padding: 40px 22px 72px; }
+    .search-btn { width: auto; flex: 1; max-width: 300px; }
+    .tier-cards, .guide-index { grid-template-columns: minmax(0, 1fr); }
+    .tier-card + .tier-card { padding-left: 0; border-left: 0; }
   }
+  @media (max-width: 560px) {
+    .nav-row { gap: 8px; padding: 0 12px; }
+    .lockup .sub, .search-btn .t, .search-btn kbd { display: none; }
+    .search-btn { flex: none; width: 36px; padding: 0; justify-content: center; margin-left: auto; }
+    .btn { padding: 0 10px; }
+    .ref td:first-child { white-space: normal; }
+    .next-nav { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 </style>
 </head>
 <body>
-<div class="grain" aria-hidden="true"></div>
-<div class="progress" aria-hidden="true"></div>
+<a class="skip" href="#top-doc">Skip to content</a>
 
 <header class="site">
   <div class="nav-row">
     <button class="icon-btn" id="menuBtn" aria-label="Open navigation" data-icon="menu"></button>
-    <a class="lockup" href="index.html"><img src="assets/logo.svg" alt="">narrately<em>docs</em></a>
+    <a class="lockup" href="index.html"><img src="assets/logo.svg" alt="">narrately<span class="sub">Docs</span></a>
     <button class="search-btn" id="searchBtn" aria-label="Search the docs"><span data-icon="search"></span><span class="t">Search the docs…</span><kbd id="kbdHint">Ctrl K</kbd></button>
     <nav class="links">
       <a href="#guides">Guides</a>
@@ -297,10 +266,10 @@
   <aside class="sidebar" id="sidebar" aria-label="Documentation">
     <label class="filter"><span data-icon="search"></span><input id="sideFilter" type="search" placeholder="Filter pages" autocomplete="off"></label>
 
-    <a class="side-flat" href="#top-doc"><span class="ic" data-icon="home"></span>Home</a>
+    <a class="side-flat" href="#top-doc">Home</a>
 
     <div class="side-group open" data-group>
-      <button type="button"><span class="ic" data-icon="rocket"></span>Getting started<span class="chev" data-icon="chevron"></span></button>
+      <button type="button">Getting started<span class="chev" data-icon="chevron"></span></button>
       <div class="side-items"><ul>
         <li><a href="#getting-started">Installation</a></li>
         <li><a href="#onboarding">Onboarding wizard</a></li>
@@ -309,7 +278,7 @@
     </div>
 
     <div class="side-group" data-group>
-      <button type="button"><span class="ic" data-icon="book"></span>Guides<span class="chev" data-icon="chevron"></span></button>
+      <button type="button">Guides<span class="chev" data-icon="chevron"></span></button>
       <div class="side-items"><ul>
         <li><a href="#reports">Reports</a></li>
         <li><a href="#ask-chat">Ask &amp; Chat</a></li>
@@ -322,17 +291,17 @@
     </div>
 
     <div class="side-group" data-group>
-      <button type="button"><span class="ic" data-icon="code"></span>Code change capture<span class="chev" data-icon="chevron"></span></button>
+      <button type="button">Code change capture<span class="chev" data-icon="chevron"></span></button>
       <div class="side-items"><ul>
         <li><a href="#capture-overview">Overview</a></li>
-        <li><a href="#tier1">Tier 1 — Commits</a></li>
-        <li><a href="#tier2">Tier 2 — Uncommitted</a></li>
-        <li><a href="#tier3">Tier 3 — Retention</a></li>
+        <li><a href="#tier1">Tier 1: commits</a></li>
+        <li><a href="#tier2">Tier 2: uncommitted</a></li>
+        <li><a href="#tier3">Tier 3: retention</a></li>
       </ul></div>
     </div>
 
     <div class="side-group" data-group>
-      <button type="button"><span class="ic" data-icon="plug"></span>IDE collectors<span class="chev" data-icon="chevron"></span></button>
+      <button type="button">IDE collectors<span class="chev" data-icon="chevron"></span></button>
       <div class="side-items"><ul>
         <li><a href="#vscode">VS Code</a></li>
         <li><a href="#jetbrains">JetBrains</a></li>
@@ -341,7 +310,7 @@
     </div>
 
     <div class="side-group" data-group>
-      <button type="button"><span class="ic" data-icon="list"></span>Reference<span class="chev" data-icon="chevron"></span></button>
+      <button type="button">Reference<span class="chev" data-icon="chevron"></span></button>
       <div class="side-items"><ul>
         <li><a href="#reference">Command list</a></li>
         <li><a href="#commands">Report flags</a></li>
@@ -351,24 +320,23 @@
       </ul></div>
     </div>
 
-    <a class="side-flat" href="#faq"><span class="ic" data-icon="help"></span>FAQs</a>
+    <a class="side-flat" href="#faq">FAQs</a>
   </aside>
 
   <main class="content" id="top-doc">
     <div class="welcome">
       <div>
-        <p class="eyebrow">Documentation</p>
-        <h1>Everything, <em>documented.</em></h1>
-        <p class="lead">Install Narrately, wire up your editor, and get a written, queryable record of your work — for standups, timesheets, reviews, or just remembering what you did.</p>
+        <h1>Everything, documented.</h1>
+        <p class="lead">Install Narrately, wire up your editor, and get a written, queryable record of your work for standups, timesheets, reviews, or just remembering what you did.</p>
         <div class="chips">
-          <a href="#getting-started"><span data-icon="rocket"></span>Install</a>
-          <a href="#project-context"><span data-icon="book"></span>Project context</a>
-          <a href="#teams"><span data-icon="users"></span>Teams</a>
-          <a href="#reference"><span data-icon="list"></span>Commands</a>
+          <a href="#getting-started">Install</a>
+          <a href="#project-context">Project context</a>
+          <a href="#teams">Teams</a>
+          <a href="#reference">Commands</a>
         </div>
       </div>
       <div class="code-float">
-        <div class="cf-top"><i></i><i></i><i></i><span>~/project — narrately</span></div>
+        <div class="cf-top"><span class="rec"></span><span>~/project — narrately</span></div>
         <pre><span class="ps">$</span> narrately report --week
 
 <span class="h"># Weekly Log — Jul 28 – Aug 1</span>
@@ -386,106 +354,98 @@ billing-api      3h 05m   4 sessions</pre>
 
     <div id="guides">
       <h2 class="section-title">Guides</h2>
-      <div class="guides-grid">
-        <a class="guide-card reveal" href="#getting-started"><span class="gi" data-icon="rocket"></span><div><h4>Installation</h4><p>The CLI via npm, the VS Code extension, or the JetBrains plugin. Pick one or all three.</p></div><span class="arrow" data-icon="arrowUpRight"></span></a>
-        <a class="guide-card reveal" href="#onboarding"><span class="gi v" data-icon="wand"></span><div><h4>Onboarding wizard</h4><p>One command configures collectors, project roots, privacy exclusions, and your LLM provider.</p></div><span class="arrow" data-icon="arrowUpRight"></span></a>
-        <a class="guide-card reveal" href="#reports"><span class="gi c" data-icon="note"></span><div><h4>Reports, Ask &amp; Chat</h4><p>A written report on demand or on a schedule — or just ask a question about your own history.</p></div><span class="arrow" data-icon="arrowUpRight"></span></a>
-        <a class="guide-card reveal" href="#project-context"><span class="gi" data-icon="book"></span><div><h4>Project context <span class="new-dot">NEW</span></h4><p>Give the AI a short brief per project so reports use your real names, goals, and areas.</p></div><span class="arrow" data-icon="arrowUpRight"></span></a>
-        <a class="guide-card reveal" href="#capture-overview"><span class="gi s" data-icon="code"></span><div><h4>Code change capture</h4><p>Three independent, opt-in layers for real diff text instead of just line counts — redacted before storage.</p></div><span class="arrow" data-icon="arrowUpRight"></span></a>
-        <a class="guide-card reveal" href="#teams"><span class="gi v" data-icon="users"></span><div><h4>Teams <span class="new-dot">NEW</span></h4><p>Optional Narrately Cloud: everyone's session time in one shared dashboard. Metadata only.</p></div><span class="arrow" data-icon="arrowUpRight"></span></a>
-        <a class="guide-card reveal" href="#dashboard"><span class="gi c" data-icon="grid"></span><div><h4>Web dashboard</h4><p>A loopback-only app — overview charts, notes, project context, chat, and your report history.</p></div><span class="arrow" data-icon="arrowUpRight"></span></a>
-        <a class="guide-card reveal" href="#scheduling"><span class="gi s" data-icon="clock"></span><div><h4>Scheduling</h4><p>Hand daily reports to your OS's native scheduler — Task Scheduler, launchd, or systemd.</p></div><span class="arrow" data-icon="arrowUpRight"></span></a>
-      </div>
+      <ul class="guide-index">
+        <li><a href="#getting-started"><b>Installation</b><span>The CLI via npm, the VS Code extension, or the JetBrains plugin. Pick one or all three.</span></a></li>
+        <li><a href="#onboarding"><b>Onboarding wizard</b><span>One command configures collectors, project roots, privacy exclusions, and your LLM provider.</span></a></li>
+        <li><a href="#reports"><b>Reports, Ask &amp; Chat</b><span>A written report on demand or on a schedule. Or just ask a question about your own history.</span></a></li>
+        <li><a href="#project-context"><b>Project context <span class="new-dot">NEW</span></b><span>Give the AI a short brief per project so reports use your real names, goals, and areas.</span></a></li>
+        <li><a href="#capture-overview"><b>Code change capture</b><span>Three independent, opt-in layers for real diff text instead of just line counts, redacted before storage.</span></a></li>
+        <li><a href="#teams"><b>Teams <span class="new-dot">NEW</span></b><span>Optional Narrately Cloud: everyone's session time in one shared dashboard. Metadata only.</span></a></li>
+        <li><a href="#dashboard"><b>Web dashboard</b><span>A loopback-only app with overview charts, notes, project context, chat, and your report history.</span></a></li>
+        <li><a href="#scheduling"><b>Scheduling</b><span>Hand daily reports to your OS's native scheduler: Task Scheduler, launchd, or systemd.</span></a></li>
+      </ul>
     </div>
 
-    <section id="getting-started" class="doc-section">
-      <p class="kicker">Getting started</p>
+    <section id="getting-started" class="doc-section" data-group="Getting started">
       <h2 class="doc-h">Installation</h2>
-      <p class="doc-p">Three independent entry points. The CLI is the core — the daemon, reports, graph queries, chat, and dashboard all live there. The editor extensions are thin producers that talk to it.</p>
+      <p class="doc-p">Three independent entry points. The CLI is the core: the daemon, reports, graph queries, chat, and dashboard all live there. The editor extensions are thin producers that talk to it.</p>
       <h3 class="doc-h3">CLI, via npm</h3>
       <p class="doc-p">Requires Node.js 22.5 or later and Git on your PATH.</p>
-      <div class="diffblock"><div class="l ctx">npm install -g narrately</div><div class="l ctx">narrately onboard</div></div>
+      <div class="diffblock cmd"><div class="l ctx">npm install -g narrately</div><div class="l ctx">narrately onboard</div></div>
       <h3 class="doc-h3">VS Code extension</h3>
       <p class="doc-p">Search <code>Narrately</code> in the Extensions view, or install it from the CLI:</p>
-      <div class="diffblock"><div class="l ctx">narrately install vscode</div><div class="l ctx">ext install narrately.narrately-collector   <span class="cm"># Marketplace alternative</span></div></div>
+      <div class="diffblock cmd"><div class="l ctx">narrately install vscode</div><div class="l ctx">ext install narrately.narrately-collector   <span class="cm"># Marketplace alternative</span></div></div>
       <h3 class="doc-h3">JetBrains plugin</h3>
-      <p class="doc-p">Settings → Plugins → Marketplace → search <code>Narrately</code>, or run <code>narrately install intellij</code>. One build works across IntelliJ IDEA, WebStorm, PyCharm, GoLand, and RubyMine — they share the platform SDK.</p>
+      <p class="doc-p">Settings → Plugins → Marketplace → search <code>Narrately</code>, or run <code>narrately install intellij</code>. One build works across IntelliJ IDEA, WebStorm, PyCharm, GoLand, and RubyMine, since they share the platform SDK.</p>
       <h3 class="doc-h3">From source</h3>
-      <p class="doc-p">The full source is available to clone, audit, or self-host — MIT licensed.</p>
-      <div class="diffblock"><div class="l ctx">git clone https://github.com/narrately/narrately.github.io</div><div class="l ctx">cd narrately &amp;&amp; npm install &amp;&amp; npm link</div></div>
+      <p class="doc-p">The full source is available to clone, audit, or self-host. MIT licensed.</p>
+      <div class="diffblock cmd"><div class="l ctx">git clone https://github.com/narrately/narrately.github.io</div><div class="l ctx">cd narrately &amp;&amp; npm install &amp;&amp; npm link</div></div>
     </section>
 
-    <section id="onboarding" class="doc-section">
-      <p class="kicker">Getting started</p>
+    <section id="onboarding" class="doc-section" data-group="Getting started">
       <h2 class="doc-h">Onboarding wizard</h2>
-      <p class="doc-p"><code>narrately onboard</code> asks a series of questions — the last one optional — and writes everything to <code>~/.narrately/config.yaml</code>. Re-run it any time; it only asks about what's new.</p>
-      <ul class="step-list">
-        <li><span class="num"></span><div><strong>Work profile</strong><span>Confirms software development — other profiles are recorded for the roadmap.</span></div></li>
+      <p class="doc-p"><code>narrately onboard</code> asks a series of questions (the last one optional) and writes everything to <code>~/.narrately/config.yaml</code>. Re-run it any time; it only asks about what's new.</p>
+      <ul class="step-list ordered">
+        <li><span class="num"></span><div><strong>Work profile</strong><span>Confirms software development. Other profiles are recorded for the roadmap.</span></div></li>
         <li><span class="num"></span><div><strong>IDE detection</strong><span>Scans for installed VS Code and JetBrains IDEs and lets you pick which to collect from.</span></div></li>
         <li><span class="num"></span><div><strong>Collector install</strong><span>Installs the extension or plugin for whatever you selected.</span></div></li>
-        <li><span class="num"></span><div><strong>Shell integration</strong><span>Installs a history hook — command text and timestamp only, never output.</span></div></li>
+        <li><span class="num"></span><div><strong>Shell integration</strong><span>Installs a history hook: command text and timestamp only, never output.</span></div></li>
         <li><span class="num"></span><div><strong>Project roots</strong><span>Add code directories, scan for repos, and label each for reports. Sets a default for code-change capture, then lets you override it per repo.</span></div></li>
         <li><span class="num"></span><div><strong>Privacy &amp; retention</strong><span>Exclusions that are never recorded, whether captured diffs get secret-redaction, and an optional age-out window for old diffs.</span></div></li>
         <li><span class="num"></span><div><strong>Report preferences</strong><span>LLM provider (with an optional model pin), manual vs. scheduled mode, verbosity, and optional email delivery.</span></div></li>
-        <li><span class="num"></span><div><strong>Advanced <span style="color:var(--text-3);font-weight:400">(optional, skipped by default)</span></strong><span>Daemon port, minimum focus duration, and whether the git collector runs at all.</span></div></li>
+        <li><span class="num"></span><div><strong>Advanced <span class="muted">(optional, skipped by default)</span></strong><span>Daemon port, minimum focus duration, and whether the git collector runs at all.</span></div></li>
       </ul>
-      <p class="doc-p">Anything the wizard doesn't ask, or that you want to change later without re-running it, is reachable directly — see <a href="#config">Configuration file</a>. Then give your main projects some <a href="#project-context">context</a>.</p>
+      <p class="doc-p">Anything the wizard doesn't ask, or that you want to change later without re-running it, is reachable directly; see <a href="#config">Configuration file</a>. Then give your main projects some <a href="#project-context">context</a>.</p>
     </section>
 
-    <section id="quick-start" class="doc-section">
-      <p class="kicker">Getting started</p>
+    <section id="quick-start" class="doc-section" data-group="Getting started">
       <h2 class="doc-h">Daily usage</h2>
-      <p class="doc-p">Start the daemon once — it keeps running until you stop it or reboot.</p>
-      <div class="diffblock"><div class="l ctx">narrately daemon start</div><div class="l ctx">narrately status</div></div>
+      <p class="doc-p">Start the daemon once. It keeps running until you stop it or reboot.</p>
+      <div class="diffblock cmd"><div class="l ctx">narrately daemon start</div><div class="l ctx">narrately status</div></div>
       <p class="doc-p">Then work normally. When you want a report:</p>
-      <div class="diffblock"><div class="l ctx">narrately report                      <span class="cm"># since your last report</span></div><div class="l ctx">narrately report --day 2026-07-28     <span class="cm"># a specific day</span></div><div class="l ctx">narrately report --week               <span class="cm"># the current week, cross-project</span></div></div>
+      <div class="diffblock cmd"><div class="l ctx">narrately report                      <span class="cm"># since your last report</span></div><div class="l ctx">narrately report --day 2026-07-28     <span class="cm"># a specific day</span></div><div class="l ctx">narrately report --week               <span class="cm"># the current week, cross-project</span></div></div>
     </section>
 
-    <section id="reports" class="doc-section">
-      <p class="kicker">Guides</p>
+    <section id="reports" class="doc-section" data-group="Guides">
       <h2 class="doc-h">Reports, Ask &amp; Chat</h2>
-      <p class="doc-p">Reports work without an API key — they just come out structured rather than narrated. Set <code>ANTHROPIC_API_KEY</code> or <code>GEMINI_API_KEY</code> for the written version.</p>
-      <div class="diffblock"><div class="l ctx">narrately ask "what did I work on this week"</div><div class="l ctx">narrately chat   <span class="cm"># multi-turn, remembers the last few turns</span></div></div>
-      <p class="doc-p">Both are grounded in your recorded activity, your notes, and your project context — never raw file contents.</p>
+      <p class="doc-p">Reports work without an API key; they just come out structured rather than narrated. Set <code>ANTHROPIC_API_KEY</code> or <code>GEMINI_API_KEY</code> for the written version.</p>
+      <div class="diffblock cmd"><div class="l ctx">narrately ask "what did I work on this week"</div><div class="l ctx">narrately chat   <span class="cm"># multi-turn, remembers the last few turns</span></div></div>
+      <p class="doc-p">Both are grounded in your recorded activity, your notes, and your project context, never raw file contents.</p>
     </section>
 
-    <section id="ask-chat" class="doc-section">
-      <p class="kicker">Guides</p>
+    <section id="ask-chat" class="doc-section" data-group="Guides">
       <h2 class="doc-h">Ask &amp; Chat, in more detail</h2>
       <p class="doc-p"><code>narrately ask</code> answers one question and exits. <code>narrately chat</code> opens a conversation that remembers context, so a follow-up like "what about last week?" resolves correctly. Both accept <code>--provider</code> and <code>--model</code> overrides for a single run.</p>
     </section>
 
-    <section id="project-context" class="doc-section">
-      <p class="kicker">Guides · new</p>
+    <section id="project-context" class="doc-section" data-group="Guides">
       <h2 class="doc-h">Project context</h2>
-      <p class="doc-p">Tracking only sees metadata — file names, durations, commit subjects. Give each project a short brief — what it is, what you're working towards, what its folders mean, its internal names — and the narrative, <code>ask</code>, and <code>chat</code> use it to explain the work in the project's own terms. <code>src/billing/</code> becomes "the invoicing service".</p>
-      <div class="diffblock"><div class="l ctx">narrately context                          <span class="cm"># list projects and their context</span></div><div class="l ctx">narrately context edit api                 <span class="cm"># write it in your editor, from a template</span></div><div class="l ctx">narrately context set api --link docs/ARCHITECTURE.md</div><div class="l ctx">narrately context set api --file brief.md</div><div class="l ctx">narrately context show api                 <span class="cm"># exactly what the AI will see</span></div></div>
+      <p class="doc-p">Tracking only sees metadata: file names, durations, commit subjects. Give each project a short brief (what it is, what you're working towards, what its folders mean, its internal names) and the narrative, <code>ask</code>, and <code>chat</code> use it to explain the work in the project's own terms. <code>src/billing/</code> becomes "the invoicing service".</p>
+      <div class="diffblock cmd"><div class="l ctx">narrately context                          <span class="cm"># list projects and their context</span></div><div class="l ctx">narrately context edit api                 <span class="cm"># write it in your editor, from a template</span></div><div class="l ctx">narrately context set api --link docs/ARCHITECTURE.md</div><div class="l ctx">narrately context set api --file brief.md</div><div class="l ctx">narrately context show api                 <span class="cm"># exactly what the AI will see</span></div></div>
       <ul class="step-list">
         <li><span class="num"></span><div><strong>Linked file</strong><span><code>--link</code> re-reads the file on every report, so edits to your architecture doc flow in automatically.</span></div></li>
         <li><span class="num"></span><div><strong>Copied text</strong><span><code>--file</code>, inline text, or <code>context edit</code> store a snapshot in the local database.</span></div></li>
         <li><span class="num"></span><div><strong>Zero setup</strong><span>Drop a <code>.narrately.md</code> in the project's root folder and it's picked up with no command. An explicit <code>context set</code> always wins over it.</span></div></li>
       </ul>
       <p class="doc-p">The dashboard's <strong>Journal</strong> view has the same editor, with .md upload and drag-and-drop.</p>
-      <div class="callout"><span data-icon="shield"></span><div>Only projects active in the report's period are included, capped at <strong>6,000 characters each</strong> and 20,000 per prompt. The model is told to use it to interpret activity — never as evidence that work happened. Context stays local, is never synced to a team, and is sent to your LLM provider only alongside the activity it explains.</div></div>
+      <div class="callout"><span data-icon="shield"></span><div>Only projects active in the report's period are included, capped at <strong>6,000 characters each</strong> and 20,000 per prompt. The model is told to use it to interpret activity, never as evidence that work happened. Context stays local, is never synced to a team, and is sent to your LLM provider only alongside the activity it explains.</div></div>
     </section>
 
-    <section id="dashboard" class="doc-section">
-      <p class="kicker">Guides</p>
+    <section id="dashboard" class="doc-section" data-group="Guides">
       <h2 class="doc-h">Web dashboard</h2>
-      <p class="doc-p">A local app over the same data. The server binds to <code>127.0.0.1</code> only and ships its own fonts — it makes no outside requests.</p>
-      <div class="diffblock"><div class="l ctx">narrately web</div></div>
+      <p class="doc-p">A local app over the same data. The server binds to <code>127.0.0.1</code> only and ships its own fonts, so it makes no outside requests.</p>
+      <div class="diffblock cmd"><div class="l ctx">narrately web</div></div>
       <div class="ref-wrap"><table class="ref">
         <tr><th>View</th><th>What's there</th></tr>
         <tr><td>Overview</td><td>Tracked time and deltas vs. the previous period, a daily activity chart, project share, file churn, and focus</td></tr>
-        <tr><td>Journal</td><td>Notes — free text scoped to a day and optionally a project — and the project context editor</td></tr>
+        <tr><td>Journal</td><td>Notes (free text scoped to a day and optionally a project) and the project context editor</td></tr>
         <tr><td>Assistant</td><td>Chat over your history, with suggested questions</td></tr>
         <tr><td>History</td><td>Every past report, rendered as a document, plus captured code changes</td></tr>
       </table></div>
       <p class="doc-p"><kbd>Ctrl K</kbd> opens a command palette; <kbd>1</kbd>–<kbd>4</kbd> switch the time range, <kbd>N</kbd> starts a note, and <kbd>/</kbd> jumps to the assistant.</p>
     </section>
 
-    <section id="graph" class="doc-section">
-      <p class="kicker">Guides</p>
+    <section id="graph" class="doc-section" data-group="Guides">
       <h2 class="doc-h">Graph queries</h2>
       <p class="doc-p">Query your local activity graph directly, without generating a full report.</p>
       <div class="ref-wrap"><table class="ref">
@@ -499,11 +459,10 @@ billing-api      3h 05m   4 sessions</pre>
       </table></div>
     </section>
 
-    <section id="scheduling" class="doc-section">
-      <p class="kicker">Guides</p>
+    <section id="scheduling" class="doc-section" data-group="Guides">
       <h2 class="doc-h">Scheduling</h2>
       <p class="doc-p">Delegated to your OS's native scheduler, not an in-process timer, so it survives sleep, wake, and reboot.</p>
-      <div class="diffblock"><div class="l ctx">narrately schedule enable --at 18:00</div><div class="l ctx">narrately schedule status</div></div>
+      <div class="diffblock cmd"><div class="l ctx">narrately schedule enable --at 18:00</div><div class="l ctx">narrately schedule status</div></div>
       <div class="ref-wrap"><table class="ref">
         <tr><th>Platform</th><th>Mechanism</th></tr>
         <tr><td>Windows</td><td>Task Scheduler task <code>Narrately-DailyReport</code></td></tr>
@@ -512,76 +471,67 @@ billing-api      3h 05m   4 sessions</pre>
       </table></div>
     </section>
 
-    <section id="teams" class="doc-section">
-      <p class="kicker">Guides · new</p>
-      <h2 class="doc-h">Teams — Narrately Cloud</h2>
-      <p class="doc-p">Optional and opt-in. Teammates' <strong>session metadata</strong> — project, start and end time, duration, languages, save and edit counts, lines added and removed — rolls up into one shared dashboard. The local tool keeps working exactly the same.</p>
+    <section id="teams" class="doc-section" data-group="Guides">
+      <h2 class="doc-h">Teams on Narrately Cloud</h2>
+      <p class="doc-p">Optional and opt-in. Teammates' <strong>session metadata</strong> (project, start and end time, duration, languages, save and edit counts, lines added and removed) rolls up into one shared dashboard. The local tool keeps working exactly the same.</p>
       <h3 class="doc-h3">Team owner</h3>
-      <div class="diffblock"><div class="l ctx">narrately cloud signup              <span class="cm"># once, then confirm the email</span></div><div class="l ctx">narrately cloud login</div><div class="l ctx">narrately cloud create-org "Acme"</div><div class="l ctx">narrately cloud invite              <span class="cm"># prints a join code, valid 7 days</span></div><div class="l ctx">narrately cloud dashboard           <span class="cm"># open the team portal in your browser</span></div></div>
+      <div class="diffblock cmd"><div class="l ctx">narrately cloud signup              <span class="cm"># once, then confirm the email</span></div><div class="l ctx">narrately cloud login</div><div class="l ctx">narrately cloud create-org "Acme"</div><div class="l ctx">narrately cloud invite              <span class="cm"># prints a join code, valid 7 days</span></div><div class="l ctx">narrately cloud dashboard           <span class="cm"># open the team portal in your browser</span></div></div>
       <h3 class="doc-h3">Each teammate</h3>
-      <div class="diffblock"><div class="l ctx">narrately cloud signup</div><div class="l ctx">narrately cloud login</div><div class="l ctx">narrately cloud join &lt;code&gt;</div></div>
+      <div class="diffblock cmd"><div class="l ctx">narrately cloud signup</div><div class="l ctx">narrately cloud login</div><div class="l ctx">narrately cloud join &lt;code&gt;</div></div>
       <p class="doc-p">While the daemon runs it syncs every 15 minutes. <code>narrately sync</code> pushes now, and <code>narrately sync --days 30</code> re-sends a longer window. Turn auto-sync off with <code>narrately config set cloud.auto_sync false</code>. Owners can also invite and remove people from the team dashboard, and export the week as a CSV timesheet.</p>
       <div class="callout"><span data-icon="shield"></span><div><strong>Never sent:</strong> file paths, diffs, commit messages, notes, project context, or any code. Those stay in <code>~/.narrately/narrately.db</code>.</div></div>
       <div class="callout warn"><span data-icon="clock"></span><div>New teams get a 14-day trial. Afterwards, past rollups stay readable, but new syncs pause until the owner upgrades. Self-hosting setup (Supabase schema and Stripe billing) is in <a href="https://github.com/narrately/narrately.github.io/tree/main/cloud">cloud/README.md</a>.</div></div>
     </section>
 
-    <section id="capture-overview" class="doc-section">
-      <p class="kicker">Code change capture</p>
+    <section id="capture-overview" class="doc-section" data-group="Code change capture">
       <h2 class="doc-h">Code change capture</h2>
-      <p class="doc-p">Everything else tells you <em>that</em> something changed. This is the deliberate, opt-in exception that tells you <em>what</em> — off by default, at every layer.</p>
+      <p class="doc-p">Everything else tells you <em>that</em> something changed. This is the deliberate, opt-in exception that tells you <em>what</em>. It is off by default, at every layer.</p>
       <div class="tier-cards">
-        <div class="tier-card reveal"><span class="badge">Tier 1</span><h4>Your commits</h4><p>New commits get real diff text, redacted, scoped to the repo, never retroactive.</p></div>
-        <div class="tier-card reveal"><span class="badge">Tier 2</span><h4>Uncommitted work</h4><p>A diff on every save — the IDE only reads content once the daemon confirms opt-in.</p></div>
-        <div class="tier-card reveal"><span class="badge">Tier 3</span><h4>Local retention</h4><p>Raw text ages into a short summary after N days. No LLM involved, ever.</p></div>
+        <div class="tier-card"><span class="badge">Tier 1</span><h3>Your commits</h3><p>New commits get real diff text, redacted, scoped to the repo, never retroactive.</p></div>
+        <div class="tier-card"><span class="badge">Tier 2</span><h3>Uncommitted work</h3><p>A diff on every save. The IDE only reads content once the daemon confirms opt-in.</p></div>
+        <div class="tier-card"><span class="badge">Tier 3</span><h3>Local retention</h3><p>Raw text ages into a short summary after N days. No LLM involved, ever.</p></div>
       </div>
     </section>
 
-    <section id="tier1" class="doc-section">
-      <p class="kicker">Code change capture</p>
-      <h2 class="doc-h">Tier 1 — your commits</h2>
+    <section id="tier1" class="doc-section" data-group="Code change capture">
+      <h2 class="doc-h">Tier 1: your commits</h2>
       <p class="doc-p">Enable per project:</p>
       <div class="diffblock"><div class="l ctx">project_roots:</div><div class="l ctx">  - path: C:/code/auth-service</div><div class="l ctx">    label: auth-service</div><div class="l add">+   capture_diffs: true</div></div>
       <p class="doc-p">Every file's diff is checked against your privacy exclusions, then redacted for secret-shaped strings before it ever touches disk:</p>
       <div class="diffblock"><div class="l ctx">function login() {</div><div class="l add">+  const apiKey = "[REDACTED:quoted-secret-assignment]";</div><div class="l ctx">  return true;</div><div class="l ctx">}</div></div>
-      <p class="doc-p">Any single file's diff over 50KB is dropped entirely, not truncated — you get the line counts and a note, never a partial diff that reads as complete.</p>
+      <p class="doc-p">Any single file's diff over 50KB is dropped entirely, not truncated. You get the line counts and a note, never a partial diff that reads as complete.</p>
     </section>
 
-    <section id="tier2" class="doc-section">
-      <p class="kicker">Code change capture</p>
-      <h2 class="doc-h">Tier 2 — uncommitted work</h2>
-      <p class="doc-p">A second, independent switch — meaningfully more exposed, since it captures on every save before you've reviewed anything:</p>
+    <section id="tier2" class="doc-section" data-group="Code change capture">
+      <h2 class="doc-h">Tier 2: uncommitted work</h2>
+      <p class="doc-p">A second, independent switch, and meaningfully more exposed, since it captures on every save before you've reviewed anything:</p>
       <div class="diffblock"><div class="l ctx">    capture_diffs: true</div><div class="l add">+   capture_save_diffs: true</div></div>
-      <p class="doc-p">The IDE never reads a file's content speculatively — it asks the daemon first (<code>GET /capture-config</code>), and only reads &amp; sends content for a project the daemon has actively confirmed opted in. The daemon re-checks independently before storing anything; the client's own gating is a courtesy, never the authority.</p>
+      <p class="doc-p">The IDE never reads a file's content speculatively. It asks the daemon first (<code>GET /capture-config</code>), and only reads &amp; sends content for a project the daemon has actively confirmed opted in. The daemon re-checks independently before storing anything; the client's own gating is a courtesy, never the authority.</p>
     </section>
 
-    <section id="tier3" class="doc-section">
-      <p class="kicker">Code change capture</p>
-      <h2 class="doc-h">Tier 3 — local retention</h2>
+    <section id="tier3" class="doc-section" data-group="Code change capture">
+      <h2 class="doc-h">Tier 3: local retention</h2>
       <p class="doc-p">Raw diff text is kept indefinitely by default. Set a retention window to age it out:</p>
       <div class="diffblock"><div class="l ctx">privacy:</div><div class="l add">+  diff_retention_days: 30</div></div>
-      <p class="doc-p">Past the window, a purely local, regex-based summarizer (no LLM, no API key required) replaces the raw text with a short description — <em>"Added function login, processPayment; removed function oldAuth."</em> The row stays; only the code itself is gone.</p>
+      <p class="doc-p">Past the window, a purely local, regex-based summarizer (no LLM, no API key required) replaces the raw text with a short description: <em>"Added function login, processPayment; removed function oldAuth."</em> The row stays; only the code itself is gone.</p>
     </section>
 
-    <section id="vscode" class="doc-section">
-      <p class="kicker">IDE collectors</p>
+    <section id="vscode" class="doc-section" data-group="IDE collectors">
       <h2 class="doc-h">VS Code collector</h2>
-      <p class="doc-p">Plain JS, no build step, no dependencies. Tracks focus/save, edit volume, debug sessions, idle detection, diagnostics deltas, and file create/delete/rename. The Git branch is read directly from <code>.git/HEAD</code> — no dependency on the built-in Git extension being enabled.</p>
+      <p class="doc-p">Plain JS, no build step, no dependencies. Tracks focus/save, edit volume, debug sessions, idle detection, diagnostics deltas, and file create/delete/rename. The Git branch is read directly from <code>.git/HEAD</code>, with no dependency on the built-in Git extension being enabled.</p>
     </section>
 
-    <section id="jetbrains" class="doc-section">
-      <p class="kicker">IDE collectors</p>
+    <section id="jetbrains" class="doc-section" data-group="IDE collectors">
       <h2 class="doc-h">JetBrains plugin</h2>
       <p class="doc-p">Kotlin, built on the IntelliJ Platform Plugin template. Registered at project-startup time, not lazily, so files already open when the project loads still get captured. One build works across the whole family.</p>
     </section>
 
-    <section id="shell" class="doc-section">
-      <p class="kicker">IDE collectors</p>
+    <section id="shell" class="doc-section" data-group="IDE collectors">
       <h2 class="doc-h">Shell hook</h2>
-      <p class="doc-p">Supports bash, zsh, fish, and PowerShell. Logs command <strong>text and timestamp only</strong> — never what a command printed, which is where secrets and output usually land.</p>
+      <p class="doc-p">Supports bash, zsh, fish, and PowerShell. Logs command <strong>text and timestamp only</strong>, never what a command printed, which is where secrets and output usually land.</p>
     </section>
 
-    <section id="reference" class="doc-section">
-      <p class="kicker">Reference</p>
+    <section id="reference" class="doc-section" data-group="Reference">
       <h2 class="doc-h">Command reference</h2>
       <div class="ref-wrap"><table class="ref">
         <tr><th>Command</th><th>What it does</th></tr>
@@ -598,13 +548,12 @@ billing-api      3h 05m   4 sessions</pre>
         <tr><td>chat</td><td>Interactive, multi-turn conversation</td></tr>
         <tr><td>web</td><td>Open the local dashboard</td></tr>
         <tr><td>ingest</td><td>Force a shell + git collection pass</td></tr>
-        <tr><td>cloud &lt;action&gt;</td><td>Narrately Cloud team account — <code>signup</code>, <code>login</code>, <code>create-org</code>, <code>invite</code>, <code>join</code>, <code>members</code>, <code>org</code>, <code>dashboard</code>, <code>status</code>, <code>logout</code></td></tr>
+        <tr><td>cloud &lt;action&gt;</td><td>Narrately Cloud team account: <code>signup</code>, <code>login</code>, <code>create-org</code>, <code>invite</code>, <code>join</code>, <code>members</code>, <code>org</code>, <code>dashboard</code>, <code>status</code>, <code>logout</code></td></tr>
         <tr><td>sync [--days N]</td><td>Push session metadata to your team now</td></tr>
       </table></div>
     </section>
 
-    <section id="commands" class="doc-section">
-      <p class="kicker">Reference</p>
+    <section id="commands" class="doc-section" data-group="Reference">
       <h2 class="doc-h">Report flags</h2>
       <div class="ref-wrap"><table class="ref">
         <tr><th>Flag</th><th>Effect</th></tr>
@@ -617,46 +566,42 @@ billing-api      3h 05m   4 sessions</pre>
       </table></div>
     </section>
 
-    <section id="config" class="doc-section">
-      <p class="kicker">Reference</p>
+    <section id="config" class="doc-section" data-group="Reference">
       <h2 class="doc-h">Configuration file</h2>
       <p class="doc-p">Everything lives in <code>~/.narrately/config.yaml</code>, written <code>chmod 600</code> (a real restriction on macOS/Linux; NTFS doesn't enforce POSIX mode bits, so on Windows your account login is the actual boundary). Override the location with <code>NARRATELY_HOME</code>.</p>
       <div class="diffblock"><div class="l ctx">report:</div><div class="l ctx">  mode: manual         <span class="cm"># or scheduled</span></div><div class="l ctx">  verbosity: standard  <span class="cm"># brief | standard | detailed</span></div><div class="l ctx">  provider: claude     <span class="cm"># or gemini</span></div><div class="l ctx">cloud:</div><div class="l ctx">  auto_sync: true      <span class="cm"># team sync every 15 min while the daemon runs</span></div></div>
       <p class="doc-p">Prefer not to hand-edit YAML? <code>narrately config</code> reads and writes the same file:</p>
-      <div class="diffblock"><div class="l ctx">narrately config list                       <span class="cm"># whole file, secrets redacted</span></div><div class="l ctx">narrately config get daemon.port</div><div class="l ctx">narrately config set report.verbosity detailed</div></div>
+      <div class="diffblock cmd"><div class="l ctx">narrately config list                       <span class="cm"># whole file, secrets redacted</span></div><div class="l ctx">narrately config get daemon.port</div><div class="l ctx">narrately config set report.verbosity detailed</div></div>
     </section>
 
-    <section id="privacy" class="doc-section">
-      <p class="kicker">Reference</p>
+    <section id="privacy" class="doc-section" data-group="Reference">
       <h2 class="doc-h">Privacy model</h2>
       <p class="doc-p">Every line below is backed by code in the repository, not a policy document.</p>
       <ul class="step-list">
         <li><span class="num"></span><div><strong>Local-first</strong><span>Nothing leaves the machine unless you explicitly enable email, an LLM narrative, or join a team.</span></div></li>
-        <li><span class="num"></span><div><strong>Metadata only, by default</strong><span>File paths, timestamps, commit subjects, integer counts — never file contents.</span></div></li>
-        <li><span class="num"></span><div><strong>No command output</strong><span>The shell hook logs command text and timestamp — never what it printed.</span></div></li>
+        <li><span class="num"></span><div><strong>Metadata only, by default</strong><span>File paths, timestamps, commit subjects, integer counts. Never file contents.</span></div></li>
+        <li><span class="num"></span><div><strong>No command output</strong><span>The shell hook logs command text and timestamp, never what it printed.</span></div></li>
         <li><span class="num"></span><div><strong>Exclusions apply before storage</strong><span>Excluded paths, repos, and patterns never reach the database at all.</span></div></li>
         <li><span class="num"></span><div><strong>Loopback-only daemon and dashboard</strong><span>Bound to 127.0.0.1, unauthenticated by design, never reachable off the machine.</span></div></li>
         <li><span class="num"></span><div><strong>Teams see session metadata only</strong><span>Narrately Cloud never receives paths, diffs, notes, project context, or code.</span></div></li>
       </ul>
     </section>
 
-    <section id="data-model" class="doc-section">
-      <p class="kicker">Reference</p>
+    <section id="data-model" class="doc-section" data-group="Reference">
       <h2 class="doc-h">Data &amp; storage</h2>
-      <div class="diffblock"><div class="l ctx">~/.narrately/</div><div class="l ctx">  config.yaml      <span class="cm"># chmod 600</span></div><div class="l ctx">  narrately.db     <span class="cm"># SQLite: activity, notes, project context</span></div><div class="l ctx">  reports/         <span class="cm"># every generated report, as Markdown</span></div><div class="l ctx">  cloud.json       <span class="cm"># team login — only if you join a team</span></div><div class="l ctx">  logs/daemon.log</div></div>
-      <p class="doc-p">The schema upgrades itself in place on every new version — no "reset your data" step required.</p>
+      <div class="diffblock"><div class="l ctx">~/.narrately/</div><div class="l ctx">  config.yaml      <span class="cm"># chmod 600</span></div><div class="l ctx">  narrately.db     <span class="cm"># SQLite: activity, notes, project context</span></div><div class="l ctx">  reports/         <span class="cm"># every generated report, as Markdown</span></div><div class="l ctx">  cloud.json       <span class="cm"># team login, only if you join a team</span></div><div class="l ctx">  logs/daemon.log</div></div>
+      <p class="doc-p">The schema upgrades itself in place on every new version, with no "reset your data" step.</p>
     </section>
 
-    <section id="faq" class="doc-section">
-      <p class="kicker">Help</p>
+    <section id="faq" class="doc-section" data-group="Help">
       <h2 class="doc-h">Frequently asked questions</h2>
       <div id="faq-list">
-        <div class="faq-item open"><button type="button" aria-expanded="true"><span>Does my code ever leave my machine?</span><span class="plus"></span></button><div class="a"><div><p>Not by default. Reports and questions are grounded in aggregated counts — durations, file paths, commit subjects — never file contents, unless you separately opt into code change capture <em>and</em> raise report verbosity to detailed, in which case bounded, redacted diff excerpts are included.</p></div></div></div>
-        <div class="faq-item"><button type="button" aria-expanded="false"><span>What's the difference between the npm CLI and the editor extensions?</span><span class="plus"></span></button><div class="a"><div><p>The CLI is the whole system — daemon, storage, reports, dashboard. The VS Code and JetBrains extensions are thin producers: they detect focus, saves, and edits, and send that to the daemon the CLI already runs. Install the CLI first either way.</p></div></div></div>
-        <div class="faq-item"><button type="button" aria-expanded="false"><span>Do I need an API key to use it?</span><span class="plus"></span></button><div class="a"><div><p>No. Reports, ask, and chat all work without one — they come out structured instead of narrated. Set <code>ANTHROPIC_API_KEY</code> or <code>GEMINI_API_KEY</code> when you want the written version.</p></div></div></div>
+        <div class="faq-item open"><button type="button" aria-expanded="true"><span>Does my code ever leave my machine?</span><span class="plus"></span></button><div class="a"><div><p>Not by default. Reports and questions are grounded in aggregated counts (durations, file paths, commit subjects), never file contents, unless you separately opt into code change capture <em>and</em> raise report verbosity to detailed, in which case bounded, redacted diff excerpts are included.</p></div></div></div>
+        <div class="faq-item"><button type="button" aria-expanded="false"><span>What's the difference between the npm CLI and the editor extensions?</span><span class="plus"></span></button><div class="a"><div><p>The CLI is the whole system: daemon, storage, reports, dashboard. The VS Code and JetBrains extensions are thin producers: they detect focus, saves, and edits, and send that to the daemon the CLI already runs. Install the CLI first either way.</p></div></div></div>
+        <div class="faq-item"><button type="button" aria-expanded="false"><span>Do I need an API key to use it?</span><span class="plus"></span></button><div class="a"><div><p>No. Reports, ask, and chat all work without one. They come out structured instead of narrated. Set <code>ANTHROPIC_API_KEY</code> or <code>GEMINI_API_KEY</code> when you want the written version.</p></div></div></div>
         <div class="faq-item"><button type="button" aria-expanded="false"><span>What does project context send to the AI?</span><span class="plus"></span></button><div class="a"><div><p>Only the background you wrote, only for projects active in the period being reported or asked about, and capped at 6,000 characters each. It goes to the same LLM provider as the rest of the prompt and is never synced to a team.</p></div></div></div>
-        <div class="faq-item"><button type="button" aria-expanded="false"><span>Is code change capture on by default?</span><span class="plus"></span></button><div class="a"><div><p>No — all three tiers default to off, per project. Turning on Tier 1 (commits) doesn't turn on Tier 2 (uncommitted work); they're independent decisions, and Tier 2 is only ever asked about if you've already said yes to Tier 1.</p></div></div></div>
-        <div class="faq-item"><button type="button" aria-expanded="false"><span>Can I use it across a team?</span><span class="plus"></span></button><div class="a"><div><p>Yes. Each machine runs its own daemon and keeps its own SQLite store. For a shared view, the optional Narrately Cloud rolls up session metadata across a team — see <a href="#teams" style="color:var(--signal-text)">Teams</a>.</p></div></div></div>
+        <div class="faq-item"><button type="button" aria-expanded="false"><span>Is code change capture on by default?</span><span class="plus"></span></button><div class="a"><div><p>No. All three tiers default to off, per project. Turning on Tier 1 (commits) doesn't turn on Tier 2 (uncommitted work); they're independent decisions, and Tier 2 is only ever asked about if you've already said yes to Tier 1.</p></div></div></div>
+        <div class="faq-item"><button type="button" aria-expanded="false"><span>Can I use it across a team?</span><span class="plus"></span></button><div class="a"><div><p>Yes. Each machine runs its own daemon and keeps its own SQLite store. For a shared view, the optional Narrately Cloud rolls up session metadata across a team; see <a href="#teams">Teams</a>.</p></div></div></div>
         <div class="faq-item"><button type="button" aria-expanded="false"><span>What happens if I stop the daemon?</span><span class="plus"></span></button><div class="a"><div><p>Tracking pauses. Nothing is lost from before that point, and any open focus or debug span is flushed on shutdown rather than discarded. Team auto-sync pauses too; <code>narrately sync</code> catches up later.</p></div></div></div>
         <div class="faq-item"><button type="button" aria-expanded="false"><span>Is it free?</span><span class="plus"></span></button><div class="a"><div><p>The tool itself is open source and free. The only optional costs are API usage if you enable a written narrative through Claude or Gemini, and a paid plan if your team uses Narrately Cloud after its trial.</p></div></div></div>
       </div>
@@ -686,7 +631,6 @@ billing-api      3h 05m   4 sessions</pre>
 <script>
 (function () {
   var root = document.documentElement;
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $ = function (id) { return document.getElementById(id); };
   var store = {
     get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
@@ -729,18 +673,17 @@ billing-api      3h 05m   4 sessions</pre>
   if (/Mac|iPhone|iPad/.test(navigator.platform)) $('kbdHint').textContent = '⌘K';
 
   // ---------- theme ----------
-  function currentTheme() { return root.dataset.theme || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); }
-  function syncThemeIcon() { $('themeToggle').innerHTML = icon(currentTheme() === 'dark' ? 'sun' : 'moon'); }
+  function currentTheme() { return root.dataset.theme === 'dark' ? 'dark' : 'light'; }
+  function syncThemeIcon() {
+    var dark = currentTheme() === 'dark';
+    $('themeToggle').innerHTML = icon(dark ? 'sun' : 'moon');
+    $('themeToggle').setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+  }
   syncThemeIcon();
-  $('themeToggle').addEventListener('click', function (e) {
-    var next = currentTheme() === 'dark' ? 'light' : 'dark';
-    var apply = function () { root.dataset.theme = next; store.set('narrately.theme', next); syncThemeIcon(); };
-    if (!document.startViewTransition || reduced) return apply();
-    var x = e.clientX, y = e.clientY, r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-    document.startViewTransition(apply).ready.then(function () {
-      root.animate({ clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + r + 'px at ' + x + 'px ' + y + 'px)'] },
-        { duration: 650, easing: 'cubic-bezier(.16,1,.3,1)', pseudoElement: '::view-transition-new(root)' });
-    });
+  $('themeToggle').addEventListener('click', function () {
+    root.dataset.theme = currentTheme() === 'dark' ? 'light' : 'dark';
+    store.set('narrately.theme', root.dataset.theme);
+    syncThemeIcon();
   });
 
   // ---------- sidebar: groups, mobile drawer, filter ----------
@@ -807,15 +750,12 @@ billing-api      3h 05m   4 sessions</pre>
     });
   });
 
-  // ---------- scroll spy + progress ----------
+  // ---------- scroll spy ----------
   var sideLinks = Array.prototype.slice.call(document.querySelectorAll('.side-items a'));
   var targets = sideLinks.map(function (a) { return document.querySelector(a.getAttribute('href')); });
-  var progress = document.querySelector('.progress');
   var frame = 0, current = null;
   function onScroll() {
     frame = 0;
-    var max = document.documentElement.scrollHeight - innerHeight;
-    progress.style.transform = 'scaleX(' + (max > 0 ? scrollY / max : 0) + ')';
     var active = -1;
     targets.forEach(function (t, i) { if (t && t.getBoundingClientRect().top <= innerHeight * 0.3) active = i; });
     if (active === current) return;
@@ -831,25 +771,11 @@ billing-api      3h 05m   4 sessions</pre>
   window.addEventListener('scroll', function () { if (!frame) frame = requestAnimationFrame(onScroll); }, { passive: true });
   onScroll();
 
-  // ---------- reveal + spotlight ----------
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(function (el, i) { el.style.transitionDelay = (i % 4) * 60 + 'ms'; io.observe(el); });
-  document.addEventListener('pointermove', function (e) {
-    var card = e.target.closest && e.target.closest('.guide-card');
-    if (!card) return;
-    var r = card.getBoundingClientRect();
-    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-  });
-
   // ---------- search palette over every section, command, and table row ----------
   var INDEX = [];
   document.querySelectorAll('section.doc-section').forEach(function (s) {
     var title = s.querySelector('h2.doc-h').firstChild.textContent.trim();
-    var group = (s.querySelector('.kicker') || {}).textContent || '';
-    INDEX.push({ label: title, group: group.replace(/·.*$/, '').trim(), href: '#' + s.id, icon: 'hash', text: s.textContent.toLowerCase() });
+    INDEX.push({ label: title, group: s.dataset.group || '', href: '#' + s.id, icon: 'hash', text: s.textContent.toLowerCase() });
     s.querySelectorAll('table.ref tr').forEach(function (tr) {
       var cells = tr.querySelectorAll('td');
       if (cells.length) INDEX.push({ label: cells[0].textContent.trim(), group: title, href: '#' + s.id, icon: 'code', text: tr.textContent.toLowerCase() });

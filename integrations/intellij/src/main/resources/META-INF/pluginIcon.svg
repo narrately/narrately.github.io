@@ -1,9 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 64 64" role="img" aria-label="Narrately">
-  <rect width="64" height="64" rx="18" fill="#0C0C10"/>
-  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="17.25" fill="none" stroke="#FFFFFF" stroke-opacity="0.1" stroke-width="1.5"/>
-  <path d="M19 45.5V18.5M45 45.5V18.5" fill="none" stroke="#D4FF4F" stroke-width="6.5" stroke-linecap="round"/>
-  <path d="M19 18.5L45 45.5" fill="none" stroke="#D4FF4F" stroke-opacity="0.45" stroke-width="2.2" stroke-linecap="round"/>
-  <circle cx="27.3" cy="27.1" r="3.3" fill="#D4FF4F"/>
-  <circle cx="32" cy="32" r="3.3" fill="#D4FF4F"/>
-  <circle cx="36.7" cy="36.9" r="3.3" fill="#D4FF4F"/>
+  <rect width="64" height="64" rx="14" fill="#1C1F22"/>
+  <path d="M19 45.5V18.5M45 45.5V18.5" fill="none" stroke="#F6F7F2" stroke-width="6.5" stroke-linecap="round"/>
+  <path d="M19 18.5L45 45.5" fill="none" stroke="#F6F7F2" stroke-opacity="0.38" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="27.3" cy="27.1" r="3.3" fill="#E8382E"/>
+  <circle cx="32" cy="32" r="3.3" fill="#E8382E"/>
+  <circle cx="36.7" cy="36.9" r="3.3" fill="#E8382E"/>
 </svg>
