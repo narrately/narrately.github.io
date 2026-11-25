@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "website/index.html"
+        ],
+        "createdAt": "2026-11-25T07:13:55.000Z",
+        "reason": "agent decided after measuring in a browser: flagged children are full-width rows inside ruled sheets (slip-head, report-mock, film-bar, term-body) that carry their own 11-20px padding, so text sits 14px+ from every border; the install copy button is an intentionally joined segmented control"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "website/docs.html"
+        ],
+        "createdAt": "2026-11-25T07:13:55.119Z",
+        "reason": "agent decided after measuring in a browser: tier-card text sits 21px from its left rule and FAQ rows carry 17px own padding under the list's top rule; no rendered text touches a border"
+      }
+    ]
+  }
+}
