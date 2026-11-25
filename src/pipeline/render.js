@@ -190,6 +190,9 @@ export function markdownToHtml(markdown) {
     } else if (/^-{3,}$/.test(line.trim())) {
       closeList();
       out.push('<hr>');
+    } else if (/^_.+_$/.test(line.trim())) {
+      closeList();
+      out.push(`<p class="note"><em>${inlineMarkdown(line.trim().slice(1, -1))}</em></p>`);
     } else {
       closeList();
       out.push(`<p>${inlineMarkdown(line)}</p>`);
@@ -201,7 +204,11 @@ export function markdownToHtml(markdown) {
   return out.join('\n');
 }
 
-export function renderEmailHtml(markdown, { title = 'Narrately' } = {}) {
+// Email clients ignore web fonts, block SVG and data-URI images, and (in
+// Outlook) flexbox — so the brand is built from tables, a CSS-drawn logo
+// tile, and Georgia standing in for the serif used on the web.
+export function renderEmailHtml(markdown, { title = 'Narrately', date = new Date() } = {}) {
+  const dateLabel = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   return `<!doctype html>
 <html>
 <head>
@@ -211,52 +218,71 @@ export function renderEmailHtml(markdown, { title = 'Narrately' } = {}) {
 <meta name="supported-color-schemes" content="light dark">
 <title>${escapeHtml(title)}</title>
 <style>
-  body { margin: 0; padding: 0; background: #f6f7f9; }
-  .narrately-shell { max-width: 640px; margin: 0 auto; padding: 24px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-  .narrately-brand { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
-  .narrately-brand-mark { width: 22px; height: 22px; border-radius: 6px; background: #4f46e5; flex: none; }
-  .narrately-brand-name { font-size: 14px; font-weight: 600; letter-spacing: 0.01em; color: #1a1a1a; }
-  .narrately-card { background: #ffffff; border: 1px solid #e3e5e8; border-radius: 10px; padding: 28px; font-size: 15px; line-height: 1.6; color: #1a1a1a; }
-  .narrately-report h1 { font-size: 20px; margin: 0 0 16px; }
-  .narrately-report h2 { font-size: 16px; margin: 24px 0 8px; padding-top: 12px; border-top: 1px solid #eceef1; }
-  .narrately-report h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
-  .narrately-report h3 { font-size: 14px; margin: 16px 0 4px; }
-  .narrately-report p { margin: 0 0 12px; }
-  .narrately-report ul { margin: 0 0 12px; padding-left: 20px; }
-  .narrately-report li { margin: 4px 0; }
-  .narrately-report table { width: 100%; border-collapse: collapse; margin: 0 0 16px; font-size: 14px; }
-  .narrately-report th, .narrately-report td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #eceef1; }
-  .narrately-report th { color: #6b7280; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.02em; }
-  .narrately-report code { background: #f1f2f4; border-radius: 4px; padding: 1px 5px; font-size: 13px; }
-  .narrately-report hr { border: none; border-top: 1px solid #eceef1; margin: 20px 0; }
-  .narrately-footer { margin-top: 16px; font-size: 12px; color: #8a8f98; text-align: center; }
+  body { margin: 0; padding: 0; background: #F4F2ED; -webkit-text-size-adjust: 100%; }
+  .n-shell { width: 100%; background: #F4F2ED; }
+  .n-wrap { max-width: 640px; margin: 0 auto; padding: 28px 16px 36px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+  .n-head td { vertical-align: middle; }
+  .n-mark { width: 28px; height: 28px; border-radius: 8px; background: #0C0C10; color: #D4FF4F; font: 800 15px/28px -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; text-align: center; }
+  .n-word { padding-left: 9px; font-size: 18px; font-weight: 700; letter-spacing: -0.04em; color: #111111; }
+  .n-date { text-align: right; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #8D8A83; }
+  .n-card { margin-top: 18px; background: #FFFFFF; border: 1px solid #E6E3DC; border-radius: 18px; overflow: hidden; }
+  .n-bar { height: 4px; background: #D4FF4F; font-size: 0; line-height: 0; }
+  .n-body { padding: 30px 32px 26px; font-size: 15.5px; line-height: 1.65; color: #111111; }
+  .n-body h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 32px; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 18px; color: #111111; }
+  .n-body h2 { font-size: 15px; font-weight: 700; margin: 26px 0 10px; padding-top: 16px; border-top: 1px solid #ECE9E2; color: #111111; }
+  .n-body h3 { font-size: 14px; margin: 18px 0 6px; }
+  .n-body p { margin: 0 0 13px; }
+  .n-body strong { color: #4A6500; }
+  .n-body ul { margin: 0 0 13px; padding-left: 20px; }
+  .n-body li { margin: 5px 0; }
+  .n-body table { width: 100%; border-collapse: collapse; margin: 2px 0 16px; font-size: 14px; }
+  .n-body th { text-align: left; padding: 8px 10px; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #8D8A83; border-bottom: 1px solid #DDD9D0; }
+  .n-body td { padding: 9px 10px; border-bottom: 1px solid #ECE9E2; }
+  .n-body code { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 12.5px; background: #F4F2ED; border-radius: 5px; padding: 1px 6px; }
+  .n-body hr { border: none; border-top: 1px solid #ECE9E2; margin: 22px 0; }
+  .n-body .note { color: #8D8A83; font-size: 13px; }
+  .n-foot { padding: 18px 8px 0; font-size: 12px; line-height: 1.6; color: #8D8A83; text-align: center; }
+  .n-foot b { color: #57544E; font-weight: 600; }
+  @media (max-width: 520px) {
+    .n-body { padding: 24px 20px 20px; font-size: 15px; }
+    .n-body h1 { font-size: 27px; }
+    .n-date { display: none; }
+  }
   @media (prefers-color-scheme: dark) {
-    body { background: #0f1115; }
-    .narrately-brand-name { color: #e6e8eb; }
-    .narrately-card { background: #171a21; border-color: #262b35; color: #e6e8eb; }
-    .narrately-report h2 { border-top-color: #262b35; }
-    .narrately-report th { color: #9aa1ac; }
-    .narrately-report th, .narrately-report td { border-bottom-color: #262b35; }
-    .narrately-report code { background: #23272f; color: #e6e8eb; }
-    .narrately-report hr { border-top-color: #262b35; }
-    .narrately-footer { color: #6b7280; }
+    body, .n-shell { background: #08080A !important; }
+    .n-word, .n-body, .n-body h1, .n-body h2 { color: #F3F1EC !important; }
+    .n-mark { border: 1px solid #2A2A33; }
+    .n-card { background: #121217 !important; border-color: #23232B !important; }
+    .n-body strong { color: #D4FF4F !important; }
+    .n-body h2, .n-body td, .n-body hr { border-color: #23232B !important; }
+    .n-body th { border-color: #2A2A33 !important; color: #6E6C67 !important; }
+    .n-body code { background: #18181F !important; color: #F3F1EC !important; }
+    .n-date, .n-body .note, .n-foot { color: #6E6C67 !important; }
+    .n-foot b { color: #A6A39C !important; }
   }
 </style>
 </head>
 <body>
-<div class="narrately-shell">
-  <div class="narrately-brand">
-    <span class="narrately-brand-mark"></span>
-    <span class="narrately-brand-name">Narrately</span>
-  </div>
-  <div class="narrately-card">
-    <div class="narrately-report">
-      ${markdownToHtml(markdown)}
+<div class="n-shell">
+  <div class="n-wrap">
+    <table class="n-head" role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td width="28"><div class="n-mark">N</div></td>
+        <td class="n-word">narrately</td>
+        <td class="n-date">${escapeHtml(dateLabel)}</td>
+      </tr>
+    </table>
+    <div class="n-card">
+      <div class="n-bar">&nbsp;</div>
+      <div class="n-body">
+        ${markdownToHtml(markdown)}
+      </div>
     </div>
+    <p class="n-foot">
+      <b>Written on your machine by Narrately.</b><br>
+      Your activity data never left it except to produce this email.
+    </p>
   </div>
-  <p class="narrately-footer">
-    Generated locally by Narrately. Your activity data never left your machine except to produce this email.
-  </p>
 </div>
 </body>
 </html>`;
