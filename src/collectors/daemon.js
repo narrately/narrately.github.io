@@ -8,8 +8,10 @@ import { summarizeDiff } from '../core/summarize-diff.js';
 import { PID_PATH, PORT_PATH, DAEMON_LOG, ensureHome } from '../core/paths.js';
 import { drainShellLog } from './shell.js';
 import { scrapeGit } from './git.js';
+import { loadCloudSession } from '../commands/cloud.js';
 
 const POLL_INTERVAL_MS = 60_000;
+const CLOUD_SYNC_INTERVAL_MS = 15 * 60_000;
 
 function nowIso() {
   return new Date().toISOString();
@@ -448,6 +450,27 @@ export async function startDaemon({ port, onListening } = {}) {
   appendLog(`daemon listening on 127.0.0.1:${boundPort} (pid ${process.pid})`);
   onListening?.(boundPort);
 
+  // Team sync rides along on the poll once the user has joined a team. The
+  // session file is re-read each time so logging in later needs no restart.
+  let lastCloudSync = 0;
+  let cloudSyncRunning = false;
+  const maybeCloudSync = async () => {
+    if (config.cloud?.auto_sync === false || cloudSyncRunning) return;
+    if (Date.now() - lastCloudSync < CLOUD_SYNC_INTERVAL_MS) return;
+    if (!loadCloudSession()?.org_id) return;
+    lastCloudSync = Date.now();
+    cloudSyncRunning = true;
+    try {
+      const { runSync } = await import('../commands/sync.js');
+      const result = await runSync();
+      appendLog(`cloud sync: ${result.sessions} session(s) → ${result.orgName}`);
+    } catch (error) {
+      appendLog(`cloud sync error: ${error.message}`);
+    } finally {
+      cloudSyncRunning = false;
+    }
+  };
+
   const poll = setInterval(() => {
     try {
       const shell = drainShellLog(config);
@@ -462,6 +485,7 @@ export async function startDaemon({ port, onListening } = {}) {
     } catch (error) {
       appendLog(`diff retention sweep error: ${error.message}`);
     }
+    maybeCloudSync();
   }, POLL_INTERVAL_MS);
   poll.unref?.();
 

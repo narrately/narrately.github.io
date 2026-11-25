@@ -1,0 +1,1195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Narrately Cloud — Team</title>
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<script>
+  try { var t = localStorage.getItem('narrately.theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<style>
+  @font-face { font-family: 'Geist'; src: url(assets/geist.woff2) format('woff2'); font-weight: 300 700; font-display: swap; }
+  @font-face { font-family: 'Geist Mono'; src: url(assets/geist-mono.woff2) format('woff2'); font-weight: 400 600; font-display: swap; }
+  @font-face { font-family: 'Instrument Serif'; src: url(assets/instrument-serif.woff2) format('woff2'); font-style: normal; font-display: swap; }
+  @font-face { font-family: 'Instrument Serif'; src: url(assets/instrument-serif-italic.woff2) format('woff2'); font-style: italic; font-display: swap; }
+
+  :root {
+    color-scheme: dark;
+    --ink: #08080A; --ink-2: #0D0D11; --surface: #121217; --surface-2: #18181F; --surface-3: #22222B;
+    --line: rgba(255,255,255,.07); --line-2: rgba(255,255,255,.12);
+    --text: #F3F1EC; --text-2: #A6A39C; --text-3: #6E6C67;
+    --signal: #D4FF4F; --signal-ink: #0B1000; --signal-text: #D4FF4F; --signal-soft: rgba(212,255,79,.12);
+    --chart-1: #D4FF4F; --violet: #A594FF; --coral: #FF7D61; --sky: #6FCBFF; --amber: #FFC65C; --mint: #5EEAC2; --pink: #FF8FCF;
+    --good: #7BE495; --bad: #FF7D7D; --warn: #FFC65C;
+    --glow-1: rgba(212,255,79,.07); --glow-2: rgba(165,148,255,.09);
+    --shadow: 0 30px 80px -30px rgba(0,0,0,.75);
+    --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+    --ease-out: cubic-bezier(.16, 1, .3, 1); --spring: cubic-bezier(.34, 1.56, .64, 1);
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      color-scheme: light;
+      --ink: #F4F2ED; --ink-2: #ECE9E2; --surface: #FFFFFF; --surface-2: #F7F5F0; --surface-3: #ECE9E2;
+      --line: rgba(18,18,18,.08); --line-2: rgba(18,18,18,.15);
+      --text: #111111; --text-2: #57544E; --text-3: #8D8A83;
+      --signal-text: #4A6500; --signal-soft: rgba(120,160,0,.13); --chart-1: #9CC700;
+      --violet: #6B57F0; --coral: #E5502F; --sky: #1689C9; --amber: #C98A00; --mint: #0FA37F; --pink: #D6408F;
+      --good: #178A4A; --bad: #D0342C; --warn: #A86F00;
+      --glow-1: rgba(156,199,0,.10); --glow-2: rgba(107,87,240,.07);
+      --shadow: 0 30px 70px -35px rgba(30,25,15,.28);
+    }
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --ink: #F4F2ED; --ink-2: #ECE9E2; --surface: #FFFFFF; --surface-2: #F7F5F0; --surface-3: #ECE9E2;
+    --line: rgba(18,18,18,.08); --line-2: rgba(18,18,18,.15);
+    --text: #111111; --text-2: #57544E; --text-3: #8D8A83;
+    --signal-text: #4A6500; --signal-soft: rgba(120,160,0,.13); --chart-1: #9CC700;
+    --violet: #6B57F0; --coral: #E5502F; --sky: #1689C9; --amber: #C98A00; --mint: #0FA37F; --pink: #D6408F;
+    --good: #178A4A; --bad: #D0342C; --warn: #A86F00;
+    --glow-1: rgba(156,199,0,.10); --glow-2: rgba(107,87,240,.07);
+    --shadow: 0 30px 70px -35px rgba(30,25,15,.28);
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; min-height: 100vh; background: var(--ink); color: var(--text); font: 14px/1.55 var(--font-sans); -webkit-font-smoothing: antialiased; }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(900px 520px at -5% -10%, var(--glow-1), transparent 60%), radial-gradient(800px 520px at 105% -5%, var(--glow-2), transparent 60%);
+  }
+  .grain {
+    position: fixed; inset: 0; pointer-events: none; z-index: 90; opacity: .045; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  ::selection { background: var(--signal); color: var(--signal-ink); }
+  :focus-visible { outline: 2px solid var(--signal-text); outline-offset: 2px; }
+  button, input { font-family: inherit; }
+  svg.icon { width: 16px; height: 16px; flex-shrink: 0; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  .view { position: relative; z-index: 1; animation: viewIn .55s var(--ease-out) both; }
+  @keyframes viewIn { from { opacity: 0; transform: translateY(10px); filter: blur(4px); } }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; padding: 10px 16px; cursor: pointer;
+    font-size: 13px; font-weight: 600; border: 1px solid transparent; white-space: nowrap; text-decoration: none;
+    transition: transform .25s var(--ease-out), box-shadow .25s, background .2s, border-color .2s, color .2s;
+  }
+  .btn svg { width: 15px; height: 15px; }
+  .btn-primary { background: var(--signal); color: var(--signal-ink); }
+  .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 30px -12px var(--signal); }
+  .btn-primary:disabled { opacity: .6; cursor: default; }
+  .btn-ghost { background: var(--surface-2); color: var(--text-2); border-color: var(--line); }
+  .btn-ghost:hover { color: var(--text); border-color: var(--line-2); }
+  .btn-quiet { background: none; color: var(--text-3); padding: 6px 8px; }
+  .btn-quiet:hover { color: var(--bad); }
+  .btn .spin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .icon-btn {
+    width: 36px; height: 36px; display: grid; place-items: center; border-radius: 11px; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--line); color: var(--text-2); transition: color .2s, border-color .2s, transform .45s var(--spring);
+  }
+  .icon-btn:hover:not(:disabled) { color: var(--text); border-color: var(--line-2); }
+  .icon-btn:disabled { opacity: .35; cursor: default; }
+
+  /* ---------- auth ---------- */
+  .auth { display: grid; grid-template-columns: 1.08fr 1fr; min-height: 100vh; }
+  @media (max-width: 960px) { .auth { grid-template-columns: 1fr; } }
+  .brand-side {
+    position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 40px 48px;
+    background: #08080A; color: #F3F1EC; isolation: isolate;
+  }
+  .brand-side::before {
+    content: ''; position: absolute; inset: -20%; z-index: -2;
+    background:
+      radial-gradient(40% 35% at 25% 30%, rgba(212,255,79,.20), transparent 70%),
+      radial-gradient(35% 35% at 75% 65%, rgba(165,148,255,.22), transparent 70%),
+      radial-gradient(30% 30% at 60% 15%, rgba(255,125,97,.12), transparent 70%);
+    filter: blur(20px); animation: aurora 18s ease-in-out infinite alternate;
+  }
+  @keyframes aurora { to { transform: translate(-4%, 3%) rotate(8deg) scale(1.08); } }
+  .brand-side::after {
+    content: ''; position: absolute; inset: 0; z-index: -1; opacity: .5;
+    background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 48px 48px; mask-image: radial-gradient(ellipse 80% 70% at 40% 40%, #000 30%, transparent 80%);
+  }
+  .lockup { display: flex; align-items: center; gap: 10px; font-weight: 620; font-size: 20px; letter-spacing: -.045em; color: inherit; text-decoration: none; }
+  .lockup img { width: 32px; height: 32px; border-radius: 9px; }
+  .lockup em { font-style: normal; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #A6A39C; border: 1px solid rgba(255,255,255,.14); padding: 2px 8px; border-radius: 999px; }
+  .brand-copy h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(44px, 5vw, 76px); line-height: .98; letter-spacing: -.025em; margin: 0 0 16px; max-width: 11ch; }
+  .brand-copy h1 em { color: #D4FF4F; }
+  .brand-copy p { color: #A6A39C; font-size: 15.5px; margin: 0; max-width: 42ch; }
+  .collage { position: relative; height: 300px; margin: 28px 0; }
+  .float {
+    position: absolute; border-radius: 18px; padding: 16px 18px; color: #F3F1EC;
+    background: rgba(24,24,31,.82); border: 1px solid rgba(255,255,255,.1); backdrop-filter: blur(12px);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6); animation: bob 7s ease-in-out infinite; transform: rotate(var(--r));
+  }
+  @keyframes bob { 50% { transform: rotate(var(--r)) translateY(-10px); } }
+  .float.f1 { --r: -4deg; left: 0; top: 20px; width: 290px; }
+  .float.f2 { --r: 5deg; right: 6%; top: 0; width: 230px; animation-delay: -2.3s; }
+  .float.f3 { --r: -2deg; right: 14%; bottom: 0; width: 250px; animation-delay: -4.6s; }
+  .float .cap { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #6E6C67; margin-bottom: 10px; }
+  .mini-row { display: grid; grid-template-columns: 22px 1fr 54px; gap: 9px; align-items: center; margin-bottom: 9px; font-size: 12px; }
+  .mini-row .av { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; font-weight: 700; color: #0B1000; }
+  .mini-row .tr { height: 6px; border-radius: 3px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .mini-row .tr i { display: block; height: 100%; border-radius: 3px; }
+  .mini-row .t { font-family: var(--font-mono); font-size: 10.5px; color: #A6A39C; text-align: right; }
+  .f2 .big { font-size: 30px; font-weight: 600; letter-spacing: -.05em; line-height: 1; }
+  .f2 .big small { font-size: 13px; color: #D4FF4F; margin-left: 4px; letter-spacing: 0; }
+  .f2 .sub { color: #A6A39C; font-size: 12px; margin-top: 6px; }
+  .f3 { display: flex; gap: 10px; align-items: flex-start; font-size: 12.5px; }
+  .f3 .ok { width: 22px; height: 22px; border-radius: 50%; background: #D4FF4F; color: #0B1000; display: grid; place-items: center; flex-shrink: 0; }
+  .f3 .ok svg { width: 13px; height: 13px; }
+  .f3 small { display: block; color: #A6A39C; font-size: 11.5px; margin-top: 2px; }
+  .brand-foot { display: flex; align-items: center; gap: 10px; color: #6E6C67; font-size: 12.5px; }
+  .brand-foot svg { color: #D4FF4F; }
+  @media (max-width: 960px) {
+    .brand-side { padding: 22px 20px 28px; }
+    .collage, .brand-foot { display: none; }
+    .brand-copy { margin-top: 22px; }
+    .brand-copy h1 { font-size: 40px; max-width: none; }
+  }
+
+  .form-side { display: grid; place-items: center; padding: 40px 24px; }
+  .form-card { width: min(400px, 100%); }
+  .form-card.shake { animation: shake .45s var(--ease-out); }
+  @keyframes shake { 20% { transform: translateX(-8px); } 40% { transform: translateX(7px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(2px); } }
+  .form-card h2 { font-family: var(--font-serif); font-weight: 400; font-size: 44px; line-height: 1; letter-spacing: -.02em; margin: 0 0 8px; }
+  .form-card h2 em { color: var(--signal-text); }
+  .form-card > p { color: var(--text-2); margin: 0 0 26px; }
+  .tabs { position: relative; display: flex; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); margin-bottom: 22px; }
+  .tabs button { position: relative; z-index: 1; flex: 1; background: none; border: none; color: var(--text-2); padding: 9px; border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: color .3s; }
+  .tabs button.active { color: var(--signal-ink); }
+  .tabs .glider { position: absolute; top: 4px; bottom: 4px; left: 0; border-radius: 999px; background: var(--signal); transition: transform .5s var(--ease-out), width .5s var(--ease-out); }
+  .field-wrap { margin-bottom: 14px; }
+  .field-wrap label { display: block; font-size: 12px; color: var(--text-2); margin-bottom: 6px; font-weight: 500; }
+  .input {
+    display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line-2); border-radius: 12px; padding: 0 6px 0 14px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .input:focus-within { border-color: color-mix(in srgb, var(--signal-text) 60%, var(--line-2)); box-shadow: 0 0 0 4px var(--signal-soft); }
+  .input svg { color: var(--text-3); }
+  .input input { flex: 1; min-width: 0; border: none; background: none; color: var(--text); font-size: 14px; padding: 12px 0; outline: none; }
+  .input .peek { background: none; border: none; color: var(--text-3); cursor: pointer; padding: 6px; border-radius: 8px; display: grid; place-items: center; }
+  .input .peek:hover { color: var(--text); }
+  .form-card .btn-primary { width: 100%; padding: 13px; font-size: 14px; margin-top: 6px; border-radius: 13px; }
+  .form-msg { font-size: 12.5px; margin-top: 12px; min-height: 18px; }
+  .form-msg.err { color: var(--bad); }
+  .form-msg.ok { color: var(--good); }
+  .switch-line { margin-top: 20px; font-size: 13px; color: var(--text-3); text-align: center; }
+  .switch-line button { background: none; border: none; color: var(--text); font-weight: 600; cursor: pointer; padding: 0; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-2); }
+
+  /* ---------- app shell ---------- */
+  .appbar {
+    position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 12px; padding: 14px 32px;
+    background: color-mix(in srgb, var(--ink) 80%, transparent); backdrop-filter: blur(16px); border-bottom: 1px solid var(--line);
+  }
+  .appbar .lockup { color: var(--text); font-size: 18px; }
+  .appbar .lockup img { width: 28px; height: 28px; border-radius: 8px; }
+  .appbar .lockup em { color: var(--text-3); border-color: var(--line-2); }
+  .appbar .spacer { flex: 1; }
+  .pill-btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--line); color: var(--text); font-size: 13px; font-weight: 500; max-width: 240px;
+  }
+  .pill-btn span.n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pill-btn:hover { border-color: var(--line-2); }
+  .pill-btn .sq { width: 18px; height: 18px; border-radius: 5px; background: var(--signal); color: var(--signal-ink); display: grid; place-items: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+  .week-nav { display: flex; align-items: center; gap: 2px; padding: 3px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+  .week-nav button { width: 30px; height: 30px; border-radius: 50%; border: none; background: none; color: var(--text-2); cursor: pointer; display: grid; place-items: center; }
+  .week-nav button:hover:not(:disabled) { background: var(--surface-2); color: var(--text); }
+  .week-nav button:disabled { opacity: .3; cursor: default; }
+  #weekLabel { display: inline-block; min-width: 128px; text-align: center; font-size: 13px; font-weight: 500; }
+  #weekLabel.from-left { animation: labelL .45s var(--ease-out); }
+  #weekLabel.from-right { animation: labelR .45s var(--ease-out); }
+  @keyframes labelL { from { opacity: 0; transform: translateX(-12px); filter: blur(4px); } }
+  @keyframes labelR { from { opacity: 0; transform: translateX(12px); filter: blur(4px); } }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; border: none; cursor: pointer; display: grid; place-items: center; font-weight: 700; font-size: 13px; background: var(--violet); color: #0B0B12; }
+  .menu-wrap { position: relative; }
+  .menu {
+    position: absolute; right: 0; top: calc(100% + 8px); z-index: 40; min-width: 240px; padding: 6px; border-radius: 16px;
+    background: var(--surface); border: 1px solid var(--line-2); box-shadow: var(--shadow);
+    transform-origin: top right; animation: menuIn .35s var(--spring) both;
+  }
+  .menu.left { right: auto; left: 0; transform-origin: top left; }
+  @keyframes menuIn { from { opacity: 0; transform: scale(.9) translateY(-6px); } }
+  .menu .head { padding: 10px 12px 8px; font-size: 12px; color: var(--text-3); border-bottom: 1px solid var(--line); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; }
+  .menu .head b { display: block; color: var(--text); font-size: 13px; font-weight: 560; }
+  .menu button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 12px; border-radius: 10px; border: none; background: none; color: var(--text-2); font-size: 13px; cursor: pointer; text-align: left; }
+  .menu button:hover { background: var(--surface-2); color: var(--text); }
+  .menu button.cur { color: var(--text); }
+  .menu button.cur::after { content: ''; margin-left: auto; width: 7px; height: 7px; border-radius: 50%; background: var(--signal-text); }
+  @media (max-width: 760px) {
+    .appbar { padding: 12px 16px; flex-wrap: wrap; }
+    .appbar .lockup em { display: none; }
+    .appbar .lockup { font-size: 0; gap: 0; }
+    .appbar .pill-btn { max-width: 190px; }
+    .week-nav { order: 5; width: 100%; justify-content: space-between; }
+  }
+
+  main.dash { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 8px 32px 72px; }
+  @media (max-width: 760px) { main.dash { padding: 4px 16px 56px; } }
+  .notice {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 14px 12px 18px; border-radius: 16px; margin: 18px 0 0;
+    background: var(--signal-soft); border: 1px solid color-mix(in srgb, var(--signal-text) 25%, transparent); font-size: 13.5px;
+    animation: viewIn .5s var(--ease-out) both;
+  }
+  .notice .grow { flex: 1; min-width: 200px; }
+  .notice.warn { background: color-mix(in srgb, var(--warn) 13%, transparent); border-color: color-mix(in srgb, var(--warn) 30%, transparent); }
+  .notice.bad { background: color-mix(in srgb, var(--bad) 12%, transparent); border-color: color-mix(in srgb, var(--bad) 30%, transparent); }
+  .notice.good { background: color-mix(in srgb, var(--good) 12%, transparent); border-color: color-mix(in srgb, var(--good) 30%, transparent); }
+
+  .hero { padding: 30px 0 26px; }
+  .eyebrow { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); }
+  .eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--text-3); }
+  .hero h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(40px, 5vw, 70px); line-height: 1; letter-spacing: -.02em; margin: 0; }
+  .hero h1 .num { font-family: var(--font-sans); font-weight: 600; letter-spacing: -.055em; font-size: .9em; font-variant-numeric: tabular-nums; }
+  .hero h1 em { color: var(--signal-text); }
+  .hero p { color: var(--text-2); margin: 14px 0 0; font-size: 15px; }
+  .hero p strong { color: var(--text); font-weight: 560; }
+
+  .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+  @media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .kpi, .panel { position: relative; overflow: hidden; background: var(--surface); border: 1px solid var(--line); transition: opacity .3s, filter .3s, transform .35s var(--ease-out), border-color .3s; }
+  .kpi { padding: 16px 18px; border-radius: 16px; }
+  .kpi:hover { transform: translateY(-2px); border-color: var(--line-2); }
+  .kpi .k-label { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-2); }
+  .kpi .k-label svg { width: 14px; height: 14px; color: var(--text-3); }
+  .kpi .k-value { font-size: 28px; font-weight: 600; letter-spacing: -.045em; margin-top: 10px; font-variant-numeric: tabular-nums; }
+  .kpi::after, .panel::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .35s;
+    background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--signal-text) 7%, transparent), transparent 60%);
+  }
+  .kpi:hover::after, .panel:hover::after { opacity: 1; }
+  .swapping .kpi, .swapping .panel { opacity: .45; filter: blur(1px) saturate(.6); pointer-events: none; }
+
+  .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
+  .span-8 { grid-column: span 8; } .span-7 { grid-column: span 7; } .span-5 { grid-column: span 5; } .span-4 { grid-column: span 4; }
+  @media (max-width: 1080px) { .grid > * { grid-column: 1 / -1; } }
+  .panel { border-radius: 22px; padding: 20px; }
+  .panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .panel-head h3 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: -.015em; }
+  .panel-head small { color: var(--text-3); font-size: 12px; }
+  .panel-head .spacer { flex: 1; }
+  .empty { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 34px 16px; text-align: center; color: var(--text-3); font-size: 13px; }
+  .empty b { font-family: var(--font-serif); font-weight: 400; font-size: 22px; color: var(--text-2); }
+  .empty code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-2); padding: 1px 6px; border-radius: 5px; }
+
+  /* stacked team chart */
+  .chart { position: relative; }
+  .cols { position: relative; display: flex; align-items: flex-end; gap: 10px; height: 240px; padding-top: 14px; }
+  .gridline { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--line-2); pointer-events: none; }
+  .gridline span { position: absolute; right: 0; top: -9px; font-family: var(--font-mono); font-size: 10px; color: var(--text-3); background: var(--surface); padding-left: 6px; }
+  .col { position: relative; z-index: 1; flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .col .area { flex: 1; width: 100%; display: flex; align-items: flex-end; justify-content: center; }
+  .stack { width: 100%; max-width: 56px; height: 0; min-height: 3px; display: flex; flex-direction: column-reverse; gap: 2px; border-radius: 9px 9px 4px 4px; overflow: hidden; transition: height .9s var(--ease-out), opacity .2s; transition-delay: calc(var(--i, 0) * 45ms); }
+  .stack.zero { background: var(--surface-3); }
+  .stack i { display: block; width: 100%; }
+  .col .lbl { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); height: 14px; }
+  .col.today .lbl { color: var(--text); }
+  .cols:hover .col:not(:hover) .stack { opacity: .4; }
+  .tip {
+    position: absolute; z-index: 5; pointer-events: none; min-width: 190px; background: var(--surface-3); border: 1px solid var(--line-2); border-radius: 12px; padding: 10px 12px; font-size: 12px;
+    box-shadow: var(--shadow); opacity: 0; transform: translate(-50%, -100%) translateY(-4px) scale(.96); transition: opacity .15s, transform .3s var(--spring);
+  }
+  .tip.show { opacity: 1; transform: translate(-50%, -100%) translateY(-12px) scale(1); }
+  .tip b { display: block; margin-bottom: 6px; }
+  .tip .r { display: grid; grid-template-columns: 8px 1fr auto; gap: 8px; align-items: center; color: var(--text-2); margin-top: 3px; }
+  .tip .r i { width: 8px; height: 8px; border-radius: 2px; }
+  .tip .r span:last-child { font-family: var(--font-mono); color: var(--text); font-size: 11.5px; }
+  .legend-strip { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; font-size: 12px; color: var(--text-2); }
+  .legend-strip span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend-strip i { width: 9px; height: 9px; border-radius: 3px; }
+
+  /* donut */
+  .donut-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .donut { position: relative; width: 168px; height: 168px; }
+  .donut svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .donut circle.track { fill: none; stroke: var(--surface-3); stroke-width: 15; }
+  .donut circle.seg { fill: none; stroke-width: 15; transition: stroke-dasharray 1.1s var(--ease-out), opacity .2s, stroke-width .25s var(--spring); }
+  .donut.hovering circle.seg:not(.hot) { opacity: .25; }
+  .donut circle.seg.hot { stroke-width: 19; }
+  .donut .center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+  .donut .center b { font-size: 22px; font-weight: 600; letter-spacing: -.045em; }
+  .donut .center span { font-size: 11px; color: var(--text-3); max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .legend { width: 100%; display: flex; flex-direction: column; gap: 2px; }
+  .legend-row { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto 40px; gap: 10px; align-items: center; padding: 7px 8px; border-radius: 10px; font-size: 12.5px; transition: background .15s; }
+  .legend-row:hover { background: var(--surface-2); }
+  .legend-row i { width: 10px; height: 10px; border-radius: 3px; }
+  .legend-row .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .legend-row .t { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-2); }
+  .legend-row .pct { font-family: var(--font-mono); font-size: 11px; color: var(--text-3); text-align: right; }
+
+  /* leaderboard & members */
+  .person { display: grid; grid-template-columns: 34px minmax(0, 1fr) 150px 72px; gap: 12px; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--line); }
+  .person:last-child { border-bottom: none; }
+  .av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px; color: #0B0B12; flex-shrink: 0; }
+  .who { min-width: 0; }
+  .who .e { font-weight: 560; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .who .s { font-size: 11.5px; color: var(--text-3); margin-top: 1px; }
+  .who .s .add { color: var(--good); } .who .s .del { color: var(--bad); }
+  .share { height: 8px; border-radius: 4px; background: var(--surface-3); overflow: hidden; }
+  .share i { display: block; height: 100%; width: 0; border-radius: 4px; transition: width .9s var(--ease-out); transition-delay: calc(var(--i, 0) * 60ms); }
+  .person .t { text-align: right; font-family: var(--font-mono); font-size: 12.5px; }
+  .rank { position: absolute; }
+  @media (max-width: 560px) { .person { grid-template-columns: 34px minmax(0, 1fr) 64px; } .person .share { display: none; } }
+  .member { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--line); }
+  .member:last-child { border-bottom: none; }
+  .role { font-size: 11px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--text-2); background: var(--surface-2); }
+  .role.owner { color: var(--signal-text); background: var(--signal-soft); border-color: transparent; }
+  .invite-box {
+    margin-top: 14px; padding: 16px; border-radius: 16px; background: var(--surface-2); border: 1px dashed var(--line-2);
+    animation: menuIn .45s var(--spring) both; transform-origin: top center;
+  }
+  .invite-box .cap { font-size: 12px; color: var(--text-3); }
+  .invite-code { font-family: var(--font-mono); font-size: 24px; font-weight: 600; letter-spacing: .12em; color: var(--signal-text); margin: 4px 0 10px; animation: codeIn .8s var(--ease-out) both .1s; }
+  @keyframes codeIn { from { opacity: 0; letter-spacing: .5em; filter: blur(6px); } }
+  .invite-box pre { margin: 0 0 12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-2); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; }
+
+  /* onboarding */
+  .onboard { max-width: 880px; margin: 0 auto; padding: 56px 24px 72px; }
+  .onboard .hero { text-align: center; padding-top: 0; }
+  .onboard .hero .eyebrow { justify-content: center; }
+  .onboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .onboard-grid { grid-template-columns: 1fr; } }
+  .onboard-card { padding: 26px; }
+  .onboard-card .ic { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; margin-bottom: 16px; background: var(--signal-soft); color: var(--signal-text); }
+  .onboard-card .ic.v { background: color-mix(in srgb, var(--violet) 15%, transparent); color: var(--violet); }
+  .onboard-card h3 { margin: 0 0 4px; font-size: 18px; letter-spacing: -.02em; }
+  .onboard-card p { margin: 0 0 18px; color: var(--text-2); font-size: 13.5px; }
+  .onboard-card .btn-primary { width: 100%; margin-top: 4px; }
+
+  .toasts { position: fixed; right: 20px; bottom: 20px; z-index: 80; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+  .toast { display: flex; align-items: center; gap: 9px; padding: 10px 15px; border-radius: 12px; font-size: 13px; background: var(--surface-3); border: 1px solid var(--line-2); box-shadow: var(--shadow); animation: toastIn .5s var(--spring) both; }
+  .toast svg { width: 15px; height: 15px; color: var(--signal-text); }
+  .toast.out { animation: toastOut .3s var(--ease-out) forwards; }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(14px) scale(.94); } }
+  @keyframes toastOut { to { opacity: 0; transform: translateX(24px); } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; transition-delay: 0s !important; }
+  }
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- AUTH -->
+<section id="authView" class="view auth" hidden>
+  <aside class="brand-side">
+    <a class="lockup" href="#"><img src="assets/logo.svg" alt="">narrately<em>cloud</em></a>
+    <div class="brand-copy">
+      <h1>Your team's week, <em>already written.</em></h1>
+      <p>Everyone's session time rolls up into one shared view — without a status meeting, a timesheet chase, or a single line of code leaving anyone's laptop.</p>
+    </div>
+    <div class="collage" aria-hidden="true">
+      <div class="float f1">
+        <div class="cap">This week · by teammate</div>
+        <div class="mini-row"><span class="av" style="background:#D4FF4F">P</span><span class="tr"><i style="width:88%;background:#D4FF4F"></i></span><span class="t">31h 20m</span></div>
+        <div class="mini-row"><span class="av" style="background:#A594FF">M</span><span class="tr"><i style="width:72%;background:#A594FF"></i></span><span class="t">26h 05m</span></div>
+        <div class="mini-row"><span class="av" style="background:#FF7D61">S</span><span class="tr"><i style="width:58%;background:#FF7D61"></i></span><span class="t">21h 40m</span></div>
+        <div class="mini-row" style="margin:0"><span class="av" style="background:#6FCBFF">J</span><span class="tr"><i style="width:41%;background:#6FCBFF"></i></span><span class="t">15h 10m</span></div>
+      </div>
+      <div class="float f2">
+        <div class="cap">Team time</div>
+        <div class="big">94h 15m<small>+18%</small></div>
+        <div class="sub">4 of 4 members active</div>
+      </div>
+      <div class="float f3">
+        <span class="ok" data-icon="check"></span>
+        <div>Synced 23 sessions to Acme<small>Metadata only — no paths, diffs, or code.</small></div>
+      </div>
+    </div>
+    <div class="brand-foot"><span data-icon="shield"></span>Session metadata only. File paths, diffs, and code never leave the machine.</div>
+  </aside>
+  <div class="form-side">
+    <div class="form-card" id="formCard">
+      <h2 id="authTitle">Welcome <em>back.</em></h2>
+      <p id="authLede">Log in to see your team's week.</p>
+      <div class="tabs" role="tablist">
+        <span class="glider" aria-hidden="true"></span>
+        <button id="tabLogin" class="active" type="button">Log in</button>
+        <button id="tabSignup" type="button">Create account</button>
+      </div>
+      <form id="authForm" novalidate>
+        <div class="field-wrap">
+          <label for="email">Work email</label>
+          <div class="input"><span data-icon="mail"></span><input id="email" type="email" autocomplete="username" placeholder="you@company.com" required /></div>
+        </div>
+        <div class="field-wrap">
+          <label for="password">Password</label>
+          <div class="input">
+            <span data-icon="lock"></span><input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters" required />
+            <button type="button" class="peek" id="peekBtn" aria-label="Show password" data-icon="eye"></button>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="authSubmit" type="submit">Log in</button>
+        <div id="authMsg" class="form-msg" role="status"></div>
+      </form>
+      <div class="switch-line" id="switchLine">New to Narrately Cloud? <button type="button" id="switchMode">Create an account</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- NO TEAM -->
+<section id="noTeamView" class="view" hidden>
+  <header class="appbar">
+    <a class="lockup" href="#"><img src="assets/logo.svg" alt="">narrately<em>cloud</em></a>
+    <span class="spacer"></span>
+    <button class="btn btn-ghost" id="backToDash" hidden data-icon="arrowLeft">Back to dashboard</button>
+    <button class="btn btn-ghost" id="logoutBtn2">Log out</button>
+  </header>
+  <div class="onboard">
+    <div class="hero">
+      <p class="eyebrow">Narrately Cloud</p>
+      <h1>Start your <em>team.</em></h1>
+      <p>Create a team and invite people, or join one with the code your owner sent you.</p>
+    </div>
+    <div class="onboard-grid">
+      <div class="panel onboard-card">
+        <div class="ic" data-icon="plus"></div>
+        <h3>Start a team</h3>
+        <p>You'll be the owner. 14-day free trial, no card needed.</p>
+        <form id="createForm">
+          <div class="field-wrap"><label for="teamName">Team name</label><div class="input"><span data-icon="users"></span><input id="teamName" type="text" placeholder="Acme Engineering" required /></div></div>
+          <button class="btn btn-primary" type="submit">Create team</button>
+          <div id="createMsg" class="form-msg"></div>
+        </form>
+      </div>
+      <div class="panel onboard-card">
+        <div class="ic v" data-icon="key"></div>
+        <h3>Join a team</h3>
+        <p>Paste the invite code your team owner shared with you.</p>
+        <form id="joinForm">
+          <div class="field-wrap"><label for="inviteCode">Invite code</label><div class="input"><span data-icon="key"></span><input id="inviteCode" type="text" placeholder="A1B2C3D4E5F6" autocomplete="off" required style="font-family:var(--font-mono);letter-spacing:.08em" /></div></div>
+          <button class="btn btn-primary" type="submit">Join team</button>
+          <div id="joinMsg" class="form-msg"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<section id="appView" class="view" hidden>
+  <header class="appbar">
+    <a class="lockup" href="#"><img src="assets/logo.svg" alt="">narrately<em>cloud</em></a>
+    <div class="menu-wrap">
+      <button class="pill-btn" id="teamBtn"><span class="sq" id="teamInitial">A</span><span class="n" id="orgSub">Team</span><span data-icon="chevronDown"></span></button>
+    </div>
+    <span class="spacer"></span>
+    <div class="week-nav">
+      <button id="weekPrev" aria-label="Previous week" data-icon="chevronLeft"></button>
+      <span id="weekLabel"></span>
+      <button id="weekNext" aria-label="Next week" data-icon="chevronRight"></button>
+    </div>
+    <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" data-icon="moon"></button>
+    <div class="menu-wrap">
+      <button class="avatar" id="userBtn" aria-label="Account menu">?</button>
+    </div>
+  </header>
+
+  <main class="dash" id="dash">
+    <div id="notice" class="notice" hidden>
+      <span data-icon="sparkle"></span>
+      <span class="grow" id="noticeText"></span>
+      <button class="btn btn-primary" id="upgradeBtn" hidden>Upgrade team plan</button>
+    </div>
+
+    <div class="hero">
+      <p class="eyebrow" id="heroEyebrow">This week</p>
+      <h1 id="heroTitle"><span class="num">—</span> logged by <em>the team</em></h1>
+      <p id="heroSub">&nbsp;</p>
+    </div>
+
+    <div class="kpis" id="cards"></div>
+
+    <div class="grid">
+      <article class="panel span-8">
+        <div class="panel-head"><h3>Team activity</h3><small>stacked by teammate · hover a day</small></div>
+        <div class="chart" id="byDay"></div>
+      </article>
+      <article class="panel span-4">
+        <div class="panel-head"><h3>Projects</h3><small>share of team time</small></div>
+        <div id="byProject"></div>
+      </article>
+    </div>
+
+    <div class="grid">
+      <article class="panel span-7">
+        <div class="panel-head">
+          <h3>Leaderboard</h3><small>time this week</small><span class="spacer"></span>
+          <button class="btn btn-ghost" id="exportBtn" data-icon="download">Export CSV</button>
+        </div>
+        <div id="byMember"></div>
+      </article>
+      <article class="panel span-5">
+        <div class="panel-head">
+          <h3>Members</h3><small id="memberCount"></small><span class="spacer"></span>
+          <button class="btn btn-ghost" id="inviteBtn" data-icon="plus" hidden>Invite</button>
+        </div>
+        <div id="members"></div>
+        <div id="inviteBox" class="invite-box" hidden></div>
+      </article>
+    </div>
+  </main>
+</section>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+(function () {
+  const SUPABASE_URL = window.NARRATELY_CLOUD_URL || '';
+  const SUPABASE_ANON_KEY = window.NARRATELY_CLOUD_ANON_KEY || '';
+  const $ = (id) => document.getElementById(id);
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const ICONS = {
+    check: '<path d="M5 12.5 10 17.5 19 7"/>',
+    shield: '<path d="M12 3 4.5 6v6c0 4.5 3.2 7.8 7.5 9 4.3-1.2 7.5-4.5 7.5-9V6L12 3Z"/><path d="m9 12 2 2 4-4"/>',
+    mail: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
+    lock: '<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
+    eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/>',
+    eyeOff: '<path d="M3 3l18 18"/><path d="M10.6 5.6A9.7 9.7 0 0 1 12 5.5C18 5.5 21.5 12 21.5 12a17 17 0 0 1-3.2 4M6.4 7.4C3.9 9.1 2.5 12 2.5 12S6 18.5 12 18.5c1.6 0 3-.4 4.2-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.3a6.5 6.5 0 0 1 3.5 5.7"/>',
+    key: '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+    layers: '<path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M2 13l10 5 10-5"/>',
+    code: '<path d="M9 6 3 12l6 6M15 6l6 6-6 6"/>',
+    chevronLeft: '<path d="M14 6l-6 6 6 6"/>',
+    chevronRight: '<path d="M10 6l6 6-6 6"/>',
+    chevronDown: '<path d="M6 9l6 6 6-6"/>',
+    arrowLeft: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+    download: '<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>',
+    sparkle: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/>',
+    moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    logout: '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5M5 12h11"/>',
+    copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M4 16V5a1 1 0 0 1 1-1h11"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>',
+    trash: '<path d="M4 7h16M9 7V4h6v3"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/>',
+  };
+  const svgIcon = (name) => `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ''}</svg>`;
+  function iconNode(name) {
+    const t = document.createElement('template');
+    t.innerHTML = svgIcon(name);
+    return t.content.firstElementChild;
+  }
+  document.querySelectorAll('[data-icon]').forEach((node) => {
+    const icon = iconNode(node.dataset.icon);
+    if (node.tagName === 'SPAN' && !node.childNodes.length && !node.className) node.replaceWith(icon);
+    else node.prepend(icon);
+  });
+
+  // Everything user-controlled (emails, project and team names) goes in as text nodes.
+  function el(tag, props, ...children) {
+    const node = document.createElement(tag);
+    for (const [key, value] of Object.entries(props || {})) {
+      if (value == null || value === false) continue;
+      if (key === 'class') node.className = value;
+      else if (key === 'style') node.style.cssText = value;
+      else if (key.startsWith('on')) node.addEventListener(key.slice(2), value);
+      else node.setAttribute(key, value);
+    }
+    for (const child of children.flat()) {
+      if (child == null || child === false) continue;
+      node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+    }
+    return node;
+  }
+
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    document.body.append(el('div', { class: 'onboard view' },
+      el('div', { class: 'hero' }, el('p', { class: 'eyebrow' }, 'Setup needed'), el('h1', {}, 'Missing ', el('em', {}, 'config.js')),
+        el('p', {}, 'Copy config.example.js to config.js and fill in your Supabase project URL and publishable key. See cloud/README.md.'))));
+    return;
+  }
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ---- helpers ----
+  function formatDuration(sec) {
+    const h = Math.floor(sec / 3600);
+    const m = Math.round((sec % 3600) / 60);
+    if (h && m === 60) return (h + 1) + 'h';
+    if (h) return m ? h + 'h ' + m + 'm' : h + 'h';
+    return m + 'm';
+  }
+  const localDate = (iso) => new Date(iso).toLocaleDateString('en-CA');
+  const localTime = (iso) => new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+  function startOfWeek(date) {
+    const d = new Date(date);
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+  function addDays(date, days) { const d = new Date(date); d.setDate(d.getDate() + days); return d; }
+  const remember = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+
+  const lastValues = {};
+  const NUM = /\d[\d,]*/g;
+  function tweenText(node, key, target) {
+    const from = lastValues[key];
+    lastValues[key] = target;
+    const toNums = (target.match(NUM) || []).map((s) => Number(s.replace(/,/g, '')));
+    if (reducedMotion || !toNums.length || from === target) { node.textContent = target; return; }
+    const skeleton = (s) => s.replace(NUM, '#');
+    const fromNums = from && skeleton(from) === skeleton(target) ? from.match(NUM).map((s) => Number(s.replace(/,/g, ''))) : toNums.map(() => 0);
+    const start = performance.now();
+    const frame = (now) => {
+      const p = Math.min(1, (now - start) / 800);
+      const e = 1 - Math.pow(1 - p, 3);
+      let i = 0;
+      node.textContent = target.replace(NUM, (s) => {
+        const v = Math.round(fromNums[i] + (toNums[i] - fromNums[i]) * e);
+        i++;
+        return s.includes(',') || v >= 1000 ? v.toLocaleString() : String(v);
+      });
+      if (p < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+  function grow(nodes, prop) {
+    const apply = () => nodes.forEach((n) => { n.style[prop] = n.dataset.v; });
+    if (reducedMotion) return apply();
+    requestAnimationFrame(() => requestAnimationFrame(apply));
+  }
+  function toast(text, iconName = 'check') {
+    const node = el('div', { class: 'toast' }, iconNode(iconName), text);
+    $('toasts').append(node);
+    setTimeout(() => { node.classList.add('out'); setTimeout(() => node.remove(), reducedMotion ? 0 : 320); }, 2400);
+  }
+  document.addEventListener('pointermove', (e) => {
+    const target = e.target.closest && e.target.closest('.kpi, .panel');
+    if (!target) return;
+    const rect = target.getBoundingClientRect();
+    target.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+    target.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+  });
+
+  // ---- theme ----
+  function currentTheme() {
+    return document.documentElement.dataset.theme || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  }
+  function syncThemeIcon() { $('themeToggle').replaceChildren(iconNode(currentTheme() === 'dark' ? 'sun' : 'moon')); }
+  function toggleTheme(event) {
+    const next = currentTheme() === 'dark' ? 'light' : 'dark';
+    const apply = () => { document.documentElement.dataset.theme = next; remember.set('narrately.theme', next); syncThemeIcon(); };
+    if (!document.startViewTransition || reducedMotion) return apply();
+    const x = event?.clientX ?? innerWidth - 60, y = event?.clientY ?? 30;
+    const r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    document.startViewTransition(apply).ready.then(() => {
+      document.documentElement.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+        { duration: 650, easing: 'cubic-bezier(.16,1,.3,1)', pseudoElement: '::view-transition-new(root)' },
+      );
+    });
+  }
+  $('themeToggle').addEventListener('click', toggleTheme);
+  syncThemeIcon();
+
+  // ---- menus ----
+  let openMenu = null;
+  function closeMenu() { if (openMenu) { openMenu.remove(); openMenu = null; } }
+  function showMenu(anchor, items, { head = null, left = false } = {}) {
+    closeMenu();
+    const menu = el('div', { class: 'menu' + (left ? ' left' : ''), role: 'menu' },
+      head,
+      items.map((item) => el('button', { class: item.current ? 'cur' : null, role: 'menuitem', onclick: () => { closeMenu(); item.run(); } }, item.icon ? iconNode(item.icon) : null, item.label)));
+    anchor.parentElement.append(menu);
+    openMenu = menu;
+  }
+  document.addEventListener('click', (e) => { if (openMenu && !e.target.closest('.menu-wrap')) closeMenu(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+  const state = { user: null, teams: [], org: null, role: null, members: new Map(), weekStart: startOfWeek(new Date()), sessions: [] };
+
+  function show(view) {
+    for (const id of ['authView', 'noTeamView', 'appView']) $(id).hidden = id !== view;
+    if (view === 'authView') requestAnimationFrame(moveTabGlider);
+  }
+  function setMsg(node, text, kind) { node.textContent = text || ''; node.className = 'form-msg' + (kind ? ' ' + kind : ''); }
+  function shake(card) { card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); }
+  function busy(button, on, label) {
+    button.disabled = on;
+    if (on) { button.dataset.label = button.textContent; button.replaceChildren(el('span', { class: 'spin' }), label || 'Working…'); }
+    else if (button.dataset.label) button.textContent = button.dataset.label;
+  }
+
+  // ---- auth ----
+  let authMode = 'login';
+  const tabs = document.querySelector('.tabs');
+  const tabGlider = tabs.querySelector('.glider');
+  function moveTabGlider() {
+    const active = tabs.querySelector('button.active');
+    if (!active || !active.offsetWidth) return;
+    tabGlider.style.width = active.offsetWidth + 'px';
+    tabGlider.style.transform = 'translateX(' + active.offsetLeft + 'px)';
+  }
+  window.addEventListener('resize', moveTabGlider);
+  function setAuthMode(mode) {
+    authMode = mode;
+    const login = mode === 'login';
+    $('tabLogin').classList.toggle('active', login);
+    $('tabSignup').classList.toggle('active', !login);
+    $('authTitle').replaceChildren(login ? 'Welcome ' : 'Join your ', el('em', {}, login ? 'back.' : 'team.'));
+    $('authLede').textContent = login ? "Log in to see your team's week." : 'Create an account, then start a team or join one with a code.';
+    $('authSubmit').textContent = login ? 'Log in' : 'Create account';
+    $('password').autocomplete = login ? 'current-password' : 'new-password';
+    $('switchLine').firstChild.textContent = login ? 'New to Narrately Cloud? ' : 'Already have an account? ';
+    $('switchMode').textContent = login ? 'Create an account' : 'Log in';
+    setMsg($('authMsg'), '');
+    moveTabGlider();
+  }
+  $('tabLogin').addEventListener('click', () => setAuthMode('login'));
+  $('tabSignup').addEventListener('click', () => setAuthMode('signup'));
+  $('switchMode').addEventListener('click', () => setAuthMode(authMode === 'login' ? 'signup' : 'login'));
+  $('peekBtn').addEventListener('click', () => {
+    const input = $('password');
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    $('peekBtn').replaceChildren(iconNode(showing ? 'eye' : 'eyeOff'));
+    $('peekBtn').setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+  });
+
+  $('authForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = $('email').value.trim();
+    const password = $('password').value;
+    if (!email || password.length < 8) {
+      setMsg($('authMsg'), !email ? 'Enter your email.' : 'Passwords are at least 8 characters.', 'err');
+      return shake($('formCard'));
+    }
+    busy($('authSubmit'), true, authMode === 'login' ? 'Logging in…' : 'Creating account…');
+    setMsg($('authMsg'), '');
+    try {
+      if (authMode === 'signup') {
+        const { error } = await supabase.auth.signUp({ email, password });
+        if (error) { setMsg($('authMsg'), error.message, 'err'); return shake($('formCard')); }
+        setAuthMode('login');
+        setMsg($('authMsg'), 'Account created — confirm the link in your email, then log in.', 'ok');
+        return;
+      }
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) { setMsg($('authMsg'), error.message, 'err'); return shake($('formCard')); }
+      await enter(data.user);
+    } finally {
+      busy($('authSubmit'), false);
+    }
+  });
+
+  async function logout() { await supabase.auth.signOut(); location.reload(); }
+  $('logoutBtn2').addEventListener('click', logout);
+
+  // ---- teams ----
+  async function loadTeams() {
+    const { data, error } = await supabase.from('memberships').select('role, orgs(id, name, subscription_status, trial_ends_at)').eq('user_id', state.user.id);
+    if (error) throw error;
+    state.teams = (data || []).filter((row) => row.orgs).map((row) => ({ ...row.orgs, role: row.role })).sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  async function enter(user) {
+    state.user = user;
+    $('userBtn').textContent = (user.email || '?')[0].toUpperCase();
+    await loadTeams();
+    if (!state.teams.length) { $('backToDash').hidden = true; show('noTeamView'); return; }
+    const saved = remember.get('narrately.org');
+    await selectTeam(state.teams.find((team) => team.id === saved) || state.teams[0]);
+  }
+
+  async function selectTeam(team) {
+    state.org = team;
+    state.role = team.role;
+    remember.set('narrately.org', team.id);
+    $('orgSub').textContent = team.name;
+    $('teamInitial').textContent = team.name[0]?.toUpperCase() || 'T';
+    $('inviteBtn').hidden = state.role !== 'owner';
+    $('inviteBox').hidden = true;
+    show('appView');
+    renderBilling();
+    await loadMembers();
+    await loadWeek();
+  }
+
+  $('teamBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (openMenu) return closeMenu();
+    showMenu($('teamBtn'), [
+      ...state.teams.map((t) => ({ label: t.name, current: t.id === state.org?.id, run: () => selectTeam(t) })),
+      { label: 'Create or join a team', icon: 'plus', run: () => { $('backToDash').hidden = false; show('noTeamView'); } },
+    ], { head: el('div', { class: 'head' }, 'Switch team'), left: true });
+  });
+  $('userBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (openMenu) return closeMenu();
+    showMenu($('userBtn'), [
+      { label: currentTheme() === 'dark' ? 'Light mode' : 'Dark mode', icon: currentTheme() === 'dark' ? 'sun' : 'moon', run: () => toggleTheme() },
+      { label: 'Log out', icon: 'logout', run: logout },
+    ], { head: el('div', { class: 'head' }, el('b', {}, 'Signed in'), state.user?.email || '') });
+  });
+  $('backToDash').addEventListener('click', () => show('appView'));
+
+  function schemaHint(error) {
+    return error.code === 'PGRST202' ? 'This project is on an older schema — re-run cloud/schema.sql in the Supabase SQL editor.' : error.message;
+  }
+  $('createForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = event.target.querySelector('button');
+    busy(button, true, 'Creating…');
+    try {
+      const { error } = await supabase.rpc('create_org', { org_name: $('teamName').value });
+      if (error) { setMsg($('createMsg'), schemaHint(error), 'err'); return shake(event.target.closest('.panel')); }
+      toast('Team created — 14-day trial started');
+      await enter(state.user);
+    } finally { busy(button, false); }
+  });
+  $('joinForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = event.target.querySelector('button');
+    busy(button, true, 'Joining…');
+    try {
+      const { error } = await supabase.rpc('accept_invite', { invite_code: $('inviteCode').value });
+      if (error) { setMsg($('joinMsg'), schemaHint(error), 'err'); return shake(event.target.closest('.panel')); }
+      toast('Joined the team');
+      await enter(state.user);
+    } finally { busy(button, false); }
+  });
+
+  // ---- billing ----
+  function renderBilling() {
+    const org = state.org;
+    const params = new URLSearchParams(location.search);
+    const isOwner = state.role === 'owner';
+    let text = null, kind = '', canUpgrade = false;
+    if (params.get('billing') === 'success') { text = 'Thanks — payment received. Sync stays on for the whole team.'; kind = 'good'; }
+    else if (org.subscription_status === 'active') text = null;
+    else if (org.subscription_status === 'past_due') { text = 'Payment past due — Stripe is retrying the card. Sync keeps working for now.'; kind = 'warn'; canUpgrade = isOwner; }
+    else if (org.subscription_status === 'trialing') {
+      const msLeft = new Date(org.trial_ends_at) - Date.now();
+      const daysLeft = Math.ceil(msLeft / 86400000);
+      if (msLeft > 0) { text = `Free trial — ${daysLeft} day${daysLeft === 1 ? '' : 's'} left.`; kind = daysLeft <= 3 ? 'warn' : ''; }
+      else { text = 'Free trial ended — new syncs are paused. Past rollups stay readable.'; kind = 'bad'; }
+      canUpgrade = isOwner;
+    } else { text = `Subscription ${org.subscription_status} — new syncs are paused. Past rollups stay readable.`; kind = 'bad'; canUpgrade = isOwner; }
+    if (text && !isOwner && kind === 'bad') text += ' Ask your team owner to upgrade.';
+    $('notice').hidden = !text;
+    $('notice').className = 'notice' + (kind ? ' ' + kind : '');
+    $('noticeText').textContent = text || '';
+    $('upgradeBtn').hidden = !canUpgrade;
+  }
+  $('upgradeBtn').addEventListener('click', async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData.session || !state.org) return;
+    busy($('upgradeBtn'), true, 'Opening checkout…');
+    try {
+      const resp = await fetch(SUPABASE_URL + '/functions/v1/create-checkout-session', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + sessionData.session.access_token },
+        body: JSON.stringify({ org_id: state.org.id }),
+      });
+      const text = await resp.text();
+      let body = {};
+      try { body = JSON.parse(text); } catch {}
+      if (body.url) location.href = body.url;
+      else toast('Could not start checkout: ' + (body.error || text || resp.statusText), 'x');
+    } finally { busy($('upgradeBtn'), false); }
+  });
+
+  // ---- members ----
+  const PALETTE = ['var(--chart-1)', 'var(--violet)', 'var(--coral)', 'var(--sky)', 'var(--amber)', 'var(--mint)', 'var(--pink)'];
+  const memberColor = (userId) => state.members.get(userId)?.color || 'var(--text-3)';
+  const memberLabel = (userId) => state.members.get(userId)?.email || 'former member · ' + userId.slice(0, 8);
+  const avatar = (userId) => el('span', { class: 'av', style: `background:${memberColor(userId)}` }, (state.members.get(userId)?.email || '?')[0].toUpperCase());
+
+  async function loadMembers() {
+    const { data, error } = await supabase.rpc('org_members', { for_org_id: state.org.id });
+    const list = (data || []).slice().sort((a, b) => a.email.localeCompare(b.email));
+    state.members = new Map(list.map((m, i) => [m.member_id, { ...m, color: PALETTE[i % PALETTE.length] }]));
+    $('memberCount').textContent = list.length ? `${list.length} ${list.length === 1 ? 'person' : 'people'}` : '';
+    const box = $('members');
+    if (error) { box.replaceChildren(el('div', { class: 'empty' }, schemaHint(error))); return; }
+    box.replaceChildren(...[...state.members.values()].map((m) => el('div', { class: 'member' },
+      avatar(m.member_id),
+      el('div', { class: 'who', style: 'flex:1' },
+        el('div', { class: 'e', title: m.email }, m.email, m.member_id === state.user.id ? el('span', { style: 'color:var(--text-3);font-weight:400' }, ' · you') : null),
+        el('div', { class: 's' }, 'joined ' + new Date(m.joined_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }))),
+      el('span', { class: 'role ' + m.role }, m.role),
+      state.role === 'owner' && m.member_id !== state.user.id
+        ? el('button', { class: 'btn btn-quiet', 'aria-label': 'Remove ' + m.email, title: 'Remove from team', onclick: () => removeMember(m) }, iconNode('trash'))
+        : null)));
+  }
+  async function removeMember(m) {
+    if (!confirm('Remove ' + m.email + ' from ' + state.org.name + '? Their past sessions stay in the rollup.')) return;
+    const { error } = await supabase.rpc('remove_member', { from_org_id: state.org.id, member_id: m.member_id });
+    if (error) return toast(schemaHint(error), 'x');
+    toast(m.email + ' removed', 'trash');
+    await loadMembers();
+    render();
+  }
+  $('inviteBtn').addEventListener('click', async () => {
+    const box = $('inviteBox');
+    const { data: code, error } = await supabase.rpc('create_invite', { for_org_id: state.org.id });
+    box.hidden = false;
+    box.style.animation = 'none'; void box.offsetWidth; box.style.animation = '';
+    if (error) { box.replaceChildren(el('span', { style: 'color:var(--bad)' }, schemaHint(error))); return; }
+    const commands = 'narrately cloud signup\nnarrately cloud login\nnarrately cloud join ' + code;
+    const copyBtn = el('button', { class: 'btn btn-primary' }, iconNode('copy'), 'Copy commands');
+    copyBtn.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(commands); toast('Invite commands copied', 'copy'); }
+      catch { toast('Copy blocked — select the text instead', 'x'); }
+    });
+    box.replaceChildren(
+      el('div', { class: 'cap' }, 'Invite code · valid 7 days · any number of teammates'),
+      el('div', { class: 'invite-code' }, code),
+      el('pre', {}, commands),
+      el('div', { style: 'display:flex;gap:10px;align-items:center;flex-wrap:wrap' }, copyBtn,
+        el('span', { class: 'cap' }, 'Or they sign up here and paste the code under "Join a team".')),
+    );
+  });
+
+  // ---- week ----
+  function setWeekLabel() {
+    const end = addDays(state.weekStart, 6);
+    const opts = { month: 'short', day: 'numeric' };
+    const isCurrent = state.weekStart.getTime() === startOfWeek(new Date()).getTime();
+    const range = state.weekStart.toLocaleDateString([], opts) + ' – ' + end.toLocaleDateString([], opts);
+    $('weekLabel').textContent = isCurrent ? 'This week' : range;
+    $('heroEyebrow').textContent = `${state.org.name} · ${isCurrent ? 'this week, ' + range : range}`;
+    $('weekNext').disabled = isCurrent;
+  }
+  $('weekPrev').addEventListener('click', () => { state.weekStart = addDays(state.weekStart, -7); loadWeek(-1); });
+  $('weekNext').addEventListener('click', () => { state.weekStart = addDays(state.weekStart, 7); loadWeek(1); });
+
+  // PostgREST caps responses (1000 rows by default), so page through the week.
+  async function fetchWeekSessions() {
+    const from = state.weekStart.toISOString();
+    const to = addDays(state.weekStart, 7).toISOString();
+    const all = [];
+    for (let offset = 0; ; offset += 1000) {
+      const { data, error } = await supabase.from('synced_sessions')
+        .select('id, user_id, project, started_at, ended_at, duration_sec, source, lines_added, lines_removed')
+        .eq('org_id', state.org.id).gte('started_at', from).lt('started_at', to)
+        .order('started_at', { ascending: true }).range(offset, offset + 999);
+      if (error) throw error;
+      all.push(...data);
+      if (data.length < 1000) return all;
+    }
+  }
+
+  async function loadWeek(direction = 0) {
+    setWeekLabel();
+    const label = $('weekLabel');
+    label.classList.remove('from-left', 'from-right');
+    if (direction) { void label.offsetWidth; label.classList.add(direction < 0 ? 'from-left' : 'from-right'); }
+    $('dash').classList.add('swapping');
+    try {
+      state.sessions = await fetchWeekSessions();
+    } catch (error) {
+      state.sessions = [];
+      toast('Could not load: ' + error.message, 'x');
+    } finally {
+      $('dash').classList.remove('swapping');
+    }
+    render();
+  }
+
+  // ---- render ----
+  function render() {
+    const sessions = state.sessions;
+    const total = sessions.reduce((s, r) => s + r.duration_sec, 0);
+    const added = sessions.reduce((s, r) => s + r.lines_added, 0);
+    const removed = sessions.reduce((s, r) => s + r.lines_removed, 0);
+    const byMember = new Map();
+    const byProject = new Map();
+    for (const s of sessions) {
+      const m = byMember.get(s.user_id) || { sec: 0, sessions: 0, added: 0, removed: 0, days: new Set() };
+      m.sec += s.duration_sec; m.sessions += 1; m.added += s.lines_added; m.removed += s.lines_removed; m.days.add(localDate(s.started_at));
+      byMember.set(s.user_id, m);
+      const project = s.project || '(unlabelled)';
+      byProject.set(project, (byProject.get(project) || 0) + s.duration_sec);
+    }
+    const active = [...byMember.keys()].filter((id) => state.members.has(id)).length;
+
+    // hero
+    const num = el('span', { class: 'num' });
+    $('heroTitle').replaceChildren(num, ' logged by ', el('em', {}, 'the team'));
+    tweenText(num, 'hero', formatDuration(total));
+    const topProject = [...byProject.entries()].sort((a, b) => b[1] - a[1])[0];
+    $('heroSub').replaceChildren(sessions.length
+      ? `${active} of ${state.members.size} member${state.members.size === 1 ? '' : 's'} active · ${sessions.length} sessions — most time on `
+      : 'No synced activity this week yet. Teammates push automatically while the daemon runs, or with ',
+      sessions.length ? el('strong', {}, topProject[0]) : el('code', { style: 'font-family:var(--font-mono);font-size:13px' }, 'narrately sync'),
+      '.');
+
+    // kpis
+    const card = (iconName, label, key, value) => {
+      const v = el('div', { class: 'k-value' });
+      tweenText(v, key, value);
+      return el('div', { class: 'kpi' }, el('div', { class: 'k-label' }, iconNode(iconName), label), v);
+    };
+    $('cards').replaceChildren(
+      card('clock', 'Team time', 'k-time', formatDuration(total)),
+      card('users', 'Active members', 'k-active', `${active} / ${state.members.size}`),
+      card('layers', 'Sessions', 'k-sessions', String(sessions.length)),
+      card('code', 'Lines changed', 'k-lines', `+${added.toLocaleString()} / −${removed.toLocaleString()}`),
+    );
+
+    renderStacked(sessions);
+    renderDonut([...byProject.entries()].sort((a, b) => b[1] - a[1]), total);
+    renderLeaderboard(byMember);
+    $('exportBtn').disabled = !sessions.length;
+  }
+
+  function renderStacked(sessions) {
+    const box = $('byDay');
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const date = addDays(state.weekStart, i);
+      days.push({ key: date.toLocaleDateString('en-CA'), date, members: new Map(), total: 0 });
+    }
+    const index = new Map(days.map((d) => [d.key, d]));
+    for (const s of sessions) {
+      const d = index.get(localDate(s.started_at));
+      if (!d) continue;
+      d.members.set(s.user_id, (d.members.get(s.user_id) || 0) + s.duration_sec);
+      d.total += s.duration_sec;
+    }
+    const max = Math.max(1, ...days.map((d) => d.total));
+    const todayKey = new Date().toLocaleDateString('en-CA');
+    const tip = el('div', { class: 'tip' });
+    const cols = el('div', { class: 'cols' },
+      el('div', { class: 'gridline', style: 'bottom: calc(22px + (100% - 36px))' }, el('span', {}, formatDuration(max))),
+      el('div', { class: 'gridline', style: 'bottom: calc(22px + (100% - 36px) * .5)' }, el('span', {}, formatDuration(max / 2))));
+    const stacks = [];
+    days.forEach((d, i) => {
+      const order = [...d.members.entries()].sort((a, b) => b[1] - a[1]);
+      const stack = el('div', { class: 'stack' + (d.total ? '' : ' zero'), style: `--i:${i}` },
+        order.map(([uid, sec]) => el('i', { style: `flex:${sec};background:${memberColor(uid)}` })));
+      stack.dataset.v = Math.max(1.5, (d.total / max) * 100) + '%';
+      stacks.push(stack);
+      const col = el('div', { class: 'col' + (d.key === todayKey ? ' today' : '') },
+        el('div', { class: 'area' }, stack),
+        el('div', { class: 'lbl' }, d.date.toLocaleDateString(undefined, { weekday: 'short' })));
+      col.addEventListener('pointerenter', () => {
+        tip.replaceChildren(
+          el('b', {}, d.date.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' }) + ' · ' + formatDuration(d.total)),
+          order.length ? order.map(([uid, sec]) => el('div', { class: 'r' }, el('i', { style: `background:${memberColor(uid)}` }), el('span', {}, memberLabel(uid)), el('span', {}, formatDuration(sec))))
+            : el('div', { class: 'r' }, el('i'), el('span', {}, 'No synced activity'), el('span', {})));
+        const b = box.getBoundingClientRect(), s = stack.getBoundingClientRect();
+        tip.style.left = Math.min(Math.max(s.left + s.width / 2 - b.left, 100), b.width - 100) + 'px';
+        tip.style.top = (s.top - b.top) + 'px';
+        tip.classList.add('show');
+      });
+      col.addEventListener('pointerleave', () => tip.classList.remove('show'));
+      cols.append(col);
+    });
+    const legendIds = [...new Set(sessions.map((s) => s.user_id))];
+    box.replaceChildren(cols, tip, el('div', { class: 'legend-strip' },
+      legendIds.map((uid) => el('span', {}, el('i', { style: `background:${memberColor(uid)}` }), memberLabel(uid).split('@')[0]))));
+    grow(stacks, 'height');
+  }
+
+  function renderDonut(entries, total) {
+    const box = $('byProject');
+    if (!entries.length) { box.replaceChildren(el('div', { class: 'empty' }, el('b', {}, 'No projects yet'), 'Projects appear once teammates sync.')); return; }
+    const top = entries.slice(0, 6).map(([name, sec], i) => ({ name, sec, color: PALETTE[i] }));
+    const rest = entries.slice(6).reduce((s, [, sec]) => s + sec, 0);
+    if (rest) top.push({ name: 'Other', sec: rest, color: 'var(--text-3)' });
+    const C = 2 * Math.PI * 48, ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 120 120');
+    const track = document.createElementNS(ns, 'circle');
+    [['class', 'track'], ['cx', 60], ['cy', 60], ['r', 48]].forEach(([k, v]) => track.setAttribute(k, v));
+    svg.append(track);
+    const cb = el('b', {}, formatDuration(total)), cs = el('span', {}, 'team total');
+    const donut = el('div', { class: 'donut' }, svg, el('div', { class: 'center' }, cb, cs));
+    let offset = 0;
+    const segs = [];
+    const rows = top.map((p) => {
+      const len = total ? (p.sec / total) * C : 0;
+      const seg = document.createElementNS(ns, 'circle');
+      [['class', 'seg'], ['cx', 60], ['cy', 60], ['r', 48]].forEach(([k, v]) => seg.setAttribute(k, v));
+      seg.style.stroke = p.color;
+      seg.style.strokeDashoffset = String(-offset);
+      seg.style.strokeDasharray = `0 ${C}`;
+      seg.dataset.v = `${Math.max(0, len - 1.2)} ${C}`;
+      offset += len;
+      svg.append(seg);
+      segs.push(seg);
+      const pct = total ? Math.round((p.sec / total) * 100) : 0;
+      const row = el('div', { class: 'legend-row' }, el('i', { style: `background:${p.color}` }), el('span', { class: 'name', title: p.name }, p.name), el('span', { class: 't' }, formatDuration(p.sec)), el('span', { class: 'pct' }, pct + '%'));
+      const hot = (on) => { donut.classList.toggle('hovering', on); seg.classList.toggle('hot', on); cb.textContent = on ? pct + '%' : formatDuration(total); cs.textContent = on ? p.name : 'team total'; };
+      for (const n of [row, seg]) { n.addEventListener('pointerenter', () => hot(true)); n.addEventListener('pointerleave', () => hot(false)); }
+      return row;
+    });
+    box.replaceChildren(el('div', { class: 'donut-wrap' }, donut, el('div', { class: 'legend' }, rows)));
+    grow(segs, 'strokeDasharray');
+  }
+
+  function renderLeaderboard(byMember) {
+    const box = $('byMember');
+    const rows = [...byMember.entries()].sort((a, b) => b[1].sec - a[1].sec);
+    if (!rows.length) {
+      box.replaceChildren(el('div', { class: 'empty' }, el('b', {}, 'Quiet week so far'), 'Teammates push automatically while ', el('code', {}, 'narrately daemon'), ' runs.'));
+      return;
+    }
+    const max = Math.max(1, ...rows.map(([, m]) => m.sec));
+    const fills = [];
+    box.replaceChildren(...rows.map(([uid, m], i) => {
+      const fill = el('i', { style: `--i:${i};background:${memberColor(uid)}` });
+      fill.dataset.v = Math.round((m.sec / max) * 100) + '%';
+      fills.push(fill);
+      return el('div', { class: 'person' },
+        avatar(uid),
+        el('div', { class: 'who' },
+          el('div', { class: 'e', title: memberLabel(uid) }, memberLabel(uid)),
+          el('div', { class: 's' }, `${m.days.size} day${m.days.size === 1 ? '' : 's'} · ${m.sessions} session${m.sessions === 1 ? '' : 's'} · `, el('span', { class: 'add' }, '+' + m.added), ' ', el('span', { class: 'del' }, '−' + m.removed))),
+        el('div', { class: 'share' }, fill),
+        el('div', { class: 't' }, formatDuration(m.sec)));
+    }));
+    grow(fills, 'width');
+  }
+
+  // Timesheet export: one row per session, in the viewer's local time.
+  $('exportBtn').addEventListener('click', () => {
+    const quote = (value) => {
+      const text = String(value ?? '');
+      return /[",\n\r]/.test(text) || /^[=+\-@]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
+    };
+    const header = ['Date', 'Member', 'Project', 'Start', 'End', 'Hours', 'Lines added', 'Lines removed', 'Source'];
+    const rows = [...state.sessions]
+      .sort((a, b) => memberLabel(a.user_id).localeCompare(memberLabel(b.user_id)) || a.started_at.localeCompare(b.started_at))
+      .map((s) => [localDate(s.started_at), memberLabel(s.user_id), s.project || '(unlabelled)', localTime(s.started_at), localTime(s.ended_at),
+        (s.duration_sec / 3600).toFixed(2), s.lines_added, s.lines_removed, s.source || '']);
+    const csv = [header, ...rows].map((row) => row.map(quote).join(',')).join('\r\n');
+    const link = el('a', {
+      href: URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })),
+      download: 'narrately-' + state.org.name.replace(/[^\w-]+/g, '-').toLowerCase() + '-' + state.weekStart.toLocaleDateString('en-CA') + '.csv',
+    });
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    toast('Timesheet exported · ' + state.sessions.length + ' sessions', 'download');
+  });
+
+  // ---- boot ----
+  supabase.auth.getSession().then(async ({ data }) => {
+    if (!data.session) return show('authView');
+    try { await enter(data.session.user); }
+    catch (error) { show('authView'); setMsg($('authMsg'), error.message, 'err'); }
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveTabGlider);
+})();
+</script>
+</body>
+</html>

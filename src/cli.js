@@ -29,6 +29,10 @@ const COMMANDS = {
     summary: 'View or edit configuration: list | get <key> | set <key> <value> | path',
     load: () => import('./commands/config.js'),
   },
+  context: {
+    summary: 'Give the AI background on a project: list | edit | set --file/--link | show | rm',
+    load: () => import('./commands/context.js'),
+  },
   graph: {
     summary: 'Query the local knowledge graph',
     load: () => import('./commands/graph.js'),
@@ -48,6 +52,14 @@ const COMMANDS = {
   web: {
     summary: 'Open the local detail dashboard: projects, files, notes, reports',
     load: () => import('./commands/web.js'),
+  },
+  cloud: {
+    summary: 'Narrately Cloud team: signup | login | create-org | invite | join | members | dashboard | org | status | logout',
+    load: () => import('./commands/cloud.js'),
+  },
+  sync: {
+    summary: 'Push session metadata to Narrately Cloud now (the daemon also auto-syncs) [--days N]',
+    load: () => import('./commands/sync.js'),
   },
 };
 
@@ -69,7 +81,7 @@ ${pc.bold('Getting started')}
   narrately daemon start     Start background collection
   narrately report           Generate a report on demand
 
-${pc.dim('All data stays on this machine unless you enable email delivery.')}
+${pc.dim('All data stays on this machine unless you enable email delivery or join a Narrately Cloud team.')}
 `);
 }
 

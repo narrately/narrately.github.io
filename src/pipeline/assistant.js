@@ -1,5 +1,7 @@
 import { formatDuration } from './aggregator.js';
 import { listNotes } from '../core/db.js';
+import { loadConfig } from '../core/config.js';
+import { contextsFor } from '../core/context.js';
 import {
   workSummary,
   timeline,
@@ -35,8 +37,9 @@ export function inferWindow(question, flags = {}) {
   return { since: daysAgo(30), label: 'the last 30 days' };
 }
 
-export function buildContext(since, until = new Date()) {
+export function buildContext(since, until = new Date(), config = loadConfig()) {
   const summary = workSummary({ since, until });
+  const background = contextsFor(config, summary.projects.map((row) => row.project));
 
   return {
     window: { since: since.toISOString(), until: until.toISOString() },
@@ -79,6 +82,7 @@ export function buildContext(since, until = new Date()) {
     notes: listNotes({ since: since.toISOString().slice(0, 10), until: until.toISOString().slice(0, 10) }).map(
       (note) => ({ date: note.date, project: note.project, body: note.body }),
     ),
+    projectContext: Object.entries(background).map(([project, text]) => ({ project, text })),
   };
 }
 

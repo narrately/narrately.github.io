@@ -10,11 +10,19 @@ export function hasApiKey() {
 }
 
 export async function generateNarrative(summary, options = {}) {
-  const { model = defaultModel, verbosity = 'standard', periodLabel = 'today', period = 'day', signal, diffsByProject = {} } = options;
+  const {
+    model = defaultModel,
+    verbosity = 'standard',
+    periodLabel = 'today',
+    period = 'day',
+    signal,
+    diffsByProject = {},
+    projectContext = {},
+  } = options;
 
   const client = new Anthropic();
   const userPrompt = [
-    buildPrompt(summary, { verbosity, periodLabel, diffsByProject }),
+    buildPrompt(summary, { verbosity, periodLabel, diffsByProject, projectContext }),
     '',
     `Length guidance: ${lengthGuidance(verbosity)}`,
   ].join('\n');

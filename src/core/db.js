@@ -91,6 +91,16 @@ CREATE TABLE IF NOT EXISTS notes (
 );
 CREATE INDEX IF NOT EXISTS idx_notes_date ON notes(date);
 
+-- Developer-written background for a project (goals, architecture, glossary)
+-- that the narrative and Q&A prompts use to explain what the work means.
+-- source_path set = linked file, re-read on use; body is the last snapshot.
+CREATE TABLE IF NOT EXISTS project_context (
+  project     TEXT PRIMARY KEY,
+  body        TEXT NOT NULL,
+  source_path TEXT,
+  updated_at  TEXT NOT NULL
+);
+
 -- Real code content — the one deliberate exception to "counts only, never
 -- content" everywhere else in this file. Off by default (collectors.git.
 -- capture_diffs / project_roots[].capture_diffs), redacted before insert,

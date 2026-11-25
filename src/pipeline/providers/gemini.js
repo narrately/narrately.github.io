@@ -68,10 +68,18 @@ async function generateContent({ model, systemInstruction, prompt, maxOutputToke
 }
 
 export async function generateNarrative(summary, options = {}) {
-  const { model = defaultModel, verbosity = 'standard', periodLabel = 'today', period = 'day', signal, diffsByProject = {} } = options;
+  const {
+    model = defaultModel,
+    verbosity = 'standard',
+    periodLabel = 'today',
+    period = 'day',
+    signal,
+    diffsByProject = {},
+    projectContext = {},
+  } = options;
 
   const userPrompt = [
-    buildPrompt(summary, { verbosity, periodLabel, diffsByProject }),
+    buildPrompt(summary, { verbosity, periodLabel, diffsByProject, projectContext }),
     '',
     `Length guidance: ${lengthGuidance(verbosity)}`,
   ].join('\n');

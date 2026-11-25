@@ -485,6 +485,7 @@ ${pc.bold('Next steps')}
   ${pc.cyan('narrately daemon start')}   Start background collection
   ${pc.cyan('narrately status')}         Check that collectors are reporting
   ${pc.cyan('narrately report')}         Generate a report on demand
+  ${pc.cyan('narrately context edit <project>')}  Describe a project so reports use its real names and goals
   ${pc.cyan('narrately config list')}    Review every setting, including ones this wizard skipped
 `);
 }

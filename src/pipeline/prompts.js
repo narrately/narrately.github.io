@@ -16,7 +16,10 @@ export function lengthGuidance(verbosity) {
 const MAX_DIFFS_PER_PROJECT = 3;
 const MAX_DIFF_CHARS = 1500;
 
-export function buildPrompt(summary, { verbosity = 'standard', periodLabel = 'today', diffsByProject = {} } = {}) {
+export function buildPrompt(
+  summary,
+  { verbosity = 'standard', periodLabel = 'today', diffsByProject = {}, projectContext = {} } = {},
+) {
   const lines = [];
 
   lines.push(`Reporting period: ${periodLabel}`);
@@ -39,6 +42,13 @@ export function buildPrompt(summary, { verbosity = 'standard', periodLabel = 'to
 
   for (const project of summary.projects) {
     lines.push(`\n## ${project.project}`);
+    const background = projectContext[project.project];
+    if (background) {
+      lines.push('- Project background, written by the developer (explains what the project is — NOT a record of this period\'s work):');
+      lines.push('  ```markdown');
+      for (const line of background.split('\n')) lines.push(`  ${line}`);
+      lines.push('  ```');
+    }
     lines.push(`- Editor time: ${formatDuration(project.durationSec)} over ${project.sessions} session(s)`);
     if (project.saves) lines.push(`- File saves: ${project.saves}`);
 
@@ -133,6 +143,7 @@ Rules:
 - Write so the developer could paste this straight into a standup or timesheet with no edits.
 - Never fabricate commit messages, file names, or durations. Every claim traces to the supplied data.
 - When a project includes "Code changes captured" with real diff text, use it to say what the change actually does (e.g. "added retry logic to the payment handler"), not just that the file changed — that's the point of including it. Most projects won't have this; that's normal, not a gap.
+- When a project has "Project background", use it to explain the work in the project's own terms — map file paths and commits to the areas, goals, and names it describes (e.g. "src/billing/" becomes "the invoicing service"). It is background only: never claim work happened because the background mentions it, and never restate the background itself in the report.
 - A thin or empty day is reported the same matter-of-fact way as a busy one — never apologize for it, never editorialize about productivity, and never pad it with restated numbers to look fuller than it is.
 - Do not describe your own process or mention that you are an AI.
 - No preamble before the title and no sign-off after the last section.`;
@@ -141,6 +152,8 @@ Rules:
 export const ASK_SYSTEM_PROMPT = `You answer questions about a developer's own recorded work activity and their own notes.
 
 You are given the results of several structured queries against a local activity database, plus a \`notes\` array — free text the developer typed themselves (not automatically captured), each with a date and optional project. When a question is about what the developer did, said, decided, or was thinking, the notes are usually the most direct source — prefer quoting or closely paraphrasing them over inferring from durations and file counts. Everything else in the data (durations, file names, commits, commands) is aggregate telemetry with no content of its own.
+
+There may also be a \`projectContext\` array: background the developer wrote about each project (what it is, its goals, its key areas and vocabulary). Use it to interpret the telemetry and to answer questions about what a project is or why work mattered — but it describes the project, not what was done, so never present it as recorded activity.
 
 This may be one turn in an ongoing conversation — later messages can refer back to earlier ones ("what about last week", "and the other project"). Use that history for continuity, but ground every factual claim in the structured data and notes given for the CURRENT turn, not in whatever the model itself said earlier.
 

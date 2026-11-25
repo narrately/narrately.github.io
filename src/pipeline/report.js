@@ -6,6 +6,7 @@ import { REPORTS_DIR, ensureHome } from '../core/paths.js';
 import { drainShellLog } from '../collectors/shell.js';
 import { scrapeGit } from '../collectors/git.js';
 import { summarizeDiff } from '../core/summarize-diff.js';
+import { contextsFor } from '../core/context.js';
 import {
   loadEvents,
   buildSessions,
@@ -105,6 +106,7 @@ export async function generateReport({
         periodLabel: label,
         period,
         diffsByProject,
+        projectContext: contextsFor(config, summary.projects.map((project) => project.project)),
       });
       markdown = result.markdown;
       generator = 'llm';

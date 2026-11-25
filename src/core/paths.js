@@ -15,6 +15,7 @@ export const PORT_PATH = path.join(HOME, 'daemon.port');
 export const REPORTS_DIR = path.join(HOME, 'reports');
 
 export const SHELL_LOG = path.join(HOME, 'shell-history.log');
+export const CLOUD_PATH = path.join(HOME, 'cloud.json');
 
 export function ensureHome() {
   for (const dir of [HOME, LOG_DIR, REPORTS_DIR]) {
