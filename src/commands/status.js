@@ -8,6 +8,9 @@ import { isHookInstalled, detectShell, checkExecutionPolicy } from '../collector
 import { graphStats } from '../pipeline/graph.js';
 import { hasApiKey, resolveProvider } from '../pipeline/providers/index.js';
 import { formatDuration } from '../pipeline/aggregator.js';
+import { loadCloudSession } from './cloud.js';
+import { CURSOR_KEY } from './sync.js';
+import { getContext, meaningfulText } from '../core/context.js';
 
 const dot = (ok) => (ok ? pc.green('●') : pc.red('●'));
 const warnDot = () => pc.yellow('●');
@@ -35,6 +38,21 @@ export default async function statusCommand() {
         : pc.dim('(no API key set — structured fallback)')),
   );
   log.info(`  ${dot(config.email?.enabled)} Email delivery ${config.email?.enabled ? pc.dim(`→ ${config.email.to}`) : pc.dim('(disabled)')}`);
+
+  const cloud = loadCloudSession();
+  if (!cloud) {
+    log.info(`  ${dot(false)} Narrately Cloud ${pc.dim('(not connected — optional team rollups)')}`);
+  } else {
+    const lastSync = getMeta(CURSOR_KEY, null);
+    const autoSync = config.cloud?.auto_sync !== false;
+    log.info(
+      `  ${dot(Boolean(cloud.org_id))} Narrately Cloud ${pc.dim(`${cloud.email} → ${cloud.org_name ?? cloud.org_id ?? 'no team selected'}`)}`,
+    );
+    log.dim(
+      `      auto-sync ${autoSync ? 'every 15 min while the daemon runs' : 'off'} · ` +
+        `last sync ${lastSync ? new Date(lastSync).toLocaleString() : 'never'}`,
+    );
+  }
 
   log.title('Collectors');
   const pid = readDaemonPid();
@@ -75,7 +93,11 @@ export default async function statusCommand() {
       const tags = [];
       if (captureDiffs) tags.push(pc.yellow('[capturing code changes]'));
       if (captureSaveDiffs) tags.push(pc.yellow('[capturing uncommitted changes]'));
+      if (meaningfulText(getContext(config, root.label)?.text)) tags.push(pc.cyan('[context]'));
       log.info(`  ${dot(exists)} ${pc.bold(root.label)} ${pc.dim(root.path)}${tags.length ? ' ' + tags.join(' ') : ''}`);
+    }
+    if (!config.project_roots.some((root) => meaningfulText(getContext(config, root.label)?.text))) {
+      log.dim('  Tip: give the AI background on a project with `narrately context edit <label>` for sharper reports.');
     }
   }
 

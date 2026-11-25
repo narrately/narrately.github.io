@@ -16,9 +16,12 @@ import {
   startOfDay,
 } from '../pipeline/graph.js';
 import { inferWindow, buildContext, trimHistory } from '../pipeline/assistant.js';
+import { listContexts, getContext, setContext, removeContext, MAX_SOURCE_BYTES } from '../core/context.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DASHBOARD_HTML = path.join(__dirname, 'dashboard.html');
+const ASSETS_DIR = path.join(__dirname, 'assets');
+const ASSET_TYPES = { woff2: 'font/woff2', svg: 'image/svg+xml', png: 'image/png' };
 
 function sendJson(res, status, payload) {
   const body = JSON.stringify(payload);
@@ -73,6 +76,22 @@ export function createRequestHandler() {
         const html = fs.readFileSync(DASHBOARD_HTML, 'utf8');
         res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
         return res.end(html);
+      }
+
+      // Fonts and the logo ship with the CLI so the dashboard never fetches
+      // anything off-machine. Flat names only — no paths, no traversal.
+      const asset = url.pathname.match(/^\/assets\/([a-z0-9-]+\.(woff2|svg|png))$/);
+      if (req.method === 'GET' && asset) {
+        const file = path.join(ASSETS_DIR, asset[1]);
+        if (!fs.existsSync(file)) {
+          res.writeHead(404, { 'content-type': 'text/plain' });
+          return res.end('not found');
+        }
+        res.writeHead(200, {
+          'content-type': ASSET_TYPES[asset[2]],
+          'cache-control': 'public, max-age=86400',
+        });
+        return res.end(fs.readFileSync(file));
       }
 
       if (!url.pathname.startsWith('/api/')) {
@@ -200,6 +219,34 @@ export function createRequestHandler() {
         const row = getDb().prepare('SELECT * FROM reports WHERE id = ?').get(Number(reportMatch[1]));
         if (!row) return send(404, { error: 'not found' });
         return send(200, row);
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/context') {
+        return send(200, { rows: listContexts(config ?? loadConfig()) });
+      }
+
+      const contextMatch = url.pathname.match(/^\/api\/context\/(.+)$/);
+      if (contextMatch) {
+        const project = decodeURIComponent(contextMatch[1]);
+        if (req.method === 'GET') {
+          const context = getContext(config ?? loadConfig(), project);
+          return send(200, context ?? { project, text: '', source: null, path: null });
+        }
+        if (req.method === 'PUT') {
+          let payload;
+          try {
+            payload = JSON.parse((await readBody(req, MAX_SOURCE_BYTES + 10_000)) || '{}');
+          } catch {
+            return send(400, { error: 'invalid JSON' });
+          }
+          const body = typeof payload.body === 'string' ? payload.body : '';
+          if (!body.trim()) return send(400, { error: 'context must not be empty' });
+          setContext(project, { body });
+          return send(200, { ok: true });
+        }
+        if (req.method === 'DELETE') {
+          return send(200, { ok: removeContext(project) });
+        }
       }
 
       if (req.method === 'GET' && url.pathname === '/api/notes') {
