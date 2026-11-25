@@ -104,7 +104,9 @@
   .scrim { display: none; }
 
   /* ---------- content ---------- */
-  .content { padding: 64px 64px 96px; max-width: 980px; }
+  .content { position: relative; padding: 64px 64px 96px; max-width: 980px; }
+  /* printed margin scale: a tick every 24px, a longer one every 120px */
+  .content::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 14px; pointer-events: none; background-image: linear-gradient(var(--print) 1px, transparent 1px), linear-gradient(var(--grid-2) 1px, transparent 1px); background-size: 14px 120px, 7px 24px; background-repeat: repeat-y; }
   .welcome { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 330px); gap: 48px; align-items: end; padding-bottom: 56px; border-bottom: 1.5px solid var(--ink); }
   .welcome h1 { margin: 0 0 18px; font: 700 clamp(3rem, 5.6vw, 4.6rem)/.92 var(--f-display); letter-spacing: -.025em; text-wrap: balance; }
   .lead { margin: 0 0 26px; font-size: 19px; line-height: 1.55; color: var(--ink-2); max-width: 46ch; }
@@ -123,8 +125,10 @@
   .guide-index li { border-bottom: 1px solid var(--rule-2); }
   .guide-index a { display: block; padding: 16px 0; text-decoration: none; }
   .guide-index b { display: flex; align-items: center; gap: 8px; font: 600 17px/1.3 var(--f-body); }
-  .guide-index b::after { content: '→'; margin-left: auto; color: var(--ink-3); transition: transform .2s var(--ease), color .2s; }
-  .guide-index a:hover b::after { color: var(--red); transform: translateX(3px); }
+  .guide-index b::after { content: ''; flex: none; width: 16px; height: 16px; margin-left: auto; background: var(--ink-3); transition: transform .2s var(--ease), background-color .2s;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat; }
+  .guide-index a:hover b::after { background: var(--red); transform: translateX(3px); }
   .guide-index span:not(.new-dot) { display: block; margin-top: 3px; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
 
   .doc-section { padding-top: 64px; }
@@ -290,9 +294,9 @@
       <button type="button">Code change capture<span class="chev" data-icon="chevron"></span></button>
       <div class="side-items"><ul>
         <li><a href="#capture-overview">Overview</a></li>
-        <li><a href="#tier1">Tier 1 — Commits</a></li>
-        <li><a href="#tier2">Tier 2 — Uncommitted</a></li>
-        <li><a href="#tier3">Tier 3 — Retention</a></li>
+        <li><a href="#tier1">Tier 1: commits</a></li>
+        <li><a href="#tier2">Tier 2: uncommitted</a></li>
+        <li><a href="#tier3">Tier 3: retention</a></li>
       </ul></div>
     </div>
 
@@ -323,7 +327,7 @@
     <div class="welcome">
       <div>
         <h1>Everything, documented.</h1>
-        <p class="lead">Install Narrately, wire up your editor, and get a written, queryable record of your work — for standups, timesheets, reviews, or just remembering what you did.</p>
+        <p class="lead">Install Narrately, wire up your editor, and get a written, queryable record of your work for standups, timesheets, reviews, or just remembering what you did.</p>
         <div class="chips">
           <a href="#getting-started">Install</a>
           <a href="#project-context">Project context</a>
@@ -353,18 +357,18 @@ billing-api      3h 05m   4 sessions</pre>
       <ul class="guide-index">
         <li><a href="#getting-started"><b>Installation</b><span>The CLI via npm, the VS Code extension, or the JetBrains plugin. Pick one or all three.</span></a></li>
         <li><a href="#onboarding"><b>Onboarding wizard</b><span>One command configures collectors, project roots, privacy exclusions, and your LLM provider.</span></a></li>
-        <li><a href="#reports"><b>Reports, Ask &amp; Chat</b><span>A written report on demand or on a schedule — or just ask a question about your own history.</span></a></li>
+        <li><a href="#reports"><b>Reports, Ask &amp; Chat</b><span>A written report on demand or on a schedule. Or just ask a question about your own history.</span></a></li>
         <li><a href="#project-context"><b>Project context <span class="new-dot">NEW</span></b><span>Give the AI a short brief per project so reports use your real names, goals, and areas.</span></a></li>
-        <li><a href="#capture-overview"><b>Code change capture</b><span>Three independent, opt-in layers for real diff text instead of just line counts — redacted before storage.</span></a></li>
+        <li><a href="#capture-overview"><b>Code change capture</b><span>Three independent, opt-in layers for real diff text instead of just line counts, redacted before storage.</span></a></li>
         <li><a href="#teams"><b>Teams <span class="new-dot">NEW</span></b><span>Optional Narrately Cloud: everyone's session time in one shared dashboard. Metadata only.</span></a></li>
-        <li><a href="#dashboard"><b>Web dashboard</b><span>A loopback-only app — overview charts, notes, project context, chat, and your report history.</span></a></li>
-        <li><a href="#scheduling"><b>Scheduling</b><span>Hand daily reports to your OS's native scheduler — Task Scheduler, launchd, or systemd.</span></a></li>
+        <li><a href="#dashboard"><b>Web dashboard</b><span>A loopback-only app with overview charts, notes, project context, chat, and your report history.</span></a></li>
+        <li><a href="#scheduling"><b>Scheduling</b><span>Hand daily reports to your OS's native scheduler: Task Scheduler, launchd, or systemd.</span></a></li>
       </ul>
     </div>
 
     <section id="getting-started" class="doc-section" data-group="Getting started">
       <h2 class="doc-h">Installation</h2>
-      <p class="doc-p">Three independent entry points. The CLI is the core — the daemon, reports, graph queries, chat, and dashboard all live there. The editor extensions are thin producers that talk to it.</p>
+      <p class="doc-p">Three independent entry points. The CLI is the core: the daemon, reports, graph queries, chat, and dashboard all live there. The editor extensions are thin producers that talk to it.</p>
       <h3 class="doc-h3">CLI, via npm</h3>
       <p class="doc-p">Requires Node.js 22.5 or later and Git on your PATH.</p>
       <div class="diffblock cmd"><div class="l ctx">npm install -g narrately</div><div class="l ctx">narrately onboard</div></div>
@@ -372,31 +376,31 @@ billing-api      3h 05m   4 sessions</pre>
       <p class="doc-p">Search <code>Narrately</code> in the Extensions view, or install it from the CLI:</p>
       <div class="diffblock cmd"><div class="l ctx">narrately install vscode</div><div class="l ctx">ext install narrately.narrately-collector   <span class="cm"># Marketplace alternative</span></div></div>
       <h3 class="doc-h3">JetBrains plugin</h3>
-      <p class="doc-p">Settings → Plugins → Marketplace → search <code>Narrately</code>, or run <code>narrately install intellij</code>. One build works across IntelliJ IDEA, WebStorm, PyCharm, GoLand, and RubyMine — they share the platform SDK.</p>
+      <p class="doc-p">Settings → Plugins → Marketplace → search <code>Narrately</code>, or run <code>narrately install intellij</code>. One build works across IntelliJ IDEA, WebStorm, PyCharm, GoLand, and RubyMine, since they share the platform SDK.</p>
       <h3 class="doc-h3">From source</h3>
-      <p class="doc-p">The full source is available to clone, audit, or self-host — MIT licensed.</p>
+      <p class="doc-p">The full source is available to clone, audit, or self-host. MIT licensed.</p>
       <div class="diffblock cmd"><div class="l ctx">git clone https://github.com/narrately/narrately.github.io</div><div class="l ctx">cd narrately &amp;&amp; npm install &amp;&amp; npm link</div></div>
     </section>
 
     <section id="onboarding" class="doc-section" data-group="Getting started">
       <h2 class="doc-h">Onboarding wizard</h2>
-      <p class="doc-p"><code>narrately onboard</code> asks a series of questions — the last one optional — and writes everything to <code>~/.narrately/config.yaml</code>. Re-run it any time; it only asks about what's new.</p>
+      <p class="doc-p"><code>narrately onboard</code> asks a series of questions (the last one optional) and writes everything to <code>~/.narrately/config.yaml</code>. Re-run it any time; it only asks about what's new.</p>
       <ul class="step-list ordered">
-        <li><span class="num"></span><div><strong>Work profile</strong><span>Confirms software development — other profiles are recorded for the roadmap.</span></div></li>
+        <li><span class="num"></span><div><strong>Work profile</strong><span>Confirms software development. Other profiles are recorded for the roadmap.</span></div></li>
         <li><span class="num"></span><div><strong>IDE detection</strong><span>Scans for installed VS Code and JetBrains IDEs and lets you pick which to collect from.</span></div></li>
         <li><span class="num"></span><div><strong>Collector install</strong><span>Installs the extension or plugin for whatever you selected.</span></div></li>
-        <li><span class="num"></span><div><strong>Shell integration</strong><span>Installs a history hook — command text and timestamp only, never output.</span></div></li>
+        <li><span class="num"></span><div><strong>Shell integration</strong><span>Installs a history hook: command text and timestamp only, never output.</span></div></li>
         <li><span class="num"></span><div><strong>Project roots</strong><span>Add code directories, scan for repos, and label each for reports. Sets a default for code-change capture, then lets you override it per repo.</span></div></li>
         <li><span class="num"></span><div><strong>Privacy &amp; retention</strong><span>Exclusions that are never recorded, whether captured diffs get secret-redaction, and an optional age-out window for old diffs.</span></div></li>
         <li><span class="num"></span><div><strong>Report preferences</strong><span>LLM provider (with an optional model pin), manual vs. scheduled mode, verbosity, and optional email delivery.</span></div></li>
         <li><span class="num"></span><div><strong>Advanced <span class="muted">(optional, skipped by default)</span></strong><span>Daemon port, minimum focus duration, and whether the git collector runs at all.</span></div></li>
       </ul>
-      <p class="doc-p">Anything the wizard doesn't ask, or that you want to change later without re-running it, is reachable directly — see <a href="#config">Configuration file</a>. Then give your main projects some <a href="#project-context">context</a>.</p>
+      <p class="doc-p">Anything the wizard doesn't ask, or that you want to change later without re-running it, is reachable directly; see <a href="#config">Configuration file</a>. Then give your main projects some <a href="#project-context">context</a>.</p>
     </section>
 
     <section id="quick-start" class="doc-section" data-group="Getting started">
       <h2 class="doc-h">Daily usage</h2>
-      <p class="doc-p">Start the daemon once — it keeps running until you stop it or reboot.</p>
+      <p class="doc-p">Start the daemon once. It keeps running until you stop it or reboot.</p>
       <div class="diffblock cmd"><div class="l ctx">narrately daemon start</div><div class="l ctx">narrately status</div></div>
       <p class="doc-p">Then work normally. When you want a report:</p>
       <div class="diffblock cmd"><div class="l ctx">narrately report                      <span class="cm"># since your last report</span></div><div class="l ctx">narrately report --day 2026-07-28     <span class="cm"># a specific day</span></div><div class="l ctx">narrately report --week               <span class="cm"># the current week, cross-project</span></div></div>
@@ -404,9 +408,9 @@ billing-api      3h 05m   4 sessions</pre>
 
     <section id="reports" class="doc-section" data-group="Guides">
       <h2 class="doc-h">Reports, Ask &amp; Chat</h2>
-      <p class="doc-p">Reports work without an API key — they just come out structured rather than narrated. Set <code>ANTHROPIC_API_KEY</code> or <code>GEMINI_API_KEY</code> for the written version.</p>
+      <p class="doc-p">Reports work without an API key; they just come out structured rather than narrated. Set <code>ANTHROPIC_API_KEY</code> or <code>GEMINI_API_KEY</code> for the written version.</p>
       <div class="diffblock cmd"><div class="l ctx">narrately ask "what did I work on this week"</div><div class="l ctx">narrately chat   <span class="cm"># multi-turn, remembers the last few turns</span></div></div>
-      <p class="doc-p">Both are grounded in your recorded activity, your notes, and your project context — never raw file contents.</p>
+      <p class="doc-p">Both are grounded in your recorded activity, your notes, and your project context, never raw file contents.</p>
     </section>
 
     <section id="ask-chat" class="doc-section" data-group="Guides">
@@ -416,7 +420,7 @@ billing-api      3h 05m   4 sessions</pre>
 
     <section id="project-context" class="doc-section" data-group="Guides">
       <h2 class="doc-h">Project context</h2>
-      <p class="doc-p">Tracking only sees metadata — file names, durations, commit subjects. Give each project a short brief — what it is, what you're working towards, what its folders mean, its internal names — and the narrative, <code>ask</code>, and <code>chat</code> use it to explain the work in the project's own terms. <code>src/billing/</code> becomes "the invoicing service".</p>
+      <p class="doc-p">Tracking only sees metadata: file names, durations, commit subjects. Give each project a short brief (what it is, what you're working towards, what its folders mean, its internal names) and the narrative, <code>ask</code>, and <code>chat</code> use it to explain the work in the project's own terms. <code>src/billing/</code> becomes "the invoicing service".</p>
       <div class="diffblock cmd"><div class="l ctx">narrately context                          <span class="cm"># list projects and their context</span></div><div class="l ctx">narrately context edit api                 <span class="cm"># write it in your editor, from a template</span></div><div class="l ctx">narrately context set api --link docs/ARCHITECTURE.md</div><div class="l ctx">narrately context set api --file brief.md</div><div class="l ctx">narrately context show api                 <span class="cm"># exactly what the AI will see</span></div></div>
       <ul class="step-list">
         <li><span class="num"></span><div><strong>Linked file</strong><span><code>--link</code> re-reads the file on every report, so edits to your architecture doc flow in automatically.</span></div></li>
@@ -424,17 +428,17 @@ billing-api      3h 05m   4 sessions</pre>
         <li><span class="num"></span><div><strong>Zero setup</strong><span>Drop a <code>.narrately.md</code> in the project's root folder and it's picked up with no command. An explicit <code>context set</code> always wins over it.</span></div></li>
       </ul>
       <p class="doc-p">The dashboard's <strong>Journal</strong> view has the same editor, with .md upload and drag-and-drop.</p>
-      <div class="callout"><span data-icon="shield"></span><div>Only projects active in the report's period are included, capped at <strong>6,000 characters each</strong> and 20,000 per prompt. The model is told to use it to interpret activity — never as evidence that work happened. Context stays local, is never synced to a team, and is sent to your LLM provider only alongside the activity it explains.</div></div>
+      <div class="callout"><span data-icon="shield"></span><div>Only projects active in the report's period are included, capped at <strong>6,000 characters each</strong> and 20,000 per prompt. The model is told to use it to interpret activity, never as evidence that work happened. Context stays local, is never synced to a team, and is sent to your LLM provider only alongside the activity it explains.</div></div>
     </section>
 
     <section id="dashboard" class="doc-section" data-group="Guides">
       <h2 class="doc-h">Web dashboard</h2>
-      <p class="doc-p">A local app over the same data. The server binds to <code>127.0.0.1</code> only and ships its own fonts — it makes no outside requests.</p>
+      <p class="doc-p">A local app over the same data. The server binds to <code>127.0.0.1</code> only and ships its own fonts, so it makes no outside requests.</p>
       <div class="diffblock cmd"><div class="l ctx">narrately web</div></div>
       <div class="ref-wrap"><table class="ref">
         <tr><th>View</th><th>What's there</th></tr>
         <tr><td>Overview</td><td>Tracked time and deltas vs. the previous period, a daily activity chart, project share, file churn, and focus</td></tr>
-        <tr><td>Journal</td><td>Notes — free text scoped to a day and optionally a project — and the project context editor</td></tr>
+        <tr><td>Journal</td><td>Notes (free text scoped to a day and optionally a project) and the project context editor</td></tr>
         <tr><td>Assistant</td><td>Chat over your history, with suggested questions</td></tr>
         <tr><td>History</td><td>Every past report, rendered as a document, plus captured code changes</td></tr>
       </table></div>
@@ -468,8 +472,8 @@ billing-api      3h 05m   4 sessions</pre>
     </section>
 
     <section id="teams" class="doc-section" data-group="Guides">
-      <h2 class="doc-h">Teams — Narrately Cloud</h2>
-      <p class="doc-p">Optional and opt-in. Teammates' <strong>session metadata</strong> — project, start and end time, duration, languages, save and edit counts, lines added and removed — rolls up into one shared dashboard. The local tool keeps working exactly the same.</p>
+      <h2 class="doc-h">Teams on Narrately Cloud</h2>
+      <p class="doc-p">Optional and opt-in. Teammates' <strong>session metadata</strong> (project, start and end time, duration, languages, save and edit counts, lines added and removed) rolls up into one shared dashboard. The local tool keeps working exactly the same.</p>
       <h3 class="doc-h3">Team owner</h3>
       <div class="diffblock cmd"><div class="l ctx">narrately cloud signup              <span class="cm"># once, then confirm the email</span></div><div class="l ctx">narrately cloud login</div><div class="l ctx">narrately cloud create-org "Acme"</div><div class="l ctx">narrately cloud invite              <span class="cm"># prints a join code, valid 7 days</span></div><div class="l ctx">narrately cloud dashboard           <span class="cm"># open the team portal in your browser</span></div></div>
       <h3 class="doc-h3">Each teammate</h3>
@@ -481,40 +485,40 @@ billing-api      3h 05m   4 sessions</pre>
 
     <section id="capture-overview" class="doc-section" data-group="Code change capture">
       <h2 class="doc-h">Code change capture</h2>
-      <p class="doc-p">Everything else tells you <em>that</em> something changed. This is the deliberate, opt-in exception that tells you <em>what</em> — off by default, at every layer.</p>
+      <p class="doc-p">Everything else tells you <em>that</em> something changed. This is the deliberate, opt-in exception that tells you <em>what</em>. It is off by default, at every layer.</p>
       <div class="tier-cards">
         <div class="tier-card"><span class="badge">Tier 1</span><h3>Your commits</h3><p>New commits get real diff text, redacted, scoped to the repo, never retroactive.</p></div>
-        <div class="tier-card"><span class="badge">Tier 2</span><h3>Uncommitted work</h3><p>A diff on every save — the IDE only reads content once the daemon confirms opt-in.</p></div>
+        <div class="tier-card"><span class="badge">Tier 2</span><h3>Uncommitted work</h3><p>A diff on every save. The IDE only reads content once the daemon confirms opt-in.</p></div>
         <div class="tier-card"><span class="badge">Tier 3</span><h3>Local retention</h3><p>Raw text ages into a short summary after N days. No LLM involved, ever.</p></div>
       </div>
     </section>
 
     <section id="tier1" class="doc-section" data-group="Code change capture">
-      <h2 class="doc-h">Tier 1 — your commits</h2>
+      <h2 class="doc-h">Tier 1: your commits</h2>
       <p class="doc-p">Enable per project:</p>
       <div class="diffblock"><div class="l ctx">project_roots:</div><div class="l ctx">  - path: C:/code/auth-service</div><div class="l ctx">    label: auth-service</div><div class="l add">+   capture_diffs: true</div></div>
       <p class="doc-p">Every file's diff is checked against your privacy exclusions, then redacted for secret-shaped strings before it ever touches disk:</p>
       <div class="diffblock"><div class="l ctx">function login() {</div><div class="l add">+  const apiKey = "[REDACTED:quoted-secret-assignment]";</div><div class="l ctx">  return true;</div><div class="l ctx">}</div></div>
-      <p class="doc-p">Any single file's diff over 50KB is dropped entirely, not truncated — you get the line counts and a note, never a partial diff that reads as complete.</p>
+      <p class="doc-p">Any single file's diff over 50KB is dropped entirely, not truncated. You get the line counts and a note, never a partial diff that reads as complete.</p>
     </section>
 
     <section id="tier2" class="doc-section" data-group="Code change capture">
-      <h2 class="doc-h">Tier 2 — uncommitted work</h2>
-      <p class="doc-p">A second, independent switch — meaningfully more exposed, since it captures on every save before you've reviewed anything:</p>
+      <h2 class="doc-h">Tier 2: uncommitted work</h2>
+      <p class="doc-p">A second, independent switch, and meaningfully more exposed, since it captures on every save before you've reviewed anything:</p>
       <div class="diffblock"><div class="l ctx">    capture_diffs: true</div><div class="l add">+   capture_save_diffs: true</div></div>
-      <p class="doc-p">The IDE never reads a file's content speculatively — it asks the daemon first (<code>GET /capture-config</code>), and only reads &amp; sends content for a project the daemon has actively confirmed opted in. The daemon re-checks independently before storing anything; the client's own gating is a courtesy, never the authority.</p>
+      <p class="doc-p">The IDE never reads a file's content speculatively. It asks the daemon first (<code>GET /capture-config</code>), and only reads &amp; sends content for a project the daemon has actively confirmed opted in. The daemon re-checks independently before storing anything; the client's own gating is a courtesy, never the authority.</p>
     </section>
 
     <section id="tier3" class="doc-section" data-group="Code change capture">
-      <h2 class="doc-h">Tier 3 — local retention</h2>
+      <h2 class="doc-h">Tier 3: local retention</h2>
       <p class="doc-p">Raw diff text is kept indefinitely by default. Set a retention window to age it out:</p>
       <div class="diffblock"><div class="l ctx">privacy:</div><div class="l add">+  diff_retention_days: 30</div></div>
-      <p class="doc-p">Past the window, a purely local, regex-based summarizer (no LLM, no API key required) replaces the raw text with a short description — <em>"Added function login, processPayment; removed function oldAuth."</em> The row stays; only the code itself is gone.</p>
+      <p class="doc-p">Past the window, a purely local, regex-based summarizer (no LLM, no API key required) replaces the raw text with a short description: <em>"Added function login, processPayment; removed function oldAuth."</em> The row stays; only the code itself is gone.</p>
     </section>
 
     <section id="vscode" class="doc-section" data-group="IDE collectors">
       <h2 class="doc-h">VS Code collector</h2>
-      <p class="doc-p">Plain JS, no build step, no dependencies. Tracks focus/save, edit volume, debug sessions, idle detection, diagnostics deltas, and file create/delete/rename. The Git branch is read directly from <code>.git/HEAD</code> — no dependency on the built-in Git extension being enabled.</p>
+      <p class="doc-p">Plain JS, no build step, no dependencies. Tracks focus/save, edit volume, debug sessions, idle detection, diagnostics deltas, and file create/delete/rename. The Git branch is read directly from <code>.git/HEAD</code>, with no dependency on the built-in Git extension being enabled.</p>
     </section>
 
     <section id="jetbrains" class="doc-section" data-group="IDE collectors">
@@ -524,7 +528,7 @@ billing-api      3h 05m   4 sessions</pre>
 
     <section id="shell" class="doc-section" data-group="IDE collectors">
       <h2 class="doc-h">Shell hook</h2>
-      <p class="doc-p">Supports bash, zsh, fish, and PowerShell. Logs command <strong>text and timestamp only</strong> — never what a command printed, which is where secrets and output usually land.</p>
+      <p class="doc-p">Supports bash, zsh, fish, and PowerShell. Logs command <strong>text and timestamp only</strong>, never what a command printed, which is where secrets and output usually land.</p>
     </section>
 
     <section id="reference" class="doc-section" data-group="Reference">
@@ -544,7 +548,7 @@ billing-api      3h 05m   4 sessions</pre>
         <tr><td>chat</td><td>Interactive, multi-turn conversation</td></tr>
         <tr><td>web</td><td>Open the local dashboard</td></tr>
         <tr><td>ingest</td><td>Force a shell + git collection pass</td></tr>
-        <tr><td>cloud &lt;action&gt;</td><td>Narrately Cloud team account — <code>signup</code>, <code>login</code>, <code>create-org</code>, <code>invite</code>, <code>join</code>, <code>members</code>, <code>org</code>, <code>dashboard</code>, <code>status</code>, <code>logout</code></td></tr>
+        <tr><td>cloud &lt;action&gt;</td><td>Narrately Cloud team account: <code>signup</code>, <code>login</code>, <code>create-org</code>, <code>invite</code>, <code>join</code>, <code>members</code>, <code>org</code>, <code>dashboard</code>, <code>status</code>, <code>logout</code></td></tr>
         <tr><td>sync [--days N]</td><td>Push session metadata to your team now</td></tr>
       </table></div>
     </section>
@@ -575,8 +579,8 @@ billing-api      3h 05m   4 sessions</pre>
       <p class="doc-p">Every line below is backed by code in the repository, not a policy document.</p>
       <ul class="step-list">
         <li><span class="num"></span><div><strong>Local-first</strong><span>Nothing leaves the machine unless you explicitly enable email, an LLM narrative, or join a team.</span></div></li>
-        <li><span class="num"></span><div><strong>Metadata only, by default</strong><span>File paths, timestamps, commit subjects, integer counts — never file contents.</span></div></li>
-        <li><span class="num"></span><div><strong>No command output</strong><span>The shell hook logs command text and timestamp — never what it printed.</span></div></li>
+        <li><span class="num"></span><div><strong>Metadata only, by default</strong><span>File paths, timestamps, commit subjects, integer counts. Never file contents.</span></div></li>
+        <li><span class="num"></span><div><strong>No command output</strong><span>The shell hook logs command text and timestamp, never what it printed.</span></div></li>
         <li><span class="num"></span><div><strong>Exclusions apply before storage</strong><span>Excluded paths, repos, and patterns never reach the database at all.</span></div></li>
         <li><span class="num"></span><div><strong>Loopback-only daemon and dashboard</strong><span>Bound to 127.0.0.1, unauthenticated by design, never reachable off the machine.</span></div></li>
         <li><span class="num"></span><div><strong>Teams see session metadata only</strong><span>Narrately Cloud never receives paths, diffs, notes, project context, or code.</span></div></li>
@@ -585,19 +589,19 @@ billing-api      3h 05m   4 sessions</pre>
 
     <section id="data-model" class="doc-section" data-group="Reference">
       <h2 class="doc-h">Data &amp; storage</h2>
-      <div class="diffblock"><div class="l ctx">~/.narrately/</div><div class="l ctx">  config.yaml      <span class="cm"># chmod 600</span></div><div class="l ctx">  narrately.db     <span class="cm"># SQLite: activity, notes, project context</span></div><div class="l ctx">  reports/         <span class="cm"># every generated report, as Markdown</span></div><div class="l ctx">  cloud.json       <span class="cm"># team login — only if you join a team</span></div><div class="l ctx">  logs/daemon.log</div></div>
-      <p class="doc-p">The schema upgrades itself in place on every new version — no "reset your data" step required.</p>
+      <div class="diffblock"><div class="l ctx">~/.narrately/</div><div class="l ctx">  config.yaml      <span class="cm"># chmod 600</span></div><div class="l ctx">  narrately.db     <span class="cm"># SQLite: activity, notes, project context</span></div><div class="l ctx">  reports/         <span class="cm"># every generated report, as Markdown</span></div><div class="l ctx">  cloud.json       <span class="cm"># team login, only if you join a team</span></div><div class="l ctx">  logs/daemon.log</div></div>
+      <p class="doc-p">The schema upgrades itself in place on every new version, with no "reset your data" step.</p>
     </section>
 
     <section id="faq" class="doc-section" data-group="Help">
       <h2 class="doc-h">Frequently asked questions</h2>
       <div id="faq-list">
-        <div class="faq-item open"><button type="button" aria-expanded="true"><span>Does my code ever leave my machine?</span><span class="plus"></span></button><div class="a"><div><p>Not by default. Reports and questions are grounded in aggregated counts — durations, file paths, commit subjects — never file contents, unless you separately opt into code change capture <em>and</em> raise report verbosity to detailed, in which case bounded, redacted diff excerpts are included.</p></div></div></div>
-        <div class="faq-item"><button type="button" aria-expanded="false"><span>What's the difference between the npm CLI and the editor extensions?</span><span class="plus"></span></button><div class="a"><div><p>The CLI is the whole system — daemon, storage, reports, dashboard. The VS Code and JetBrains extensions are thin producers: they detect focus, saves, and edits, and send that to the daemon the CLI already runs. Install the CLI first either way.</p></div></div></div>
-        <div class="faq-item"><button type="button" aria-expanded="false"><span>Do I need an API key to use it?</span><span class="plus"></span></button><div class="a"><div><p>No. Reports, ask, and chat all work without one — they come out structured instead of narrated. Set <code>ANTHROPIC_API_KEY</code> or <code>GEMINI_API_KEY</code> when you want the written version.</p></div></div></div>
+        <div class="faq-item open"><button type="button" aria-expanded="true"><span>Does my code ever leave my machine?</span><span class="plus"></span></button><div class="a"><div><p>Not by default. Reports and questions are grounded in aggregated counts (durations, file paths, commit subjects), never file contents, unless you separately opt into code change capture <em>and</em> raise report verbosity to detailed, in which case bounded, redacted diff excerpts are included.</p></div></div></div>
+        <div class="faq-item"><button type="button" aria-expanded="false"><span>What's the difference between the npm CLI and the editor extensions?</span><span class="plus"></span></button><div class="a"><div><p>The CLI is the whole system: daemon, storage, reports, dashboard. The VS Code and JetBrains extensions are thin producers: they detect focus, saves, and edits, and send that to the daemon the CLI already runs. Install the CLI first either way.</p></div></div></div>
+        <div class="faq-item"><button type="button" aria-expanded="false"><span>Do I need an API key to use it?</span><span class="plus"></span></button><div class="a"><div><p>No. Reports, ask, and chat all work without one. They come out structured instead of narrated. Set <code>ANTHROPIC_API_KEY</code> or <code>GEMINI_API_KEY</code> when you want the written version.</p></div></div></div>
         <div class="faq-item"><button type="button" aria-expanded="false"><span>What does project context send to the AI?</span><span class="plus"></span></button><div class="a"><div><p>Only the background you wrote, only for projects active in the period being reported or asked about, and capped at 6,000 characters each. It goes to the same LLM provider as the rest of the prompt and is never synced to a team.</p></div></div></div>
-        <div class="faq-item"><button type="button" aria-expanded="false"><span>Is code change capture on by default?</span><span class="plus"></span></button><div class="a"><div><p>No — all three tiers default to off, per project. Turning on Tier 1 (commits) doesn't turn on Tier 2 (uncommitted work); they're independent decisions, and Tier 2 is only ever asked about if you've already said yes to Tier 1.</p></div></div></div>
-        <div class="faq-item"><button type="button" aria-expanded="false"><span>Can I use it across a team?</span><span class="plus"></span></button><div class="a"><div><p>Yes. Each machine runs its own daemon and keeps its own SQLite store. For a shared view, the optional Narrately Cloud rolls up session metadata across a team — see <a href="#teams">Teams</a>.</p></div></div></div>
+        <div class="faq-item"><button type="button" aria-expanded="false"><span>Is code change capture on by default?</span><span class="plus"></span></button><div class="a"><div><p>No. All three tiers default to off, per project. Turning on Tier 1 (commits) doesn't turn on Tier 2 (uncommitted work); they're independent decisions, and Tier 2 is only ever asked about if you've already said yes to Tier 1.</p></div></div></div>
+        <div class="faq-item"><button type="button" aria-expanded="false"><span>Can I use it across a team?</span><span class="plus"></span></button><div class="a"><div><p>Yes. Each machine runs its own daemon and keeps its own SQLite store. For a shared view, the optional Narrately Cloud rolls up session metadata across a team; see <a href="#teams">Teams</a>.</p></div></div></div>
         <div class="faq-item"><button type="button" aria-expanded="false"><span>What happens if I stop the daemon?</span><span class="plus"></span></button><div class="a"><div><p>Tracking pauses. Nothing is lost from before that point, and any open focus or debug span is flushed on shutdown rather than discarded. Team auto-sync pauses too; <code>narrately sync</code> catches up later.</p></div></div></div>
         <div class="faq-item"><button type="button" aria-expanded="false"><span>Is it free?</span><span class="plus"></span></button><div class="a"><div><p>The tool itself is open source and free. The only optional costs are API usage if you enable a written narrative through Claude or Gemini, and a paid plan if your team uses Narrately Cloud after its trial.</p></div></div></div>
       </div>

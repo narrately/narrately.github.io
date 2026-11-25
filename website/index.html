@@ -71,13 +71,15 @@
   .lockup { display: flex; align-items: center; gap: 10px; font: 600 22px/1 var(--f-display); letter-spacing: -.01em; color: var(--engrave); text-decoration: none; }
   .lockup img { width: 28px; height: 28px; display: block; }
   .plates { display: flex; gap: 2px; margin-left: 18px; }
-  .plates a { font: 500 14px/1 var(--f-display); letter-spacing: .07em; text-transform: uppercase; color: var(--engrave-2); text-decoration: none; padding: 10px 12px 9px; border-radius: 2px; border-bottom: 2px solid transparent; transition: color .15s, background-color .15s; }
-  .plates a:hover { color: var(--engrave); background: var(--chassis-2); }
-  .plates a.active { color: var(--engrave); border-bottom-color: var(--red); }
+  .plates { gap: 6px; }
+  .plates a { font: 600 13px/1 var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--engrave-2); text-decoration: none; padding: 8px 11px 7px; border: 1px solid var(--chassis-3); border-radius: 2px; background: var(--chassis-2); transition: color .15s, border-color .15s; }
+  .plates a:hover { color: var(--engrave); border-color: var(--engrave-2); }
+  .plates a.active { color: var(--engrave); border-color: var(--engrave); text-decoration: underline 2px var(--red); text-underline-offset: 5px; }
   .ch-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
   .key { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 3px; border: 1px solid var(--chassis-3); background: var(--chassis-2); color: var(--engrave); font: 600 13.5px/1 var(--f-display); letter-spacing: .07em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background-color .15s, border-color .15s; }
   .key:hover { background: var(--chassis-3); }
   .key.icon-only { width: 36px; padding: 0; }
+  .ch-clock { display: none; height: 22px; padding: 0 6px; border-radius: 2px; background: var(--red); color: var(--red-ink); font: 600 12px/22px var(--f-mono); }
   .key-red { background: var(--red); border-color: var(--red); color: var(--red-ink); }
   .key-red:hover { background: var(--engrave); border-color: var(--engrave); color: var(--chassis); }
 
@@ -121,7 +123,6 @@
   h2 { font: 600 clamp(2.1rem, 3.7vw, 3.3rem)/1 var(--f-display); letter-spacing: -.015em; margin: 0 0 18px; max-width: 21ch; }
   .sub { font-size: 18.5px; line-height: 1.55; color: var(--ink-2); max-width: 60ch; margin: 0 0 48px; }
   h3 { font: 600 20px/1.25 var(--f-body); margin: 0 0 6px; }
-  .label { font: 600 12px/1.2 var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--print); }
 
   .btn { display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 3px; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font: 600 15px/1 var(--f-display); letter-spacing: .06em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background-color .15s, color .15s, border-color .15s; }
   .btn:hover { background: var(--ink); color: var(--paper); }
@@ -148,8 +149,10 @@
   .display { font: 700 clamp(3.5rem, 7.6vw, 6rem)/.9 var(--f-display); letter-spacing: -.028em; margin: 0 0 30px; max-width: 12ch; }
   .lede { font-size: 21px; line-height: 1.5; color: var(--ink-2); max-width: 44ch; margin: 0 0 40px; }
   .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
-  .facts { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 26px 0 0; padding: 0; list-style: none; font: 600 12.5px/1.2 var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--print); }
-  .facts li + li::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--grid-2); margin: 0 18px 2px -11px; vertical-align: middle; }
+  /* the chart's printed label plate */
+  .facts { display: inline-flex; flex-wrap: wrap; margin: 28px 0 0; padding: 0; list-style: none; border: 1.5px solid var(--print); background: var(--paper); font: 600 12.5px/1.2 var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--print); }
+  .facts li { padding: 8px 12px 7px; }
+  .facts li + li { border-left: 1px solid var(--print); }
   .teaser { margin-top: 72px; max-width: 560px; }
   .teaser p { margin: 0; padding: 16px 18px 6px; font-size: 16px; color: var(--ink-2); }
   .teaser a { display: inline-flex; align-items: center; gap: 6px; margin: 0 18px 16px; font: 600 13px/1 var(--f-display); letter-spacing: .07em; text-transform: uppercase; color: var(--red); text-decoration: none; }
@@ -312,6 +315,7 @@
   @media (max-width: 860px) {
     :root { --rail: 46px; --scale-w: 0px; --lanes-w: 46px; --pad: 22px; }
     .scale, .rail-head .day, .carriage .clock { display: none; }
+    .ch-clock { display: inline-block; }
     .rail-head .ch { font-size: 0; }
     .rail-head .ch i { margin: 0 auto 4px; }
     .plates { display: none; }
@@ -345,7 +349,8 @@
     .cta-row .btn { width: 100%; justify-content: center; }
     .team-mock .top b { font-size: 32px; }
     .film-screen { font-size: 12.5px; height: 360px; padding: 16px; }
-    .facts li + li::before { display: none; }
+    .facts { flex-direction: column; }
+    .facts li + li { border-left: 0; border-top: 1px solid var(--print); }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -366,6 +371,7 @@
       <a href="docs.html">Docs</a>
     </nav>
     <div class="ch-right">
+      <span class="ch-clock" id="clockTop" aria-hidden="true">09:00</span>
       <button class="key icon-only" id="themeToggle" aria-label="Toggle theme"></button>
       <a class="key gh" href="https://github.com/narrately/narrately.github.io">GitHub</a>
       <a class="key key-red" href="#install">Get started</a>
@@ -394,7 +400,7 @@
   <!-- 09:00 -->
   <section class="fold hero">
     <h1 class="display">Your day, already written.</h1>
-    <p class="lede">Narrately quietly watches your editor, terminal, and Git — then writes the log for your standup, timesheet, or performance review. Local-first. Open source.</p>
+    <p class="lede">Narrately records what happens in your editor, terminal and Git, then writes it up as the log for your standup, timesheet or performance review. It runs on your machine, and it's open source.</p>
     <div class="cta-row">
       <div class="install"><code><span class="ps">$</span>npm install -g narrately</code><button class="copy" data-copy="npm install -g narrately" aria-label="Copy install command"><span data-icon="copy"></span>Copy</button></div>
       <a class="btn" href="docs.html">Read the docs<span data-icon="arrowRight"></span></a>
@@ -426,18 +432,18 @@
   </section>
 
   <section class="fold" id="features">
-    <h2>Everything you did, in words.</h2>
-    <p class="sub">A background daemon collects metadata. A pipeline turns it into sessions, a graph, and finally prose — on your machine.</p>
+    <h2>What Narrately does with the record</h2>
+    <p class="sub">A background daemon collects metadata. A pipeline turns it into sessions, a graph and finally prose, all on your machine.</p>
     <div class="ledger">
       <article class="entry">
-        <div class="entry-text"><h3>Daily &amp; weekly logs, written for you</h3><p>Paste-ready for standups and timesheets. Brief, standard, or detailed — with or without an LLM.</p></div>
+        <div class="entry-text"><h3>Daily and weekly logs</h3><p>Paste-ready for standups and timesheets. Brief, standard or detailed, with or without an LLM.</p></div>
         <div class="demo">
           <div class="seg" id="logSeg" role="group" aria-label="Log period"><button class="active" data-mode="day">Daily</button><button data-mode="week">Weekly</button></div>
           <div class="slip"><div class="report-mock" id="logMock"></div></div>
         </div>
       </article>
       <article class="entry">
-        <div class="entry-text"><h3>Ask your history</h3><p>"What did I ship?" — answered from your own data, in the terminal or the dashboard.</p></div>
+        <div class="entry-text"><h3>Ask your history</h3><p>Ask "what did I ship?" and get an answer from your own data, in the terminal or the dashboard.</p></div>
         <div class="demo slip printout">
           <div class="q"><span class="ps">$</span> narrately ask "what did I ship this week?"</div>
           <div class="a">The OAuth refresh flow in <b>auth-service</b> (14h 20m) and webhook retries in <b>billing-api</b>.</div>
@@ -451,15 +457,15 @@
         </div>
       </article>
       <article class="entry">
-        <div class="entry-text"><h3>A knowledge graph</h3><p>Projects, files, tech, commits — linked across days, in local SQLite. Hover a node to see its links.</p></div>
+        <div class="entry-text"><h3>A knowledge graph</h3><p>Projects, files, languages and commits, linked across days in local SQLite. Hover a node to see its links.</p></div>
         <div class="demo"><svg id="graph" viewBox="0 0 260 160" aria-hidden="true"></svg></div>
       </article>
       <article class="entry">
-        <div class="entry-text"><h3>Local-first, by shape</h3><p>The daemon binds to loopback and never leaves the machine.</p></div>
+        <div class="entry-text"><h3>Runs on loopback only</h3><p>The daemon binds to loopback and never leaves the machine.</p></div>
         <div class="demo"><div class="loopback"><span data-icon="lock"></span>127.0.0.1<small>daemon<br>port 47821</small></div></div>
       </article>
       <article class="entry">
-        <div class="entry-text"><h3>Code capture — opt-in, redacted</h3><p>Counts by default. Turn on real diffs per project, with secrets stripped before disk.</p></div>
+        <div class="entry-text"><h3>Optional code capture</h3><p>Line counts by default. Turn on real diffs per project; secrets are stripped before anything reaches disk.</p></div>
         <div class="demo tiers" id="tiers">
           <button class="tier" aria-pressed="false"><div><b>Tier 1 · Your commits</b><small>Diff text for new commits, never retroactive</small></div><span class="switch"></span></button>
           <button class="tier" aria-pressed="false"><div><b>Tier 2 · Uncommitted work</b><small>A diff on every save, gated per project</small></div><span class="switch"></span></button>
@@ -467,7 +473,7 @@
         </div>
       </article>
       <article class="entry">
-        <div class="entry-text"><h3>Team rollups</h3><p>Optional Narrately Cloud — everyone's week, stacked by project. Metadata only.</p></div>
+        <div class="entry-text"><h3>Team rollups</h3><p>With the optional Narrately Cloud, everyone's week stacks up on one chart. Metadata only.</p></div>
         <div class="demo" id="teamCardSmall">
           <div class="team-bars" id="teamBars"></div>
           <div class="days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
@@ -477,7 +483,7 @@
   </section>
 
   <section class="fold" id="how">
-    <h2>Five layers, one shared event.</h2>
+    <h2>How an event becomes a sentence</h2>
     <p class="sub">Every collector emits the same small JSON shape. Nothing downstream needs to know where it came from.</p>
     <pre class="slip event-json" aria-label="An example raw event">{ <span class="k">"timestamp"</span>: <span class="s">"2026-11-24T10:12:04Z"</span>, <span class="k">"source"</span>: <span class="s">"git"</span>, <span class="k">"project"</span>: <span class="s">"auth-service"</span>,
   <span class="k">"event"</span>: <span class="s">"commit"</span>, <span class="k">"detail"</span>: <span class="s">"Rotate refresh tokens on use"</span> }</pre>
@@ -485,14 +491,14 @@
       <span class="track"></span><span class="packet" id="packet"></span>
       <div class="step"><span class="n"></span><h3>Collectors</h3><p>VS Code, JetBrains, a shell hook (PowerShell, zsh, bash, fish), and Git. Thin producers.</p></div>
       <div class="step"><span class="n"></span><h3>Local daemon</h3><p>One process on 127.0.0.1 pairs focus spans into durations.</p></div>
-      <div class="step"><span class="n"></span><h3>Aggregator</h3><p>Raw events collapse into sessions — deterministic and idempotent.</p></div>
+      <div class="step"><span class="n"></span><h3>Aggregator</h3><p>Raw events collapse into sessions. Deterministic and idempotent.</p></div>
       <div class="step"><span class="n"></span><h3>Knowledge graph</h3><p>Projects, files, tech, commits in local SQLite.</p></div>
-      <div class="step"><span class="n"></span><h3>Narrative</h3><p>Claude or Gemini writes it up — or skip the key for structured output.</p></div>
+      <div class="step"><span class="n"></span><h3>Narrative</h3><p>Claude or Gemini writes it up. Skip the key and you get structured output.</p></div>
     </div>
   </section>
 
   <section class="fold" id="use-cases">
-    <h2>Grounded in what actually happened.</h2>
+    <h2>Where the log ends up</h2>
     <p class="sub">One record of the day, used wherever you'd otherwise have to reconstruct it.</p>
     <table class="uses">
       <tr><th style="color:var(--red)"><i></i>Standups</th><td>Daily &amp; async updates</td><td>Paste-ready, not reconstructed at 9am.</td></tr>
@@ -506,10 +512,10 @@
   <section class="fold" id="teams">
     <div class="teams">
       <div>
-        <h2>Your team's week, without the meeting.</h2>
+        <h2>Everyone's week on one page, for teams that want it</h2>
         <p class="sub">Opt in, join with a code, and everyone's session time rolls up into one shared dashboard. The local tool stays free and works exactly the same.</p>
         <ul class="checks">
-          <li><span data-icon="check"></span><div><b>Join in one command</b><small><code>narrately cloud join &lt;code&gt;</code> — the daemon keeps it current.</small></div></li>
+          <li><span data-icon="check"></span><div><b>Join in one command</b><small><code>narrately cloud join &lt;code&gt;</code>, and the daemon keeps it current.</small></div></li>
           <li><span data-icon="check"></span><div><b>Metadata only</b><small>Project, time, and line counts. Never paths, diffs, or code.</small></div></li>
           <li><span data-icon="check"></span><div><b>Timesheets in a click</b><small>The week by teammate and project, exported as CSV.</small></div></li>
         </ul>
@@ -528,19 +534,19 @@
   </section>
 
   <section class="fold" id="install">
-    <h2>Pick your entry point.</h2>
+    <h2>Three ways to install</h2>
     <p class="sub">The CLI and both editor extensions talk to the same local daemon.</p>
     <div class="tabs" id="installTabs" role="group" aria-label="Install method"><button class="active" data-tab="cli">CLI</button><button data-tab="vscode">VS Code</button><button data-tab="jetbrains">JetBrains</button><button data-tab="team">Teams</button></div>
     <div class="slip"><div class="slip-head"><span id="termTitle">terminal</span></div><div class="term-body" id="termBody"></div></div>
-    <p class="term-note">Prefer to audit first? <a href="https://github.com/narrately/narrately.github.io">It's fully open source</a> — MIT licensed.</p>
+    <p class="term-note">Prefer to audit first? <a href="https://github.com/narrately/narrately.github.io">The source is on GitHub</a> under the MIT license.</p>
   </section>
 
   <section class="fold plate-band" id="privacy">
-    <h2>Local-first isn't a setting. It's the shape.</h2>
-    <p class="sub">Every claim here is backed by code in the repository — not a policy page.</p>
+    <h2>What stays on your machine</h2>
+    <p class="sub">Each of these is enforced by code in the repository, not by a policy page.</p>
     <div class="spec">
       <div><b><span data-icon="shield"></span>Nothing leaves the machine</b><span>unless you enable email, an LLM narrative, or a team.</span></div>
-      <div><b><span data-icon="shield"></span>Metadata only, by default</b><span>paths, timestamps, commit subjects, counts — never contents.</span></div>
+      <div><b><span data-icon="shield"></span>Metadata only, by default</b><span>paths, timestamps, commit subjects and counts. Never contents.</span></div>
       <div><b><span data-icon="shield"></span>No command output, ever</b><span>the shell hook logs the command, not what it printed.</span></div>
       <div><b><span data-icon="shield"></span>Exclusions before storage</b><span>excluded paths and patterns never reach the database.</span></div>
       <div><b><span data-icon="shield"></span>Loopback-only daemon</b><span>bound to 127.0.0.1, never reachable off the machine.</span></div>
@@ -581,7 +587,7 @@
   <div class="foot">
     <div>
       <a class="lockup" href="#top"><img src="assets/logo.svg" alt="">narrately</a>
-      <p>Your editor, terminal, and Git activity — turned into the log you'd otherwise write yourself.</p>
+      <p>Your editor, terminal and Git activity, turned into the log you'd otherwise write yourself.</p>
     </div>
     <div><h4>Product</h4><a href="#demo">Demo</a><a href="#features">Features</a><a href="#how">How it works</a><a href="#teams">Teams</a></div>
     <div><h4>Install</h4><a href="#install">npm package</a><a href="#install">VS Code</a><a href="#install">JetBrains</a></div>
@@ -671,11 +677,11 @@
     [72, 'commit', 'Rotate refresh tokens on use'],
     [155, 'shell', 'npm run lint'],
     [168, 'commit', 'Add refresh-token reuse detection'],
-    [185, 'idle', 'away 1h 25m — not counted'],
+    [185, 'idle', 'away 1h 25m, not counted'],
     [270, 'focus', '<b>webhook.ts</b> · billing-api'],
     [325, 'commit', 'Retry failed webhooks'],
     [362, 'debug', 'webhook signature mismatch'],
-    [380, 'idle', 'away 45m — not counted'],
+    [380, 'idle', 'away 45m, not counted'],
     [425, 'focus', '<b>retry.ts</b> · billing-api'],
     [490, 'shell', 'npm test'],
     [522, 'commit', 'Back off retries exponentially'],
@@ -705,7 +711,7 @@
   }
 
   var rail = $('rail'), roll = document.querySelector('.roll'), svg = $('trace'), notesEl = $('notes'), scaleEl = $('scale');
-  var carriage = $('carriage'), clockEl = $('clock'), NS = 'http://www.w3.org/2000/svg';
+  var carriage = $('carriage'), clockEl = $('clock'), clockTop = $('clockTop'), NS = 'http://www.w3.org/2000/svg';
   var geo = { y0: 86, k: 1, h: 1, laneW: 37, scaleW: 58 };
   var noteNodes = [], tips = [], paths = [];
   NOTES.forEach(function (n) {
@@ -766,6 +772,7 @@
     svg.style.clipPath = 'inset(0 0 ' + Math.max(0, geo.h - y) + 'px 0)';
     for (var i = 0; i < noteNodes.length; i++) noteNodes[i].classList.toggle('on', NOTES[i][0] <= t + 0.01);
     clockEl.textContent = clock(t);
+    clockTop.textContent = clock(t);
     var rr = roll.getBoundingClientRect(), line = innerHeight * 0.62;
     carriage.classList.toggle('on', !reduced && rr.top + geo.y0 < line && rr.top + y > line - 2 && t < DAY);
     carriage.style.top = Math.round(Math.min(line, rr.top + y)) + 'px';

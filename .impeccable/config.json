@@ -20,6 +20,24 @@
         ],
         "createdAt": "2026-11-25T07:13:55.119Z",
         "reason": "agent decided after measuring in a browser: tier-card text sits 21px from its left rule and FAQ rows carry 17px own padding under the list's top rule; no rendered text touches a border"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "roboto",
+        "files": [
+          "src/pipeline/render.js"
+        ],
+        "createdAt": "2026-11-25T08:39:20.543Z",
+        "reason": "agent decided: report email HTML must use installed system font stacks because email clients drop web fonts (documented in the renderEmailHtml comment)"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "sf mono",
+        "files": [
+          "src/pipeline/render.js"
+        ],
+        "createdAt": "2026-11-25T08:39:20.704Z",
+        "reason": "agent decided: report email HTML must use installed system monospace fonts because email clients drop web fonts"
       }
     ]
   }

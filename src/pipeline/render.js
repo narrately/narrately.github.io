@@ -224,7 +224,7 @@ export function renderEmailHtml(markdown, { title = 'Narrately', date = new Date
   .n-head td { vertical-align: middle; }
   .n-mark { width: 28px; height: 28px; border-radius: 6px; background: #1C1F22; color: #F6F7F2; font: 800 15px/28px -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; text-align: center; }
   .n-word { padding-left: 9px; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: #171A1C; }
-  .n-date { text-align: right; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #3B7650; }
+  .n-date { text-align: right; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #346B47; }
   .n-card { margin-top: 18px; background: #FFFFFF; border: 1px solid #C9CEC6; }
   .n-bar { height: 2px; background: #171A1C; font-size: 0; line-height: 0; }
   .n-body { padding: 30px 32px 26px; font-size: 15.5px; line-height: 1.65; color: #171A1C; }
@@ -236,12 +236,12 @@ export function renderEmailHtml(markdown, { title = 'Narrately', date = new Date
   .n-body ul { margin: 0 0 13px; padding-left: 20px; }
   .n-body li { margin: 5px 0; }
   .n-body table { width: 100%; border-collapse: collapse; margin: 2px 0 16px; font-size: 14px; }
-  .n-body th { text-align: left; padding: 8px 10px 8px 0; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #646B70; border-bottom: 1.5px solid #171A1C; }
+  .n-body th { text-align: left; padding: 8px 10px 8px 0; font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #5C6368; border-bottom: 1.5px solid #171A1C; }
   .n-body td { padding: 9px 10px 9px 0; border-bottom: 1px solid #E3E7E0; }
   .n-body code { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 12.5px; background: #ECEFE7; border: 1px solid #DDE2D9; padding: 1px 5px; }
   .n-body hr { border: none; border-top: 1px dashed #BED3C1; margin: 22px 0; }
-  .n-body .note { color: #646B70; font-size: 13px; }
-  .n-foot { padding: 18px 8px 0; font-size: 12px; line-height: 1.6; color: #646B70; text-align: center; }
+  .n-body .note { color: #5C6368; font-size: 13px; }
+  .n-foot { padding: 18px 8px 0; font-size: 12px; line-height: 1.6; color: #5C6368; text-align: center; }
   .n-foot b { color: #444A4E; font-weight: 600; }
   @media (max-width: 520px) {
     .n-body { padding: 24px 20px 20px; font-size: 15px; }
